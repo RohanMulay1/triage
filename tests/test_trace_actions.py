@@ -8,8 +8,6 @@ rather than assumed.
 """
 import asyncio
 
-import pytest
-
 from app.config import load_router_config
 from app.trace.actions import (
     DEFAULT_SYSTEM,

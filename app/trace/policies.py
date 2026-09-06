@@ -18,7 +18,7 @@ from typing import Optional, Protocol
 
 from ..router.abstain import abstain_risk
 from .actions import FEASIBLE_SET_DEFINITION, InterventionContext, InterventionExecutor
-from .adapter import answer_action, stop_action, stronger_model_action
+from .adapter import answer_action, stop_action
 from .contract import Action, ActionKind
 
 
