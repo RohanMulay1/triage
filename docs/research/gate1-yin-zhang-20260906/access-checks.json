@@ -1,0 +1,198 @@
+[
+  {
+    "source": "crossref",
+    "url": "https://api.crossref.org/works/10.1016/j.knosys.2026.116685",
+    "retrieved_at_utc": "2026-09-06T18:22:49.632493+00:00",
+    "http_status": 200,
+    "bytes": 12254,
+    "sha256": "3ee0f7b46dad1a8236bb762a530a3445b57a3ab163a1fc5078540e0180f9e9fb",
+    "metadata": {
+      "title": [
+        "Failure-mode-aware uncertainty intervention routing for large language models"
+      ],
+      "author": [
+        {
+          "ORCID": "https://orcid.org/0000-0002-9437-7807",
+          "authenticated-orcid": false,
+          "given": "Shiyuan",
+          "family": "Yin",
+          "sequence": "first",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        },
+        {
+          "given": "Ruizhi",
+          "family": "Zhang",
+          "sequence": "additional",
+          "affiliation": [],
+          "role": [
+            {
+              "vocabulary": "crossref",
+              "role": "author"
+            }
+          ]
+        }
+      ],
+      "link": [
+        {
+          "URL": "https://api.elsevier.com/content/article/PII:S0950705126014115?httpAccept=text/xml",
+          "content-type": "text/xml",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        },
+        {
+          "URL": "https://api.elsevier.com/content/article/PII:S0950705126014115?httpAccept=text/plain",
+          "content-type": "text/plain",
+          "content-version": "vor",
+          "intended-application": "text-mining"
+        }
+      ],
+      "resource": {
+        "primary": {
+          "URL": "https://linkinghub.elsevier.com/retrieve/pii/S0950705126014115"
+        }
+      },
+      "published": {
+        "date-parts": [
+          [
+            2026,
+            10
+          ]
+        ]
+      },
+      "relation": {}
+    }
+  },
+  {
+    "source": "openalex",
+    "url": "https://api.openalex.org/works/https://doi.org/10.1016/j.knosys.2026.116685",
+    "retrieved_at_utc": "2026-09-06T18:22:49.632493+00:00",
+    "http_status": 200,
+    "bytes": 7934,
+    "sha256": "15511af4a76e126368ce4fb3a7d7e07a820846f0afe7b6988ab47018232bb1cb",
+    "metadata": {
+      "title": "Failure-mode-aware uncertainty intervention routing for large language models",
+      "open_access": {
+        "is_oa": false,
+        "oa_status": "closed",
+        "oa_url": null,
+        "any_repository_has_fulltext": false
+      },
+      "locations": [
+        {
+          "id": "doi:10.1016/j.knosys.2026.116685",
+          "is_oa": false,
+          "landing_page_url": "https://doi.org/10.1016/j.knosys.2026.116685",
+          "pdf_url": null,
+          "source": {
+            "id": "https://openalex.org/S10169007",
+            "display_name": "Knowledge-Based Systems",
+            "issn_l": "0950-7051",
+            "issn": [
+              "0950-7051",
+              "1872-7409"
+            ],
+            "is_oa": false,
+            "is_in_doaj": false,
+            "is_core": true,
+            "host_organization": "https://openalex.org/P4310320990",
+            "host_organization_name": "Elsevier BV",
+            "host_organization_lineage": [
+              "https://openalex.org/P4310320990"
+            ],
+            "host_organization_lineage_names": [
+              "Elsevier BV"
+            ],
+            "type": "journal"
+          },
+          "license": null,
+          "license_id": null,
+          "version": "publishedVersion",
+          "is_accepted": true,
+          "is_published": true,
+          "raw_source_name": "Knowledge-Based Systems",
+          "raw_type": "journal-article"
+        }
+      ]
+    }
+  },
+  {
+    "source": "semantic_scholar",
+    "url": "https://api.semanticscholar.org/graph/v1/paper/DOI:10.1016/j.knosys.2026.116685?fields=title,authors,openAccessPdf,url",
+    "retrieved_at_utc": "2026-09-06T18:22:49.632493+00:00",
+    "http_status": 200,
+    "bytes": 418,
+    "sha256": "60f9a948c718c252c22aeca09f4e62cca6995484890be0bc04e4ef009070e01a",
+    "metadata": {
+      "paperId": "c2c3f2ee47e3bf99925b810d0cd04030122467e5",
+      "url": "https://www.semanticscholar.org/paper/c2c3f2ee47e3bf99925b810d0cd04030122467e5",
+      "title": "Failure-mode-aware uncertainty intervention routing for large language models",
+      "openAccessPdf": {
+        "url": "",
+        "status": "CLOSED",
+        "license": null
+      },
+      "authors": [
+        {
+          "authorId": "2151229969",
+          "name": "Shiyuan Yin"
+        },
+        {
+          "authorId": "2447757272",
+          "name": "Ruizhi Zhang"
+        }
+      ]
+    }
+  },
+  {
+    "source": "elsevier_full_view",
+    "url": "https://api.elsevier.com/content/article/pii/S0950705126014115?view=FULL&httpAccept=text/xml",
+    "retrieved_at_utc": "2026-09-06T18:22:49.632493+00:00",
+    "http_status": 401,
+    "bytes": 133,
+    "sha256": "a199c5505f5d84ca6206475b3a116d509aa4528f154f0d3cdbc57669ec400bb5",
+    "error_response": "<service-error><status><statusCode>AUTHENTICATION_ERROR</statusCode><statusText>Invalid API Key</statusText></status></service-error>"
+  },
+  {
+    "source": "publisher_pdf",
+    "url": "https://www.sciencedirect.com/science/article/pii/S0950705126014115/pdfft",
+    "retrieved_at_utc": "2026-09-06T18:22:49.635008+00:00",
+    "http_status": 403,
+    "bytes": 832804,
+    "sha256": "2539b87ca04020f1a19ef63d0503e3a1369859aa9555e75ac8fdd488d50ae001"
+  },
+  {
+    "source": "orcid",
+    "url": "https://pub.orcid.org/v3.0/0000-0002-9437-7807/record",
+    "retrieved_at_utc": "2026-09-06T18:22:49.635008+00:00",
+    "http_status": 200,
+    "bytes": 10359,
+    "sha256": "103773a6be69a2255e620f143a15edcb60f36a1317397ae789444e35d4a90ba8",
+    "metadata": {
+      "researcher_urls": [],
+      "biography": null,
+      "work_links": [
+        {
+          "value": "https://doi.org/10.1016/j.knosys.2026.116685"
+        },
+        {
+          "value": "https://doi.org/10.2139/ssrn.7362482"
+        },
+        {
+          "value": "https://doi.org/10.2139/ssrn.7346356"
+        },
+        {
+          "value": "https://doi.org/10.1007/s40747-023-01012-8"
+        },
+        {
+          "value": "https://doi.org/10.1109/ACCESS.2023.3323589"
+        }
+      ]
+    }
+  }
+]

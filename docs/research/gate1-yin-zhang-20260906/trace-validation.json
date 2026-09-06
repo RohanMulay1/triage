@@ -1,0 +1,38 @@
+[
+  {
+    "run_id": "fixture-mock",
+    "schema_version": "1.2.0",
+    "trajectories": 20,
+    "manifest_present": true,
+    "force_mock": true,
+    "synthetic_trajectories": 20,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  {
+    "run_id": "fixture-fanout",
+    "schema_version": "1.2.0",
+    "trajectories": 88,
+    "manifest_present": true,
+    "force_mock": true,
+    "synthetic_trajectories": 48,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  {
+    "run_id": "gate2-pilot-mock",
+    "schema_version": "1.2.0",
+    "trajectories": 440,
+    "manifest_present": true,
+    "force_mock": true,
+    "synthetic_trajectories": 240,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  }
+]

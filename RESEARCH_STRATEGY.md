@@ -16,25 +16,25 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-06, `106e808`)
+### Current state (2026-09-06, Checkpoint 5 access follow-up)
 
 | | |
 |---|---|
-| **Checkpoints complete** | 0 (audit), 1 (trace contract), 2 (novelty audit), 3 (counterfactual substrate), 4 (Gate 2 pilot) |
-| **Tests** | 210 passing (`python -m pytest -q`) |
+| **Checkpoints complete** | 0–4 as recorded below; 5 (source-access follow-up; full-text audit remains blocked) |
+| **Tests** | 222 passing (`python -m pytest -q`); see Checkpoint 5 validation |
 | **Trace schema** | 1.2.0; reads 1.0.0 and 1.1.0 |
-| **Gate 1 (novelty)** | **NARROW**, provisional on one unread closed-access paper |
+| **Gate 1 (novelty)** | **NARROW, provisional and unresolved**; Yin & Zhang publisher preview read, full methods unavailable |
 | **Gate 2 (signal)** | **INCONCLUSIVE** — cannot be decided on mock data |
 | **Gate 3 (sequentiality)** | not started; the fan-out is depth-1 only |
 | **Total spend to date** | **$0.** Every run has been on the mock provider |
 | **Paper status** | no claim is supported; no controller has been implemented |
 
-**What is true right now.** The trace substrate is built and tested: typed
-actions, counterfactual fan-out with complete depth-1 support, seven behaviour
-policies with real propensities, leakage-safe group splits, and support
-diagnostics that *refuse* an inadmissible estimate rather than warning about it.
-The legacy router is unchanged and a regression test proves tracing does not
-alter any routing decision.
+**What is true right now.** The trace substrate and mock pilot exist; the legacy
+router equivalence tests pass. **The inherited readiness description was too
+strong:** analysis paths bypass the support refusal, the live cap is checked
+after execution and resets per item, and the signal comparison has control/split
+defects. See Checkpoint 5. Do not run the earlier live command until these are
+fixed and tested. Existing tests passing does not establish those properties.
 
 **What is not true.** Nothing about repairability has been established. The
 Gate 2 pilot returned exactly zero marginal value for every intervention, which
@@ -42,24 +42,27 @@ is a property of the mock provider rather than a finding. Gate 1 narrowed the
 contribution to one clause — calibrated, outcome-supervised per-action gain
 estimation — and even that is provisional on a paper that could not be obtained.
 
-**The two things blocking progress, in order.**
+**Things blocking progress, in order.**
 
 1. **Read Yin & Zhang** (KBS 2026, DOI 10.1016/j.knosys.2026.116685) via
    institutional access or an author request. If it already learns calibrated
-   per-action repair value, Gate 1 becomes STOP and the direction ends.
-2. **Approve a small live budget.** Gate 2 needs a provider whose answers change
-   under intervention. `--live` is refused without an explicit `--max-usd`.
+   per-action repair value, Gate 1 becomes STOP and the direction ends. The
+   publisher preview establishes learned intervention routing but cannot decide
+   the calibrated-value question. [Access evidence and request draft](docs/research/gate1-yin-zhang-20260906/README.md).
+2. **Repair live-collection and causal-validity blockers** listed at Checkpoint 5.
+3. **Approve an explicit live dollar cap.** No budget has been approved. The
+   presence of `--max-usd` alone currently does not enforce a run-wide cap.
 
-**Single next command** (blocked on both of the above):
+**Single next command** (public source recheck; no paid provider calls):
 
 ```
-python scripts/collect_traces.py --n 120 --dataset gsm8k --mode fanout \
-    --policy balanced --live --max-usd 5.00 --run-id gate2-pilot-live \
-  && python -m app.trace.analysis --run gate2-pilot-live
+python scripts/check_literature_source.py --doi 10.1016/j.knosys.2026.116685 --output-dir docs/research/gate1-yin-zhang-access-recheck-01
 ```
 
-The unblocked equivalent, which reproduces the current null at zero cost, is the
-same line without `--live --max-usd 5.00`.
+The output directory must be fresh. Exit 2 records an access refusal or metadata
+only; even a body candidate needs manual reading. An authorized full manuscript
+is the practical unblock. Prior checkpoint commands below are historical, not
+authorization to spend or evidence that live collection is ready.
 
 **Checkpoint 0 — repository and research memo audit (complete).**
 
@@ -132,6 +135,53 @@ same line without `--live --max-usd 5.00`.
 - **Remaining tasks:** obtain Yin & Zhang (still blocking any paper claim, per Checkpoint 2); get an approved budget; re-run this pilot live; only then revisit Gate 2.
 - **Exact next resumption command:** `python scripts/collect_traces.py --n 120 --dataset gsm8k --mode fanout --policy balanced --live --max-usd 5.00 --run-id gate2-pilot-live && python -m app.trace.analysis --run gate2-pilot-live` — **blocked** on (a) Yin & Zhang being read and Checkpoint 2 confirmed, and (b) explicit approval of the spend. n=120 rather than 40 because the probe now requires >= 20 test rows with >= 5 per class, which a 50/25/25 split of 40 items cannot supply. The unblocked command that reproduces the current null is the same line without `--live --max-usd`.
 
+**Checkpoint 5 — closest-source access follow-up (access attempt complete; Gate 1 unresolved).**
+
+- **Completed:** re-read the strategy, charter, README, history and trace modules;
+  verified the baseline suite; checked publisher preview, DOI metadata, public
+  publisher API, OpenAlex, Semantic Scholar, ORCID, and manuscript searches.
+  Browser discovery found no connected session. No messages were sent.
+- **Evidence:** [source-access record](docs/research/gate1-yin-zhang-20260906/README.md),
+  `access-checks.json`, and `source-check/receipt.json` in that directory. The
+  publisher API returned matching metadata, not an article body; explicit FULL
+  access requires authentication. The primary-source preview is partial evidence
+  of learned intervention selection; calibration and repair-value targets remain
+  unverified. The previous statement that only metadata was available is stale.
+- **New behavior:** `scripts/check_literature_source.py` records a single-use,
+  hashed public-access receipt and refuses to treat metadata, wrong DOI, errors,
+  or a partial body as a verified full-text audit. It never assigns a novelty
+  verdict. No article body is redistributed.
+- **Decision:** retain **NARROW provisionally**; neither confirm the surviving
+  contribution nor declare STOP without the methods. The manuscript's learning
+  of calibrated per-action repair value from outcomes would trigger STOP exactly
+  as stipulated, without adding further escape conditions.
+- **Failures/limitations:** full text was not obtained. No institutional access,
+  authenticated publisher API, or open manuscript was available in this session.
+  The draft access request is ready but unsent. This checkpoint is not a paper,
+  performance result, or completed novelty clearance.
+- **Pre-live code defects found by inspection:** execution precedes budget
+  charging and budgets reset per item; served mode lacks cap enforcement;
+  analysis bypasses `assert_estimable`; Gate 2 can accept synthetic input and
+  point-AUC improvements without a paired CI; calibration/test rows are combined
+  with an item-ID split fallback; fan-out omits prompt-only input features.
+  RESAMPLE/SELF_CHECK/RETRIEVE preserve the answer, so forced depth-1 STOP cannot
+  measure their eventual repair even on a live provider. These are additional
+  hard blockers, not fixes performed in this phase. Full details and code paths
+  are in the source-access record.
+- **Validation:** `python -m pytest -q`: **222 passed**, including 12 new source
+  refusal/provenance cases and the legacy-router/receipt guards; pyflakes clean.
+  The three existing mock runs validate with intact chains, conserved costs,
+  zero errors and `analysis_grade: false`. The existing mock report still says
+  INCONCLUSIVE. No new trace run or benchmark receipt was created or overwritten.
+  Source-access receipts are literature artifacts, not analysis-grade traces.
+  Commands and output: [validation.txt](docs/research/gate1-yin-zhang-20260906/validation.txt);
+  existing-run checks: [trace-validation.json](docs/research/gate1-yin-zhang-20260906/trace-validation.json).
+- **Remaining tasks:** obtain/read the complete closest work; apply STOP if it
+  meets the stated criterion. Only if novelty survives, fix and test the recorded
+  collection/analysis defects, define effective interventions, and obtain an
+  explicit budget before collecting live evidence. No controller started.
+- **Exact next resumption command:** `python scripts/check_literature_source.py --doi 10.1016/j.knosys.2026.116685 --output-dir docs/research/gate1-yin-zhang-access-recheck-01`.
+
 ## Executive research thesis
 
 > **Superseded in part by Checkpoint 2 (2026-09-06).** The full-text audit returned
@@ -193,16 +243,17 @@ MT-Bench receipts use a first-turn LLM judge and 50/50 tune/test threshold selec
 ## Literature and novelty audit (Decision Gate 1, full text, 2026-09-06)
 
 Audited from primary sources. Where only the abstract and metadata page could be
-reached, the row says so. **One source could not be obtained at all and the gate
-is provisional on it — see "Unresolved source" below.**
+reached, the row says so. **The closest source is only partially accessible; the
+gate remains provisional on its full methods — see "Unresolved source" below.**
 
 ### The novelty question
 
 > "Has prior work already learned a calibrated, sequential, action-conditioned marginal repair-value policy over observed response state, with conservative stopping and explicit reliability/cost/latency constraints, evaluated through action-outcome traces?"
 
-**Answer: No — not in combination. But four of the six clauses are individually
-solved, two of them by 2026 work the previous version of this memo did not
-contain.** The verdict is **NARROW**, not GO.
+**Answer: unresolved pending the complete closest paper.** Checkpoint 2's
+provisional NARROW verdict is retained; it is not a verified absence of prior
+work doing the combination. Checkpoint 5 adds partial publisher evidence but
+does not resolve the calibrated repair-value target.
 
 ### Claim-by-claim comparison
 
@@ -213,7 +264,7 @@ Columns are the six clauses of the novelty question. `~` means partial.
 | **Utility-Guided Agent Orchestration** ([arXiv:2603.19896](https://arxiv.org/abs/2603.19896)) Liu, Zhao, Xu | 2026-03, preprint | `{respond, retrieve, tool_call, verify, stop}` | yes | **yes** | **no** — heuristic LLM self-estimate | **no** (states so explicitly) | no | step budget only | no |
 | **Knowing When to Quit** ([arXiv:2604.18419](https://arxiv.org/abs/2604.18419)) Davidov et al. | 2026-07, preprint | `{continue, abstain}` | yes (prefix) | yes (token-level) | one value function, **not per-action** | **yes**, isotonic | **yes**, with dominance proof | no | on-policy, no propensities |
 | **Agentic Abstention** ([arXiv:2606.28733](https://arxiv.org/abs/2606.28733)) Luo, Wen, Wang | 2026-06, preprint | `{ANSWER, ABSTAIN, ACT}` | yes | yes (POMDP) | no | no | ~ (learned stopping rules) | 10-turn budget | trajectories, no propensities |
-| **Failure-mode-aware uncertainty intervention routing** (KBS, DOI [10.1016/j.knosys.2026.116685](https://doi.org/10.1016/j.knosys.2026.116685)) Yin, Zhang | 2026, Knowledge-Based Systems | **UNVERIFIED** | ? | ? | ? | ? | ? | ? | ? |
+| **Failure-mode-aware uncertainty intervention routing** (KBS, DOI [10.1016/j.knosys.2026.116685](https://doi.org/10.1016/j.knosys.2026.116685)) Yin, Zhang | 2026, Knowledge-Based Systems; **publisher preview only** | commit / deliberate / acquire / defer | yes | unverified | learned action selection; value target unverified | unverified | unverified | full methods unverified | labeling procedure unavailable |
 | **AutoMix** ([arXiv:2310.12963](https://arxiv.org/abs/2310.12963)) Aggarwal et al. | NeurIPS 2024 | `{small, large}` | **yes** | no (one decision) | no — self-verification of correctness | no | no | cost only | no |
 | **RACER** ([arXiv:2603.06616](https://arxiv.org/abs/2603.06616)) Hao, Zeng, Wei, Jing | 2026-02, preprint | model **sets** + abstain | ~ | no | no — risk control | **yes**, finite-sample | ~ (risk-controlled) | misrouting risk | no |
 | **CP-Router** ([arXiv:2505.19970](https://arxiv.org/abs/2505.19970)) Su et al. | 2025-05, preprint | `{LLM, LRM}` | yes | no | no — conformal set size | **yes**, conformal | no | implicit token cost | no |
@@ -275,8 +326,8 @@ The surviving contribution is one clause of the original six, plus the artifact:
 
 > **Replace the heuristic self-estimated gain with an outcome-supervised, calibrated, per-action marginal value learned from randomized action-outcome traces with recorded propensities — and test whether doing so actually beats the heuristic-gain utility policy, calibrated risk-threshold escalation, and prompt-only routing at equal measured cost.**
 
-That is testable, it is not done anywhere audited, and there is a concrete reason
-to think it matters: the one published utility-guided intervention policy uses an
+That is testable, but whether it is already done remains unresolved. The
+original motivation was: the one published utility-guided intervention policy uses an
 uncalibrated self-estimate of gain and underperforms a simple ReAct baseline.
 Whether calibrated, outcome-supervised gains fix that is an open empirical
 question with a real chance of answering "no", which is what makes it worth
@@ -293,36 +344,20 @@ running.
 what survives. The work is now: *calibrated action-conditioned gain estimation for
 intervention policies*.
 
-### Unresolved source (the gate is provisional on this)
+### Unresolved source (updated by Checkpoint 5)
 
-**Yin, S. and Zhang, R., "Failure-mode-aware uncertainty intervention routing for
-large language models", Knowledge-Based Systems, 2026, DOI
-[10.1016/j.knosys.2026.116685](https://doi.org/10.1016/j.knosys.2026.116685).**
+Yin and Zhang, Knowledge-Based Systems, DOI
+[10.1016/j.knosys.2026.116685](https://doi.org/10.1016/j.knosys.2026.116685).
+The publisher preview is now available through search indexing; the earlier
+metadata-only description is superseded. Complete methods remain unavailable.
+See the [dated access record](docs/research/gate1-yin-zhang-20260906/README.md)
+for verified scope, remaining questions, access failures, and an unsent request.
 
-Existence, title, authors, year, journal and DOI are confirmed via the Crossref
-API. The full text could **not** be obtained: ScienceDirect returns HTTP 403 to
-both the article and abstract URLs, Semantic Scholar records the paper with
-`openAccessPdf.status = "CLOSED"` and a null abstract, and web search does not
-surface an accessible copy or preprint.
-
-Two consequences, recorded rather than papered over:
-
-1. The previous version of this memo asserted that this paper "predicts one of
-   commit, deliberation, retrieval-augmented regeneration, or defer from a
-   behavioral uncertainty signature" and used that to set the novelty bar. **That
-   description is unverified**; no primary source for it was obtainable. It has
-   been removed from the comparison table, whose row for this paper is marked
-   UNVERIFIED.
-2. The same memo cited the venue as *Information Sciences*. It is
-   **Knowledge-Based Systems**. Corrected.
-
-This is the single closest work by title and it is the one source the audit could
-not read. The NARROW verdict therefore stands **provisionally**: if that paper
-already learns calibrated per-action repair value from outcome data, the surviving
-contribution collapses and the verdict becomes STOP. Obtaining it — via
-institutional access, interlibrary loan, or an author request — is a blocking
-prerequisite before any paper claim, though not before the Gate 2 pilot, which is
-worth running for its own sake.
+The full-text requirement remains. If the paper learns calibrated per-action
+repair value from outcome data, the direction stops. Its absence cannot be
+inferred from an abbreviated preview. The provisional verdict is not permission
+to claim novelty; live collection is additionally blocked by Checkpoint 5's code
+findings and the absence of budget approval.
 
 ## Candidate directions
 

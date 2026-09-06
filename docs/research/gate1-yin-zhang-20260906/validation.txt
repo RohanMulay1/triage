@@ -1,0 +1,88 @@
+COMMAND: C:\Users\rohan\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\python.exe -m pytest -q
+EXIT: 0
+........................................................................ [ 32%]
+........................................................................ [ 64%]
+........................................................................ [ 97%]
+......                                                                   [100%]
+222 passed in 92.83s (0:01:32)
+C:\Users\rohan\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\pytest_asyncio\plugin.py:208: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+
+COMMAND: C:\Users\rohan\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\python.exe -m pyflakes app\trace\actions.py app\trace\adapter.py app\trace\analysis.py app\trace\branching.py app\trace\contract.py app\trace\policies.py app\trace\splits.py app\trace\store.py app\trace\support.py app\trace\__init__.py scripts/collect_traces.py scripts/check_literature_source.py tests\test_trace_actions.py tests\test_trace_adapter.py tests\test_trace_analysis.py tests\test_trace_branching.py tests\test_trace_contract.py tests\test_trace_policies.py tests\test_trace_splits.py tests\test_trace_store.py tests/test_literature_source.py
+EXIT: 0
+
+COMMAND: C:\Users\rohan\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\python.exe -m app.trace.support --run gate2-pilot-mock
+EXIT: 0
+run                 : gate2-pilot-mock
+trajectories        : 440  decisions: 680
+behaviour policies  : {'fanout_prefix': 40, 'response_risk_threshold': 640}
+actions with support: 8/10
+
+per action:
+  abstain                                      taken=  40 observed=  40 feasible= 400 cov=0.1     minP=1.0 ESS=40.0
+  answer:llama-3.1-8b:t=0.2                    taken=  80 observed=  80 feasible= 440 cov=0.1818  minP=1.0 ESS=80.0
+  resample:llama-3.1-8b:n=3,t=0.7              taken=  40 observed=  40 feasible= 400 cov=0.1     minP=1.0 ESS=40.0
+  retrieve:min_score=0.2,top_k=4               taken=  40 observed=  40 feasible= 400 cov=0.1     minP=1.0 ESS=40.0
+  self_check:llama-3.1-8b                      taken=  40 observed=  40 feasible= 400 cov=0.1     minP=1.0 ESS=40.0
+  specialist_model                             taken=  40 observed=   0 feasible=  40 cov=1.0     minP=1.0 ESS=40.0
+  stop                                         taken= 280 observed= 280 feasible= 640 cov=0.4375  minP=1.0 ESS=280.0
+  stronger_model:gpt-4o                        taken=  40 observed=  40 feasible= 400 cov=0.1     minP=1.0 ESS=40.0
+  tool:name="calculator"                       taken=  40 observed=   0 feasible=  40 cov=1.0     minP=1.0 ESS=40.0
+  verify:llama-3.1-8b:max_rounds=1             taken=  40 observed=  40 feasible= 400 cov=0.1     minP=1.0 ESS=40.0
+
+missingness         : {'chosen': 80, 'counterfactual': 520, 'unchosen': 0, 'attempted': 0, 'unavailable': 80, 'failed': 0, 'synthetic_fallback': 0}
+unsupported actions : ['specialist_model', 'tool:name="calculator"']
+off-policy ready    : False
+analysis grade      : False
+
+positivity violations (7):
+  - answer:llama-3.1-8b:t=0.2: 80 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - resample:llama-3.1-8b:n=3,t=0.7: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - self_check:llama-3.1-8b: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - specialist_model: 0 executed outcome(s) in 40 feasible occasions (need >= 1)
+  - stronger_model:gpt-4o: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - tool:name="calculator": 0 executed outcome(s) in 40 feasible occasions (need >= 1)
+  - verify:llama-3.1-8b:max_rounds=1: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+
+marginal value vs STOP (items with baseline: 40):
+  abstain                                      n=  40 mean delta=-0.0500 95% CI [-0.1184, +0.0184] (+0/-2/=38)
+  answer:llama-3.1-8b:t=0.2                    n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  resample:llama-3.1-8b:n=3,t=0.7              n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  retrieve:min_score=0.2,top_k=4               n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  self_check:llama-3.1-8b                      n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  stronger_model:gpt-4o                        n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  verify:llama-3.1-8b:max_rounds=1             n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+
+COMMAND: C:\Users\rohan\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\python.exe -m app.trace.analysis --run gate2-pilot-mock
+EXIT: 0
+run: gate2-pilot-mock   rows: 40
+splits: {'calib': 10, 'test': 8, 'train': 22}   task families: {'gsm8k': 40}
+
+--- Q1: does the state predict a WRONG answer? ---
+  triage_risk            AUC(wrong)=0.6973684210526315 CI[0.6282, 0.7763] n=40 wrong=38
+  uncertainty            AUC(wrong)=0.6973684210526315 CI[0.6282, 0.7763] n=40 wrong=38
+  predicted_difficulty   AUC(wrong)=0.5 CI[0.5, 0.5] n=40 wrong=38
+
+--- Q2: marginal benefit of each action vs STOP ---
+  abstain                                      mean=-0.0500 CI[-0.125, 0.0] n=40 (+0/-2/=38) neg_rate=0.05 varies=True
+  answer:llama-3.1-8b:t=0.2                    mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  resample:llama-3.1-8b:n=3,t=0.7              mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  retrieve:min_score=0.2,top_k=4               mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  self_check:llama-3.1-8b                      mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  stronger_model:gpt-4o                        mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  verify:llama-3.1-8b:max_rounds=1             mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+
+actions with any variation: ['abstain']
+
+  predicting repair by abstain:
+    prompt_only            {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    scalar_uncertainty     {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    triage_risk            {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    response_only          {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    prompt_plus_response   {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+
+VERDICT: INCONCLUSIVE
+  - no action had enough labelled variation on a held-out split to fit and score a probe at the required sample size (>= 20 test rows, >= 5 per class)
+

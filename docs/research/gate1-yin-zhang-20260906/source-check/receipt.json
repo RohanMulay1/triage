@@ -1,0 +1,15 @@
+{
+  "url": "https://api.elsevier.com/content/article/doi/10.1016/j.knosys.2026.116685?httpAccept=text/xml",
+  "retrieved_at_utc": "2026-09-06T18:21:16.236717+00:00",
+  "access": "public_unauthenticated",
+  "response_body_saved": false,
+  "http_status": 200,
+  "bytes": 1830,
+  "sha256": "2875549c3240b2c51a2f681c2830e226b3c736c552d464e03ad92aa7c24fea2d",
+  "expected_doi": "10.1016/j.knosys.2026.116685",
+  "full_text_verified": false,
+  "novelty_verdict": null,
+  "returned_doi": "10.1016/j.knosys.2026.116685",
+  "status": "metadata_only",
+  "final_url": "https://api.elsevier.com/content/article/doi/10.1016/j.knosys.2026.116685?httpAccept=text/xml"
+}
