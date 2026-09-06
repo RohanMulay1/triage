@@ -6,7 +6,7 @@
 (PR https://github.com/ishaannk/triage/pull/1).
 **Baseline:** `7479ff2` (this document is committed at the tip of that branch; if the branch has moved since, rebase this list onto the tip and re-verify each line reference before starting). Pull before starting — the invalid prompt-only AUC claim
 has already been retracted in `RESEARCH_STRATEGY.md`, so do not re-report it.
-**Status:** all ten defects below were independently verified against the code on
+**Status:** all eleven defects below were independently verified against the code on
 2026-09-07. Your Checkpoint 5 write-up was correct on every point it raised, and
 D8 (informational actions) is a better catch than anything in the original audit.
 
@@ -21,7 +21,7 @@ Suggested commit split: one commit for D1–D3 (money), one for D4–D6 + D9–D
 
 ---
 
-## Severity 1 — money. Nothing runs `--live` until these three are done.
+## Severity 1 — money. Nothing runs `--live` until these four are done.
 
 ### D1. The budget is charged *after* the action executes
 
@@ -79,6 +79,41 @@ mode has no cost control. Do not leave an uncapped live path reachable.
 
 **Acceptance test:** `--mode served --live --max-usd 1.00` either respects the cap
 or exits non-zero with that message. A test asserting the refusal is fine.
+
+### D11. `--max-usd inf` passes validation and lifts the cap entirely
+
+*Found by Codex, 2026-09-07. Verified.*
+
+`scripts/collect_traces.py:59`
+
+```python
+if args.live and (args.max_usd is None or args.max_usd <= 0):
+    ap.error("--live requires an explicit positive --max-usd cap")
+```
+
+`argparse` with `type=float` accepts `inf` and `nan`, and neither is `<= 0`, so
+both pass. Measured consequence:
+
+| `--max-usd` | passes CLI check | `can_afford($1e9)` |
+|---|---|---|
+| `inf` | yes | **True — unlimited spend** |
+| `nan` | yes | False — every action refused |
+| `5.0` | yes | False |
+
+`inf` is the dangerous half: the run reports a cap, the operator believes there
+is one, and there is not. `nan` is merely fail-closed and confusing.
+
+**Required:** reject any `--max-usd` that is not finite and strictly positive, in
+the same check. `math.isfinite` covers both cases. Apply the same validation to
+any other numeric CLI argument that gates spend or sample size.
+
+**Acceptance test:** `--live --max-usd inf` and `--live --max-usd nan` both exit
+non-zero with the cap error, and a finite positive value still succeeds.
+
+**Note on scope:** fixing this does **not** make live collection ready. D1 (charge
+after execution), D2 (per-item reset) and D3 (uncapped served mode) are the
+run-wide enforcement defects, and all three remain. A validated cap that is then
+enforced per item is still a per-item cap.
 
 ---
 
