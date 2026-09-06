@@ -16,6 +16,51 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
+### Current state (2026-09-06, `106e808`)
+
+| | |
+|---|---|
+| **Checkpoints complete** | 0 (audit), 1 (trace contract), 2 (novelty audit), 3 (counterfactual substrate), 4 (Gate 2 pilot) |
+| **Tests** | 210 passing (`python -m pytest -q`) |
+| **Trace schema** | 1.2.0; reads 1.0.0 and 1.1.0 |
+| **Gate 1 (novelty)** | **NARROW**, provisional on one unread closed-access paper |
+| **Gate 2 (signal)** | **INCONCLUSIVE** — cannot be decided on mock data |
+| **Gate 3 (sequentiality)** | not started; the fan-out is depth-1 only |
+| **Total spend to date** | **$0.** Every run has been on the mock provider |
+| **Paper status** | no claim is supported; no controller has been implemented |
+
+**What is true right now.** The trace substrate is built and tested: typed
+actions, counterfactual fan-out with complete depth-1 support, seven behaviour
+policies with real propensities, leakage-safe group splits, and support
+diagnostics that *refuse* an inadmissible estimate rather than warning about it.
+The legacy router is unchanged and a regression test proves tracing does not
+alter any routing decision.
+
+**What is not true.** Nothing about repairability has been established. The
+Gate 2 pilot returned exactly zero marginal value for every intervention, which
+is a property of the mock provider rather than a finding. Gate 1 narrowed the
+contribution to one clause — calibrated, outcome-supervised per-action gain
+estimation — and even that is provisional on a paper that could not be obtained.
+
+**The two things blocking progress, in order.**
+
+1. **Read Yin & Zhang** (KBS 2026, DOI 10.1016/j.knosys.2026.116685) via
+   institutional access or an author request. If it already learns calibrated
+   per-action repair value, Gate 1 becomes STOP and the direction ends.
+2. **Approve a small live budget.** Gate 2 needs a provider whose answers change
+   under intervention. `--live` is refused without an explicit `--max-usd`.
+
+**Single next command** (blocked on both of the above):
+
+```
+python scripts/collect_traces.py --n 120 --dataset gsm8k --mode fanout \
+    --policy balanced --live --max-usd 5.00 --run-id gate2-pilot-live \
+  && python -m app.trace.analysis --run gate2-pilot-live
+```
+
+The unblocked equivalent, which reproduces the current null at zero cost, is the
+same line without `--live --max-usd 5.00`.
+
 **Checkpoint 0 — repository and research memo audit (complete).**
 
 - **Completed:** cloned and audited public revision `9017edd794f2a74c981ae2a67739f91e990bad83`; inspected routing, signals, retrieval, verification, telemetry, evaluation scripts, receipts, configuration, tests, README, CHARTER, and history; completed the primary-source literature audit recorded below.
