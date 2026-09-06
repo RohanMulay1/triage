@@ -110,6 +110,16 @@ online_learning:
   risk_high_ceil: 0.72
   step: 0.02
 
+# -------------------------------------------------------------------------
+# Research traces (app/trace). OFF by default: with tracing disabled the router
+# runs exactly as it did before the trace contract existed, so the committed
+# receipts in data/ stay reproducible. See RESEARCH_STRATEGY.md, Checkpoint 1.
+# -------------------------------------------------------------------------
+trace:
+  enabled: false
+  record_counterfactual: false   # randomized/exhaustive action branches (not yet wired)
+  redact_answers: false          # store answer hashes only, for licence-restricted corpora
+
 # Cost Anomaly Detection thresholds (telemetry-driven).
 anomaly:
   window: 200

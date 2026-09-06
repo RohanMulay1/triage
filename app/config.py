@@ -49,6 +49,9 @@ class Settings:
         self.pg_dsn = os.getenv("PG_DSN", "postgresql://triage:triage@localhost:5433/triage")
 
         self.telemetry_db = os.getenv("TELEMETRY_DB", str(ROOT / "data" / "telemetry.db"))
+        # Action-level research traces (app/trace). Redirected in tests, same as
+        # telemetry_db, so a test run never writes into the committed data/ tree.
+        self.trace_dir = os.getenv("TRIAGE_TRACE_DIR", str(ROOT / "data" / "traces"))
         self.force_mock = (os.getenv("TRIAGE_FORCE_MOCK") or os.getenv("SV_FORCE_MOCK") or "0") in ("1", "true", "True")
 
     def provider_keys(self) -> dict[str, bool]:

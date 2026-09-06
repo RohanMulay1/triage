@@ -9,6 +9,9 @@ __pycache__/
 # runtime state / local artifacts
 data/*.db
 data/online_state.json
+# research traces: runs can be large, keep the mock fixture only
+data/traces/*
+!data/traces/fixture-mock/
 nohup.out
 *.log
 
@@ -33,3 +36,6 @@ paper/
 
 # Claude session memory — local only
 CLAUDE_MEMORY.md
+
+# ...but the fixture run's collection log is checkpoint evidence (beats *.log above)
+!data/traces/fixture-mock/collect.log

@@ -1,6 +1,6 @@
 """Test isolation. Set BEFORE any app import so get_settings() (lru_cached) reads
 these: force the mock provider and redirect ALL writable state (telemetry db,
-routing-memory db, online_state.json) into a throwaway temp dir, so the suite
+routing-memory db, online_state.json, research traces) into a throwaway temp dir, so the suite
 never touches committed data/ files or hits the network.
 """
 import os
@@ -9,6 +9,7 @@ import tempfile
 _TMP = tempfile.mkdtemp(prefix="triage-test-")
 os.environ["TELEMETRY_DB"] = os.path.join(_TMP, "telemetry.db")
 os.environ["TRIAGE_FORCE_MOCK"] = "1"
+os.environ["TRIAGE_TRACE_DIR"] = os.path.join(_TMP, "traces")
 os.environ.setdefault("RETRIEVAL_BACKEND", "local")
 
 import pytest

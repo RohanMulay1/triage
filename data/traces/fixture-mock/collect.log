@@ -1,0 +1,56 @@
+[collect_traces] mock provider forced: this run spends nothing.
+  [1/20] gsm8k-0000 tier=0 escalated=False label=0 actions=2
+  [2/20] gsm8k-0001 tier=0 escalated=False label=0 actions=2
+  [3/20] gsm8k-0002 tier=0 escalated=False label=0 actions=2
+  [4/20] gsm8k-0003 tier=1 escalated=False label=0 actions=5
+  [5/20] gsm8k-0004 tier=0 escalated=False label=0 actions=2
+  [6/20] gsm8k-0005 tier=1 escalated=False label=0 actions=5
+  [7/20] gsm8k-0006 tier=1 escalated=False label=0 actions=5
+  [8/20] gsm8k-0007 tier=1 escalated=False label=0 actions=5
+  [9/20] gsm8k-0008 tier=1 escalated=False label=0 actions=5
+  [10/20] gsm8k-0009 tier=0 escalated=False label=0 actions=2
+  [11/20] gsm8k-0010 tier=0 escalated=False label=1 actions=2
+  [12/20] gsm8k-0011 tier=0 escalated=False label=0 actions=2
+  [13/20] gsm8k-0012 tier=1 escalated=False label=0 actions=5
+  [14/20] gsm8k-0013 tier=1 escalated=False label=0 actions=5
+  [15/20] gsm8k-0014 tier=0 escalated=False label=0 actions=2
+  [16/20] gsm8k-0015 tier=0 escalated=False label=0 actions=2
+  [17/20] gsm8k-0016 tier=0 escalated=False label=0 actions=2
+  [18/20] gsm8k-0017 tier=0 escalated=False label=0 actions=2
+  [19/20] gsm8k-0018 tier=0 escalated=False label=0 actions=2
+  [20/20] gsm8k-0019 tier=0 escalated=False label=0 actions=2
+
+run_id: fixture-mock
+written to: C:\Users\rohan\triage\data\traces\fixture-mock
+
+--- validation ---
+{
+  "run_id": "fixture-mock",
+  "schema_version": "1.1.0",
+  "trajectories": 20,
+  "manifest_present": true,
+  "force_mock": true,
+  "synthetic_trajectories": 20,
+  "cost_conservation_ok": true,
+  "chain_ok": true,
+  "analysis_grade": false,
+  "errors": []
+}
+
+--- action support ---
+  abstain                                          taken=   0 feasible=  41 coverage=0.0
+  answer:llama-3.1-8b:t=0.2                        taken=  20 feasible=  20 coverage=1.0
+  resample:llama-3.1-8b:n=3,t=0.7                  taken=   7 feasible=  20 coverage=0.35
+  retrieve:min_score=0.2,top_k=4                   taken=   7 feasible=  34 coverage=0.2059
+  self_check:llama-3.1-8b                          taken=   7 feasible=  27 coverage=0.2593
+  stop                                             taken=  20 feasible=  41 coverage=0.4878
+  tool:name="calculator"                           taken=   0 feasible=  20 coverage=0.0
+  verify:llama-3.1-8b:max_rounds=1                 taken=   0 feasible=  41 coverage=0.0
+
+  unsupported actions : ['abstain', 'tool:name="calculator"', 'verify:llama-3.1-8b:max_rounds=1']
+  off-policy ready    : False
+  analysis grade      : False
+
+  Feasible actions were never chosen, so this run carries no evidence
+  about what they would have done. Off-policy value estimation over it
+  would be extrapolation. Randomized branch collection is required.

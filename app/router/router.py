@@ -26,6 +26,8 @@ from ..llm import LLMClient
 from ..retrieval.store import get_store
 from ..schemas import ChatRequest, ChatResponse, CostMetrics, RouteDecision, SignalSet
 from ..signals import proxy
+from ..trace import adapter as trace_adapter
+from ..trace.contract import ActionCost
 from ..verify.verify import verify
 from ..tools import calculator
 from . import memory, online, prefilter
@@ -52,12 +54,18 @@ def pick_model(req: ChatRequest) -> str:
 
 
 async def _assess(
-    client: LLMClient, req: ChatRequest, cfg: dict, lc: dict, compute_full: bool
+    client: LLMClient, req: ChatRequest, cfg: dict, lc: dict, compute_full: bool,
+    recorder=None,
 ) -> dict:
     """Run Tier 0-2 (main pass + signals + retrieve + verify) for ONE model.
 
     Returns everything the caller needs to decide abstain/escalation, including
     the (possibly verify-revised) answer and the per-tier level this model reached.
+
+    `recorder` is an optional app.trace.adapter.TraceRecorder. It only observes:
+    every call site below is a side-effect append guarded by `if recorder`, so
+    with recorder=None this function behaves exactly as it did before tracing
+    existed. That is what keeps the committed receipts in data/ reproducible.
     """
     tcfg, pcfg = cfg["tiers"], cfg["proxy"]
     enabled = cfg["signals"]
@@ -67,6 +75,7 @@ async def _assess(
     messages = [{"role": "system", "content": system}, {"role": "user", "content": req.message}]
 
     # ---- Tier 0: main pass ---------------------------------------------- #
+    c_mark = trace_adapter.snapshot_cost(client) if recorder else None
     main = await client.generate(
         messages, temperature=pcfg["base_temperature"],
         max_tokens=pcfg["max_tokens"], want_logprobs=True,
@@ -88,9 +97,19 @@ async def _assess(
         "gate": gate, "free_U": signals.uncertainty,
         "deep_signals": go_deep, "had_logprobs": bool(main.logprobs),
     }
+    if recorder:
+        recorder.record(
+            trace_adapter.answer_action(client.model_id, cfg),
+            answer=answer, signals=signals, model_id=client.model_id,
+            cost=trace_adapter.cost_delta(c_mark, client.cost, client.provider_label),
+            provider_label=client.provider_label,
+            rationale={"gate": gate, "free_U": signals.uncertainty,
+                       "had_logprobs": bool(main.logprobs), "deep_signals": go_deep},
+        )
 
     samples: list[str] = []
     if go_deep:
+        c_mark = trace_adapter.snapshot_cost(client) if recorder else None
         if enabled["instability"] or (enabled["uncertainty"] and not main.logprobs):
             for _ in range(pcfg["resamples"]):
                 r = await client.generate(
@@ -103,10 +122,30 @@ async def _assess(
             signals.uncertainty, signals.detail["uncertainty"] = proxy.uncertainty(main, samples)
         if enabled["instability"]:
             signals.instability, signals.detail["instability"] = proxy.instability(answer, samples)
+        if recorder and samples:
+            # One RESAMPLE action, not N: the intervention is "sample n more at
+            # temperature t". How many usable samples came back is a realisation
+            # of that action, so it belongs in the rationale.
+            recorder.record(
+                trace_adapter.resample_action(cfg, client.model_id),
+                answer=answer, signals=signals, model_id=client.model_id,
+                cost=trace_adapter.cost_delta(c_mark, client.cost, client.provider_label),
+                provider_label=client.provider_label,
+                rationale={"n_requested": pcfg["resamples"], "n_realised": len(samples)},
+            )
         if enabled["contradiction"]:
+            c_mark = trace_adapter.snapshot_cost(client) if recorder else None
             signals.contradiction, signals.detail["contradiction"] = await proxy.contradiction_probe(
                 client, req.message, answer
             )
+            if recorder:
+                recorder.record(
+                    trace_adapter.self_check_action(client.model_id),
+                    answer=answer, signals=signals, model_id=client.model_id,
+                    cost=trace_adapter.cost_delta(c_mark, client.cost, client.provider_label),
+                    provider_label=client.provider_label,
+                    rationale={"contradiction": signals.contradiction},
+                )
 
     conflict = (
         signals.contradiction >= tcfg["contradiction_high"]
@@ -134,6 +173,15 @@ async def _assess(
             signals.evidence_sufficiency, signals.detail["evidence_sufficiency"] = (
                 proxy.evidence_sufficiency(evidence, rc["min_score"])
             )
+        if recorder:
+            recorder.record(
+                trace_adapter.retrieve_action(cfg),
+                answer=answer, signals=signals, model_id=client.model_id,
+                cost=ActionCost(),  # local vector search: no model call, no bill
+                provider_label="retrieval", evidence_count=len(evidence),
+                rationale={"trigger": "uncertainty_over_tau_star",
+                           "tau_star": tcfg["tau_star"], "u": signals.uncertainty},
+            )
 
     # ---- Tier 2: verify (cost guard) ------------------------------------- #
     verified = False
@@ -159,6 +207,15 @@ async def _assess(
                 signals.evidence_sufficiency, signals.detail["evidence_sufficiency"] = (
                     proxy.evidence_sufficiency(evidence, rc["min_score"])
                 )
+            if recorder:
+                recorder.record(
+                    trace_adapter.retrieve_action(cfg),
+                    answer=answer, signals=signals, model_id=client.model_id,
+                    cost=ActionCost(), provider_label="retrieval",
+                    evidence_count=len(evidence),
+                    rationale={"trigger": "verify_needs_evidence"},
+                )
+        c_mark = trace_adapter.snapshot_cost(client) if recorder else None
         v = await verify(client, req.message, answer, evidence)
         verified = True
         verify_pass = v["pass"]
@@ -166,6 +223,17 @@ async def _assess(
         signals.detail["verify"] = {"pass": v["pass"], "reason": v["reason"]}
         if v["pass"]:
             answer = v["revised"]
+        if recorder:
+            recorder.record(
+                trace_adapter.verify_action(cfg, client.model_id),
+                answer=answer, signals=signals, model_id=client.model_id,
+                cost=trace_adapter.cost_delta(c_mark, client.cost, client.provider_label),
+                provider_label=client.provider_label,
+                evidence_count=len(evidence),
+                rationale={"pass": v["pass"], "reason": v["reason"],
+                           "conflict": conflict,
+                           "projected_cost_multiplier": round(projected_verify_mult, 3)},
+            )
 
     # ---- R signal: retrieval support ------------------------------------- #
     signals.retrieval_support = round(
@@ -181,7 +249,7 @@ async def _assess(
     }
 
 
-async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
+async def route_and_answer(req: ChatRequest, recorder=None) -> tuple[ChatResponse, dict]:
     cfg = load_router_config()
     tcfg = cfg["tiers"]
     ecfg = cfg.get("escalation", {}) or {}
@@ -203,6 +271,17 @@ async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
     system = req.system or "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
     lc = long_context_route(system + " " + req.message, tcfg["long_context_tokens"])
 
+    # ---- Open the research trace at the root state, before any spend ------ #
+    escalation_on = bool(ecfg.get("enabled") and req.allow_escalation
+                         and ecfg.get("max_escalations", 0) >= 1)
+    if recorder:
+        recorder.set_context(small_id, big_id, big_valid, escalation_on)
+        recorder.begin(model_id=small_id, prompt_features={
+            "long_context": lc["long_context"],
+            "approx_prompt_tokens": lc["approx_prompt_tokens"],
+            "message_chars": len(req.message),
+        })
+
     # ---- Tier T: deterministic tool (exact math) BEFORE any LLM spend ---- #
     # Tool-aware routing: if the request reduces to a pure math expression, the
     # calculator answers it exactly for ~zero cost — no model, no escalation, no
@@ -210,7 +289,7 @@ async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
     if cfg.get("tools", {}).get("calculator", True):
         sol = calculator.solve(req.message)
         if sol["handled"]:
-            return _tool_response(req, sol, small_id, lc, t_start)
+            return _tool_response(req, sol, small_id, lc, t_start, recorder)
 
     # ---- Tier -1: hybrid predict-then-route pre-filter ------------------- #
     mem = (
@@ -221,9 +300,13 @@ async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
         prefilter.predict(req.message, mem, pfcfg)
         if pfcfg.get("enabled", True) else {"route": "normal", "difficulty": None, "detail": {}}
     )
-    escalation_on = bool(ecfg.get("enabled") and req.allow_escalation and ecfg.get("max_escalations", 0) >= 1)
     prefiltered_to_big = pf["route"] == "hard_direct" and escalation_on and big_valid
     fast_path = pf["route"] == "easy_direct"
+    if recorder:
+        recorder.update_features({
+            "prefilter_route": pf["route"], "predicted_difficulty": pf["difficulty"],
+            "memory_hit": mem.get("hit"), "memory_neighbours": mem.get("n"),
+        })
 
     # ---- Assessment on the started model (big if pre-filter said hard) ---- #
     start_id = big_id if prefiltered_to_big else small_id
@@ -233,7 +316,7 @@ async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
     # model (no bigger model to escalate to -> resampling a slow reasoning model just
     # burns ~5x the latency/cost for nothing).
     deep = req.max_signals and not fast_path and not prefiltered_to_big
-    a = await _assess(start_client, req, cfg, lc, deep)
+    a = await _assess(start_client, req, cfg, lc, deep, recorder)
     # Pre-filter sent us straight to the big model and it FAILED (timeout/empty):
     # fall back to the small model — a provider failure must never become an abstain.
     pf_big_failed = False
@@ -244,6 +327,19 @@ async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
             pf_big_failed = True
             a = a_small
             start_client = fb_client   # cost of the failed big call is ~0 tokens
+            if recorder:
+                # Coarsened to one action on a rare provider-failure path: the
+                # fallback pass may itself have retrieved or verified, and those
+                # sub-costs are folded into this ANSWER rather than dropped.
+                recorder.record(
+                    trace_adapter.answer_action(small_id, cfg),
+                    answer=a["answer"], signals=a["signals"], model_id=small_id,
+                    cost=trace_adapter.cost_delta(
+                        CostMetrics(), fb_client.cost, fb_client.provider_label),
+                    provider_label=fb_client.provider_label,
+                    evidence_count=len(a["evidence"]),
+                    rationale={"trigger": "prefilter_big_model_failed"},
+                )
     abstain_flag, risk, adetail = should_abstain(a["signals"], cfg["abstain"])
     rescued = a["verified"] and a["verify_pass"]
     would_abstain = abstain_flag and not rescued
@@ -311,6 +407,22 @@ async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
                 "small_risk": small_risk_val, "big_risk": b_risk,
                 "reason": f"{why} -> traded up to bigger model",
             })
+        if recorder:
+            # One STRONGER_MODEL action priced at the whole big-model pass. The
+            # intervention being valued is "trade up", so its cost is what
+            # trading up cost; splitting the big model's internal passes out
+            # would make each of them look free. The resulting state is the
+            # SERVED one, so a big-model failure is recorded honestly as an
+            # action that spent money and changed nothing.
+            recorder.record(
+                trace_adapter.stronger_model_action(big_id),
+                answer=chosen["answer"], signals=chosen["signals"], model_id=big_id,
+                cost=trace_adapter.cost_delta(
+                    CostMetrics(), big_client.cost, big_client.provider_label),
+                provider_label=big_client.provider_label,
+                evidence_count=len(chosen["evidence"]),
+                rationale=dict(esc_detail),
+            )
 
     # ---- Aggregate cost across every model touched ----------------------- #
     # C-10: alongside API dollars we report a compute-based measure (prefill /
@@ -411,12 +523,19 @@ async def route_and_answer(req: ChatRequest) -> tuple[ChatResponse, dict]:
     return resp, telem
 
 
-def _tool_response(req, sol, small_id, lc, t_start) -> tuple[ChatResponse, dict]:
+def _tool_response(req, sol, small_id, lc, t_start, recorder=None) -> tuple[ChatResponse, dict]:
     """Build the served response when the calculator tool solved the request."""
     answer = f"{sol['answer']}"
     signals = SignalSet()
     signals.detail["tool"] = {"name": "calculator", "expression": sol["expression"],
                               "exact": not sol["answer"].startswith("≈")}
+    if recorder:
+        recorder.record(
+            trace_adapter.tool_action("calculator"),
+            answer=answer, signals=signals, model_id="calculator-tool",
+            cost=ActionCost(), provider_label="tool",
+            rationale={"expression": sol["expression"]},
+        )
     reason = f"exact arithmetic via calculator tool (no LLM): {sol['expression']} = {sol['answer']}"
     route = RouteDecision(
         tier=0, tier_name="tool", long_context=lc["long_context"],
