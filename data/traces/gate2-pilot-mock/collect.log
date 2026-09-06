@@ -1,0 +1,124 @@
+[collect_traces] mock provider forced: this run spends nothing.
+  [1/40] gsm8k-0000 split=train branches=11 written=11
+  [2/40] gsm8k-0001 split=train branches=11 written=22
+  [3/40] gsm8k-0002 split=test branches=11 written=33
+  [4/40] gsm8k-0003 split=train branches=11 written=44
+  [5/40] gsm8k-0004 split=train branches=11 written=55
+  [6/40] gsm8k-0005 split=test branches=11 written=66
+  [7/40] gsm8k-0006 split=train branches=11 written=77
+  [8/40] gsm8k-0007 split=calib branches=11 written=88
+  [9/40] gsm8k-0008 split=train branches=11 written=99
+  [10/40] gsm8k-0009 split=train branches=11 written=110
+  [11/40] gsm8k-0010 split=test branches=11 written=121
+  [12/40] gsm8k-0011 split=train branches=11 written=132
+  [13/40] gsm8k-0012 split=calib branches=11 written=143
+  [14/40] gsm8k-0013 split=test branches=11 written=154
+  [15/40] gsm8k-0014 split=train branches=11 written=165
+  [16/40] gsm8k-0015 split=calib branches=11 written=176
+  [17/40] gsm8k-0016 split=train branches=11 written=187
+  [18/40] gsm8k-0017 split=train branches=11 written=198
+  [19/40] gsm8k-0018 split=train branches=11 written=209
+  [20/40] gsm8k-0019 split=calib branches=11 written=220
+  [21/40] gsm8k-0020 split=train branches=11 written=231
+  [22/40] gsm8k-0021 split=test branches=11 written=242
+  [23/40] gsm8k-0022 split=train branches=11 written=253
+  [24/40] gsm8k-0023 split=train branches=11 written=264
+  [25/40] gsm8k-0024 split=test branches=11 written=275
+  [26/40] gsm8k-0025 split=train branches=11 written=286
+  [27/40] gsm8k-0026 split=train branches=11 written=297
+  [28/40] gsm8k-0027 split=test branches=11 written=308
+  [29/40] gsm8k-0028 split=calib branches=11 written=319
+  [30/40] gsm8k-0029 split=train branches=11 written=330
+  [31/40] gsm8k-0030 split=calib branches=11 written=341
+  [32/40] gsm8k-0031 split=calib branches=11 written=352
+  [33/40] gsm8k-0032 split=train branches=11 written=363
+  [34/40] gsm8k-0033 split=calib branches=11 written=374
+  [35/40] gsm8k-0034 split=train branches=11 written=385
+  [36/40] gsm8k-0035 split=calib branches=11 written=396
+  [37/40] gsm8k-0036 split=calib branches=11 written=407
+  [38/40] gsm8k-0037 split=train branches=11 written=418
+  [39/40] gsm8k-0038 split=train branches=11 written=429
+  [40/40] gsm8k-0039 split=test branches=11 written=440
+
+run_id: gate2-pilot-mock
+written to: C:\Users\rohan\triage\data\traces\gate2-pilot-mock
+
+--- validation ---
+{
+  "run_id": "gate2-pilot-mock",
+  "schema_version": "1.2.0",
+  "trajectories": 440,
+  "manifest_present": true,
+  "force_mock": true,
+  "synthetic_trajectories": 240,
+  "cost_conservation_ok": true,
+  "chain_ok": true,
+  "analysis_grade": false,
+  "errors": []
+}
+
+--- missingness ---
+{
+  "chosen": 80,
+  "counterfactual": 520,
+  "unchosen": 0,
+  "attempted": 0,
+  "unavailable": 80,
+  "failed": 0,
+  "synthetic_fallback": 0
+}
+
+--- action support ---
+  abstain                                        taken=  40 observed=  40 feasible= 400 coverage=0.1
+  answer:llama-3.1-8b:t=0.2                      taken=  80 observed=  80 feasible= 440 coverage=0.1818
+  resample:llama-3.1-8b:n=3,t=0.7                taken=  40 observed=  40 feasible= 400 coverage=0.1
+  retrieve:min_score=0.2,top_k=4                 taken=  40 observed=  40 feasible= 400 coverage=0.1
+  self_check:llama-3.1-8b                        taken=  40 observed=  40 feasible= 400 coverage=0.1
+  specialist_model                               taken=  40 observed=   0 feasible=  40 coverage=1.0
+  stop                                           taken= 280 observed= 280 feasible= 640 coverage=0.4375
+  stronger_model:gpt-4o                          taken=  40 observed=  40 feasible= 400 coverage=0.1
+  tool:name="calculator"                         taken=  40 observed=   0 feasible=  40 coverage=1.0
+  verify:llama-3.1-8b:max_rounds=1               taken=  40 observed=  40 feasible= 400 coverage=0.1
+
+  unsupported actions : ['specialist_model', 'tool:name="calculator"']
+  off-policy ready    : False
+  analysis grade      : False
+
+--- marginal value vs STOP (items with baseline: 40) ---
+  abstain                                        n=  40 mean delta=-0.0500 95% CI [-0.1184, +0.0184] (+0/-2/=38)
+  answer:llama-3.1-8b:t=0.2                      n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  resample:llama-3.1-8b:n=3,t=0.7                n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  retrieve:min_score=0.2,top_k=4                 n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  self_check:llama-3.1-8b                        n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  stronger_model:gpt-4o                          n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+  verify:llama-3.1-8b:max_rounds=1               n=  40 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=40)
+
+next: python -m app.trace.support --run gate2-pilot-mock
+run: gate2-pilot-mock   rows: 40
+splits: {'calib': 10, 'test': 8, 'train': 22}   task families: {'gsm8k': 40}
+
+--- Q1: does the state predict a WRONG answer? ---
+  triage_risk            AUC(wrong)=0.6973684210526315 CI[0.6282, 0.7763] n=40 wrong=38
+  uncertainty            AUC(wrong)=0.6973684210526315 CI[0.6282, 0.7763] n=40 wrong=38
+  predicted_difficulty   AUC(wrong)=0.5 CI[0.5, 0.5] n=40 wrong=38
+
+--- Q2: marginal benefit of each action vs STOP ---
+  abstain                                      mean=-0.0500 CI[-0.125, 0.0] n=40 (+0/-2/=38) neg_rate=0.05 varies=True
+  answer:llama-3.1-8b:t=0.2                    mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  resample:llama-3.1-8b:n=3,t=0.7              mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  retrieve:min_score=0.2,top_k=4               mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  self_check:llama-3.1-8b                      mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  stronger_model:gpt-4o                        mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+  verify:llama-3.1-8b:max_rounds=1             mean=+0.0000 CI[0.0, 0.0] n=40 (+0/-0/=40) neg_rate=0.0 varies=False
+
+actions with any variation: ['abstain']
+
+  predicting repair by abstain:
+    prompt_only            {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    scalar_uncertainty     {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    triage_risk            {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    response_only          {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+    prompt_plus_response   {'status': 'no_variation_in_target', 'n': 40, 'n_positive': 0}
+
+VERDICT: INCONCLUSIVE
+  - no action had enough labelled variation on a held-out split to fit and score a probe at the required sample size (>= 20 test rows, >= 5 per class)

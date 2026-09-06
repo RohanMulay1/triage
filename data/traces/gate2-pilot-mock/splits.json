@@ -1,0 +1,579 @@
+{
+  "run_id": "gate2-pilot-mock",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788716469.255591,
+  "group_count": 40,
+  "counts": {
+    "train": 22,
+    "test": 8,
+    "calib": 10
+  },
+  "groups": {
+    "df753cba51378f18559f938a5110b6cfdd0f9b8749068bb0fb3472b72d2e11b0": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "amber micah and ahito ran 52 miles in total amber ran 8"
+      },
+      "items": [
+        "gsm8k-0000"
+      ]
+    },
+    "89db490434b5024fc64e717545b7afb42e2c83ef4c1f876e325a0775f8b994ca": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "miguel uses 2 pads of paper a week for his drawing if"
+      },
+      "items": [
+        "gsm8k-0001"
+      ]
+    },
+    "123e1e3f626c39fa9ca26160ffdb55db220104d406cd30333149da9f924c86fe": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "at a certain grade level three fourths of students have a desktop"
+      },
+      "items": [
+        "gsm8k-0002"
+      ]
+    },
+    "68ad401ecf51036a46c89359cbdf7ef0dc77d1345bf6079f6f9a27f1521274ce": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "comet halley orbits the sun every 75 years bill s dad saw"
+      },
+      "items": [
+        "gsm8k-0003"
+      ]
+    },
+    "0d409ca8947300794aeabc4968f36611e519d4937623949c98faefc7a22586a5": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "tom plants 10 trees a year every year he also chops down"
+      },
+      "items": [
+        "gsm8k-0004"
+      ]
+    },
+    "48e4f25fcf922ca7489a6dba559644783f88ed7700abab0d1cfdbdc5bf68623d": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "john picks 4 bananas on wednesday then he picks 6 bananas on"
+      },
+      "items": [
+        "gsm8k-0005"
+      ]
+    },
+    "8b8a3da36de25d7ea5726ef97971da719d70337b30cec015e2f324d5207f1a40": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "peyton scheduled after work activities of a one hour yoga class on"
+      },
+      "items": [
+        "gsm8k-0006"
+      ]
+    },
+    "bca4513349ce1b9a5cd46594751016e54d7b04c47fec323dc6e5d79259b0d0c7": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "ben has 4 tubes of blue paint and 3 tubes of yellow"
+      },
+      "items": [
+        "gsm8k-0007"
+      ]
+    },
+    "2e40ab6518408b09b34a61a01cf5d223140bef6c2fb6c1e3ba0e3036a3d939f0": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "elaina is holding the final concert in her tour to celebrate her"
+      },
+      "items": [
+        "gsm8k-0008"
+      ]
+    },
+    "61ef2130ea610ac84c05bd90c49e907436b343c46cf73ced9da5b202800d5f30": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "hannah slips on a banana peel and breaks her arm the doctor"
+      },
+      "items": [
+        "gsm8k-0009"
+      ]
+    },
+    "684174bd9ae5705a69d1cd751ac790313c56cd5d6aa8d87c1bbf7bc66da90b23": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a loaf of bread at the bakery costs 2 bagels cost 1"
+      },
+      "items": [
+        "gsm8k-0010"
+      ]
+    },
+    "caf59301c96ec12857602f597d9f1722bf30708f820ba7f6a8165b0039f0ecf5": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "bob thinks he needs 56 popsicle sticks to recreate the washington monument"
+      },
+      "items": [
+        "gsm8k-0011"
+      ]
+    },
+    "94028248beeb11b7fd509e3bb7cf1bc7e6e37ebb9efc783499b9625205fa3241": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "dennis uses 1 pound of butter for every dozen croissants that he"
+      },
+      "items": [
+        "gsm8k-0012"
+      ]
+    },
+    "0a1bc44e676a457a2461c10da384329975d647890725f5eaf337d6b775c6bdf0": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "regina wrote 9 novels last year if this is 3 quarters of"
+      },
+      "items": [
+        "gsm8k-0013"
+      ]
+    },
+    "aae380356a910ad9d972a0cabd681bdbd65e5cfda9608ae59270c64f62fcbd0e": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "alex is getting ready to attend an event that she has hosted"
+      },
+      "items": [
+        "gsm8k-0014"
+      ]
+    },
+    "b8ead768f4a2b6412d136eb51ec7d23d8d874a59c10ab471e066e6020a86993c": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "rozanne is making eggnog for her family she uses 4 dozen eggs"
+      },
+      "items": [
+        "gsm8k-0015"
+      ]
+    },
+    "1881a88b580e11a095db39680f7a94107b5088f903fca79b393b92377fca087b": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "matthew has a collection of 12 unique toy soldiers he wants to"
+      },
+      "items": [
+        "gsm8k-0016"
+      ]
+    },
+    "af473e16bf8291cb97f6a76129ee4e46d0d765fa4831afd40fc670ae027d68c4": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "mrs cruz is looking for a house that will not go beyond"
+      },
+      "items": [
+        "gsm8k-0017"
+      ]
+    },
+    "8b6e1c9a7840fa5bc64613b127b17639884dbfd9793c31d2071f6f92749f0745": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "juan and his brother carlos are selling lemonade for each gallon they"
+      },
+      "items": [
+        "gsm8k-0018"
+      ]
+    },
+    "72c1c996c7efe8ca2d772428c0fafd26a3d6a20d1376e2def34478ca5a6b1af3": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "when the water is cold ray swims a mile in 16 minutes"
+      },
+      "items": [
+        "gsm8k-0019"
+      ]
+    },
+    "6c909befde1337544895dffd914323f5326319ace85097ab06a1c2fbf48ca555": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "abraham owns 80 square meters of unused land he sold half of"
+      },
+      "items": [
+        "gsm8k-0020"
+      ]
+    },
+    "eb74abff2095c9df958de5d687e9181a8b24199c912ca4749a94d74413b14f76": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "arianna plants a garden that has 10 rows of flowers with 20"
+      },
+      "items": [
+        "gsm8k-0021"
+      ]
+    },
+    "1aa1e1cce76994e6f8f3397bdca9c07afdb4b8790f43ea23f453007bd872f980": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "for four hours patrick sold 15 cups of lemonade per hour at"
+      },
+      "items": [
+        "gsm8k-0022"
+      ]
+    },
+    "3c887e434abfffa391ed51f4a97d8aa6c66e9f7327c1c7ce6803fec99e23a62f": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "although soledad works in a windowless office she loves the outdoors she"
+      },
+      "items": [
+        "gsm8k-0023"
+      ]
+    },
+    "8d888590c4eb241380930754c0a5bd2c5f4e7a235d23f5f6de63e4975b0450eb": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "janet had 22 green pens and 10 yellow pens then she bought"
+      },
+      "items": [
+        "gsm8k-0024"
+      ]
+    },
+    "0fe1a4fa2687bf405d7447bc7b6e29857404322fef4b443330db41ba0fc766f2": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "carson lives in an old house where the pipes will freeze if"
+      },
+      "items": [
+        "gsm8k-0025"
+      ]
+    },
+    "0c13273cc1a1377c63b91165a473e1dac470542a7241179349a1732b35b33093": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "in the city of soda there are exactly 23786 inhabitants they include"
+      },
+      "items": [
+        "gsm8k-0026"
+      ]
+    },
+    "598d33c5102174c0855a35ce7fcc201067fa694c1d9081edeabe3e4c5ffc1ff8": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "alfie the albatross flies 400 kilometers every day if the circumference of"
+      },
+      "items": [
+        "gsm8k-0027"
+      ]
+    },
+    "816d719e2393c1ca40e6605db42959bf2d150235162aa3c9e60164b8d0f5f818": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a candle melts by 2 centimeters every hour that it burns how"
+      },
+      "items": [
+        "gsm8k-0028"
+      ]
+    },
+    "787f22ffbedcba41183d790621a0241ff60aca3c06db68fef36c6fb679103561": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "donny can only drink water if it s at least 40 degrees"
+      },
+      "items": [
+        "gsm8k-0029"
+      ]
+    },
+    "effe66c9f94dc2e95ccf58afc55b5805902ca36365646463a243340e52104576": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "the bananas at the supermarket cost 0 80 each or a bunch"
+      },
+      "items": [
+        "gsm8k-0030"
+      ]
+    },
+    "11807e82978948a19dcb5befc2b743699424d264858c3ad358b021be596124ca": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "romeo boards a train with 120 people at the first stop 20"
+      },
+      "items": [
+        "gsm8k-0031"
+      ]
+    },
+    "8b344c42a49eb342042517740ad5442656148511892dc8301937617af18fb501": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "vince can staple 30 reports every 15 minutes if he was stapling"
+      },
+      "items": [
+        "gsm8k-0032"
+      ]
+    },
+    "7dce351ad6bea0d3375cbf6586c8cab65a099721872adb29ba83ed56b8a7cfdc": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "daisy bought a bag of potatoes that weighed 5 pounds she also"
+      },
+      "items": [
+        "gsm8k-0033"
+      ]
+    },
+    "5891df48ac366c368a98bfaf99e78e60593b640bc686e4053d7a5f7ca136d648": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "ginger and amy both start with 100 pieces of halloween candy ginger"
+      },
+      "items": [
+        "gsm8k-0034"
+      ]
+    },
+    "fcc782900b4af04df25e72cebe2ab1d44d62339700f72bc44af34e0655b502b6": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "bahati azibo and dinar each contributed to their team s 45 points"
+      },
+      "items": [
+        "gsm8k-0035"
+      ]
+    },
+    "187824cd158b0c5bd53db6f3c0957f8707e1346f4be0c97d7e1e0293dfdbba0e": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a dvd can be played 1000 times before it breaks there are"
+      },
+      "items": [
+        "gsm8k-0036"
+      ]
+    },
+    "b7fd6ed3bb45550e7c807d65b5995f8af2e86c4e5ffc041dc49338116e7da988": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "for each small task accomplished jairus gets 0 8 while jenny gets"
+      },
+      "items": [
+        "gsm8k-0037"
+      ]
+    },
+    "6706386498370d1f66b77436a9af380b76e1b5190181e2b0968e6e0fb08a52d9": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "zoey and sydney are having a watermelon seed spitting contest whoever spits"
+      },
+      "items": [
+        "gsm8k-0038"
+      ]
+    },
+    "f1fc6818698e62fc38d4d9672ed122ae435968b767d36a88559f010051d0e63f": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a basic manicure starts at 35 while a pedicure starts at 40"
+      },
+      "items": [
+        "gsm8k-0039"
+      ]
+    }
+  }
+}

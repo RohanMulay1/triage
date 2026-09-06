@@ -13,6 +13,7 @@ data/online_state.json
 data/traces/*
 !data/traces/fixture-mock/
 !data/traces/fixture-fanout/
+!data/traces/gate2-pilot-mock/
 nohup.out
 *.log
 
@@ -41,3 +42,5 @@ CLAUDE_MEMORY.md
 # ...but the fixture run's collection log is checkpoint evidence (beats *.log above)
 !data/traces/fixture-mock/collect.log
 !data/traces/fixture-fanout/collect.log
+!data/traces/gate2-pilot-mock/collect.log
+!data/traces/gate2-pilot-mock/gate2_report.json

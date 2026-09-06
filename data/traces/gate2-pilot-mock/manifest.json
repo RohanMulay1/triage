@@ -1,0 +1,82 @@
+{
+  "run_id": "gate2-pilot-mock",
+  "schema_version": "1.2.0",
+  "created_ts": 1788716469.1984231,
+  "git_sha": "52549cbc60c32ec149d87f1b028a9f5d842cd029",
+  "router_config_hash": "d5ab00f2690eaf91",
+  "models_config_hash": "8cc5d9f73ad1062a",
+  "model_snapshot": {
+    "gpt-4o-mini": {
+      "live_provider": "mock",
+      "live_model": "gpt-4o-mini",
+      "cost_in": 0.15,
+      "cost_out": 0.6
+    },
+    "gpt-4o": {
+      "live_provider": "mock",
+      "live_model": "gpt-4o",
+      "cost_in": 2.5,
+      "cost_out": 10.0
+    },
+    "gpt-5-mini": {
+      "live_provider": "mock",
+      "live_model": "gpt-5-mini",
+      "cost_in": 0.25,
+      "cost_out": 2.0
+    },
+    "gpt-5": {
+      "live_provider": "mock",
+      "live_model": "gpt-5",
+      "cost_in": 1.25,
+      "cost_out": 10.0
+    },
+    "llama-3.1-8b": {
+      "live_provider": "mock",
+      "live_model": "meta/llama-3.1-8b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "llama-3.3-70b": {
+      "live_provider": "mock",
+      "live_model": "meta/llama-3.3-70b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "llama-3.1-70b": {
+      "live_provider": "mock",
+      "live_model": "meta/llama-3.1-70b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-super-49b": {
+      "live_provider": "mock",
+      "live_model": "nvidia/llama-3.3-nemotron-super-49b-v1",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-nano-9b": {
+      "live_provider": "mock",
+      "live_model": "nvidia/nvidia-nemotron-nano-9b-v2",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-ultra-550b-free": {
+      "live_provider": "mock",
+      "live_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    }
+  },
+  "seeds": [
+    0
+  ],
+  "force_mock": true,
+  "dataset": "gsm8k",
+  "split": "mixed",
+  "command": "scripts/collect_traces.py --n 40 --dataset gsm8k --mode fanout --policy response_risk --run-id gate2-pilot-mock --notes Decision Gate 2 pilot, mock provider, zero spend.",
+  "env": {
+    "python": "3.11.9",
+    "pydantic": "2.13.4"
+  },
+  "notes": "Decision Gate 2 pilot, mock provider, zero spend. | mode=fanout policy=response_risk small=llama-3.1-8b big=gpt-4o"
+}

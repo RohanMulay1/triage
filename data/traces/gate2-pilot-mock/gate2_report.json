@@ -1,0 +1,179 @@
+{
+  "run_id": "gate2-pilot-mock",
+  "rows": 40,
+  "splits": {
+    "calib": 10,
+    "test": 8,
+    "train": 22
+  },
+  "task_families": {
+    "gsm8k": 40
+  },
+  "correctness_signal": {
+    "triage_risk": {
+      "feature": "triage_risk",
+      "auc_wrong": 0.6973684210526315,
+      "ci": {
+        "point": 0.6974,
+        "lo": 0.6282,
+        "hi": 0.7763,
+        "n": 40
+      },
+      "n": 40,
+      "n_wrong": 38
+    },
+    "uncertainty": {
+      "feature": "uncertainty",
+      "auc_wrong": 0.6973684210526315,
+      "ci": {
+        "point": 0.6974,
+        "lo": 0.6282,
+        "hi": 0.7763,
+        "n": 40
+      },
+      "n": 40,
+      "n_wrong": 38
+    },
+    "predicted_difficulty": {
+      "feature": "predicted_difficulty",
+      "auc_wrong": 0.5,
+      "ci": {
+        "point": 0.5,
+        "lo": 0.5,
+        "hi": 0.5,
+        "n": 40
+      },
+      "n": 40,
+      "n_wrong": 38
+    }
+  },
+  "repairability": {
+    "abstain": {
+      "point": -0.05,
+      "lo": -0.125,
+      "hi": 0.0,
+      "n": 40,
+      "mean_delta": -0.05,
+      "n_positive": 0,
+      "n_negative": 2,
+      "n_zero": 38,
+      "negative_rate": 0.05,
+      "any_variation": true,
+      "mean_cost_usd": 0.0
+    },
+    "answer:llama-3.1-8b:t=0.2": {
+      "point": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 40,
+      "mean_delta": 0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "n_zero": 40,
+      "negative_rate": 0.0,
+      "any_variation": false,
+      "mean_cost_usd": 0.0
+    },
+    "resample:llama-3.1-8b:n=3,t=0.7": {
+      "point": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 40,
+      "mean_delta": 0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "n_zero": 40,
+      "negative_rate": 0.0,
+      "any_variation": false,
+      "mean_cost_usd": 0.0
+    },
+    "retrieve:min_score=0.2,top_k=4": {
+      "point": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 40,
+      "mean_delta": 0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "n_zero": 40,
+      "negative_rate": 0.0,
+      "any_variation": false,
+      "mean_cost_usd": 0.0
+    },
+    "self_check:llama-3.1-8b": {
+      "point": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 40,
+      "mean_delta": 0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "n_zero": 40,
+      "negative_rate": 0.0,
+      "any_variation": false,
+      "mean_cost_usd": 0.0
+    },
+    "stronger_model:gpt-4o": {
+      "point": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 40,
+      "mean_delta": 0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "n_zero": 40,
+      "negative_rate": 0.0,
+      "any_variation": false,
+      "mean_cost_usd": 0.0
+    },
+    "verify:llama-3.1-8b:max_rounds=1": {
+      "point": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 40,
+      "mean_delta": 0.0,
+      "n_positive": 0,
+      "n_negative": 0,
+      "n_zero": 40,
+      "negative_rate": 0.0,
+      "any_variation": false,
+      "mean_cost_usd": 0.0
+    }
+  },
+  "actions_with_variation": [
+    "abstain"
+  ],
+  "feature_set_comparison": {
+    "abstain": {
+      "prompt_only": {
+        "status": "no_variation_in_target",
+        "n": 40,
+        "n_positive": 0
+      },
+      "scalar_uncertainty": {
+        "status": "no_variation_in_target",
+        "n": 40,
+        "n_positive": 0
+      },
+      "triage_risk": {
+        "status": "no_variation_in_target",
+        "n": 40,
+        "n_positive": 0
+      },
+      "response_only": {
+        "status": "no_variation_in_target",
+        "n": 40,
+        "n_positive": 0
+      },
+      "prompt_plus_response": {
+        "status": "no_variation_in_target",
+        "n": 40,
+        "n_positive": 0
+      }
+    }
+  },
+  "verdict": "INCONCLUSIVE",
+  "reasons": [
+    "no action had enough labelled variation on a held-out split to fit and score a probe at the required sample size (>= 20 test rows, >= 5 per class)"
+  ]
+}
