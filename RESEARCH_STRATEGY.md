@@ -123,7 +123,7 @@ authorization to spend or evidence that live collection is ready.
 **Checkpoint 4 — Decision Gate 2, signal and repairability pilot on mock. Verdict: INCONCLUSIVE.**
 
 - **Completed:** `app/trace/analysis.py` implements the gate. It separates the two questions the project has historically conflated — (1) does the observed state predict a **wrong** answer, (2) does it predict that a given action would **fix** it — and compares five feature sets (prompt-only, scalar uncertainty, Triage risk, response-only, prompt+response) by fitting on one split and scoring on another. Percentile bootstrap CIs throughout. Pilot run: `data/traces/gate2-pilot-mock/` — 40 GSM8K items, exhaustive fan-out, mock provider, **$0**.
-- **Q1 result — risk does predict wrongness.** Triage risk ranks wrong answers above right ones with **AUC 0.697, 95% CI [0.628, 0.776]** (n=40, 38 wrong); scalar uncertainty is identical. The pre-filter's prompt-only difficulty scores **AUC 0.500** — no signal at all.
+- **Q1 result — risk does predict wrongness.** Triage risk ranks wrong answers above right ones with **AUC 0.697, 95% CI [0.628, 0.776]** (n=40, 38 wrong); scalar uncertainty is identical. ~~The pre-filter's prompt-only difficulty scores **AUC 0.500** — no signal at all.~~ **RETRACTED 2026-09-07 — see Correction 1 below.**
 - **Q2 result — nothing repairs anything.** Across all 40 items, `retrieve`, `resample`, `self_check`, `verify`, `stronger_model` and a fresh `answer` each have marginal value versus STOP of **exactly 0.000** (40/40 items zero). `abstain` has mean Δ **−0.050**, 95% CI [−0.125, 0.000]. Negative-intervention rate is 0.0 for every action except abstain (0.05).
 - **Verdict: INCONCLUSIVE — not GO, not NARROW, not STOP.** With no action's benefit varying across items there is no repair target to predict, so the feature-set comparison cannot be run at all: every probe returns `no_variation_in_target`. The gate is undecided, and **no RL or controller implementation proceeds on this basis.**
 - **Why this is a property of the harness, not a finding about models.** The mock provider answers from a 16-entry knowledge base and cannot solve GSM8K, so every branch of every item is scored wrong no matter which action is applied. Zero variance in the outcome is guaranteed by construction. This result is evidence that **the pilot machinery works end to end**; it is not evidence about repairability, and it must not be cited as support for the thesis.
@@ -133,6 +133,32 @@ authorization to spend or evidence that live collection is ready.
 - **Evidence:** `pytest -q` passes **210 tests** (22 new in `tests/test_trace_analysis.py`, which pin the refusals rather than the numbers). Artifacts: `manifest.json`, `splits.json`, `trajectories.jsonl`, `collect.log`, `gate2_report.json`.
 - **Failure/limitation:** Gate 2 cannot be decided without a live provider, because only a model whose answers actually change under intervention can produce a repair target. The fan-out also remains depth-1, so even a live run answers the myopic question and not the sequential one (Gate 3).
 - **Remaining tasks:** obtain Yin & Zhang (still blocking any paper claim, per Checkpoint 2); get an approved budget; re-run this pilot live; only then revisit Gate 2.
+
+**Corrections to Checkpoint 4 (2026-09-07).** Both were found by inspection during
+the Checkpoint 5 access work and are recorded here rather than edited away.
+
+1. **The prompt-only comparison was invalid and is withdrawn.** `collect_fanout`
+   writes only `{"task_family": ...}` into `prompt_features`, so `message_chars`,
+   `predicted_difficulty` and `approx_prompt_tokens` are **identically 0.0 across
+   all 40 items** of `gate2-pilot-mock`. AUC 0.500 is what a constant feature
+   returns; it measures nothing about the pre-filter. Verified:
+   `assemble("gate2-pilot-mock")` yields exactly one distinct value (`0.0`) for
+   each of the three. The Triage-risk figure of 0.697 stands — those features are
+   populated — but **no contrast between response-only and prompt-only features
+   has been measured on any run to date.** The Signal Gate's central comparison
+   remains untested, not failed.
+
+2. **The stated cause of the zero deltas was only partly right.** RESAMPLE,
+   SELF_CHECK and RETRIEVE do not modify the candidate answer — they update
+   signals and evidence only. Under the depth-1 fan-out, `<action> -> STOP`
+   therefore returns the *same answer* as `STOP` alone, so **Δ = 0 by
+   construction for those three actions on any provider**, live or mock. The
+   mock-provider explanation holds only for ANSWER, TOOL, VERIFY and
+   STRONGER_MODEL, which can change the answer. Consequence: depth-2 branching is
+   not a Gate 3 refinement, it is **required to measure three of the seven
+   actions at all**, and a live depth-1 run would reproduce three of these zeros
+   and mean nothing by it.
+
 - **Exact next resumption command:** `python scripts/collect_traces.py --n 120 --dataset gsm8k --mode fanout --policy balanced --live --max-usd 5.00 --run-id gate2-pilot-live && python -m app.trace.analysis --run gate2-pilot-live` — **blocked** on (a) Yin & Zhang being read and Checkpoint 2 confirmed, and (b) explicit approval of the spend. n=120 rather than 40 because the probe now requires >= 20 test rows with >= 5 per class, which a 50/25/25 split of 40 items cannot supply. The unblocked command that reproduces the current null is the same line without `--live --max-usd`.
 
 **Checkpoint 5 — closest-source access follow-up (access attempt complete; Gate 1 unresolved).**
