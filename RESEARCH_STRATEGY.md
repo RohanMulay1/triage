@@ -37,8 +37,29 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 - **Known limitations (carried forward):** counterfactual branching is **declared but unwired** — `trace.record_counterfactual` exists in `config/router.yaml` and does nothing, and `ActionOutcome.is_counterfactual` is never set true by the current collector. `STRONGER_MODEL` cost currently represents the **full big-model pass**, not the marginal increment over the already-incurred small-model trajectory. The rare pre-filter fallback path folds into one `ANSWER`. Under a forced mock provider the router refuses to escalate, so the escalation path is covered with a stand-in provider label rather than a live one. The fixture is mock-only and is not evidence about model behaviour.
 - **Remaining tasks:** Decision Gate 1 (full-text novelty audit); then, only if it does not return STOP, wire counterfactual branching, behaviour policies and split manifests.
 - **Exact next resumption command:** `python -m pytest -q && git log --oneline -1` then run Decision Gate 1 — read the closest intervention-routing, adaptive-compute and sequential-agent papers in full and record the claim-by-claim comparison in the literature section below. Collect no paid traces until that gate resolves.
+- **Superseded by:** Checkpoint 2 below.
+
+**Checkpoint 2 — Decision Gate 1, full-text novelty audit (complete). Verdict: NARROW.**
+
+- **Completed:** primary-source audit of 18 works — every source named in the gate brief plus six 2026 works the previous audit did not contain, found by targeted search on the exact claim rather than on the project's own vocabulary. Recorded per work: title, authors, year, venue, canonical identifier, action space, observability, sequentiality, whether action value is learned, calibration, conservative stopping, constraints, and trace/propensity evidence. Full table in the literature section above.
+- **Answer to the gate question:** No prior work does the whole combination. But **four of the six clauses are individually solved**, two of them by 2026 preprints absent from the previous memo, so the honest verdict is NARROW rather than GO.
+- **Decisive findings:** (1) [arXiv:2603.19896](https://arxiv.org/abs/2603.19896) already publishes sequential utility-guided selection over `{respond, retrieve, tool_call, verify, stop}` with `argmax_a Gain - λ₁StepCost - λ₂Uncertainty - λ₃Redundancy`; its `Gain` is, in the authors' words, *"a heuristic self-estimated signal rather than a calibrated probability"*, it uses no confidence bound, and it **loses to ReAct** on its own 200-item HotpotQA evaluation. (2) [arXiv:2604.18419](https://arxiv.org/abs/2604.18419) already establishes calibrated value-threshold stopping (`abstain iff V_β < r_⊥`, isotonic calibration, dominance proposition) for the binary continue/abstain case. (3) The Aug-2026 survey [arXiv:2608.17084](https://arxiv.org/abs/2608.17084) §9.2 names action-aware evaluation with explicit action costs as an open problem and its survey finds methods that *trigger* actions from uncertainty, none that *value* them.
+- **Surviving contribution:** replace the heuristic self-estimated gain with an outcome-supervised, **calibrated, per-action** marginal value learned from **randomized action-outcome traces with recorded propensities**, and test whether that beats the heuristic-gain utility policy, calibrated risk-threshold escalation, and prompt-only routing at equal measured cost. This is one clause of the original six, plus the trace dataset the survey asks for.
+- **Corrections to the previous memo (both were wrong):** the closest-work paper is in **Knowledge-Based Systems**, not *Information Sciences*; and the memo's description of its method was **unverified** — no primary source for it could be obtained. Both are fixed above.
+- **Failure/limitation — the gate is provisional:** Yin & Zhang (KBS 2026, DOI 10.1016/j.knosys.2026.116685) is confirmed to exist via Crossref but is **closed access and could not be read** — ScienceDirect returns HTTP 403, Semantic Scholar reports `openAccessPdf.status = "CLOSED"` with a null abstract, and no preprint surfaced. It is the single closest work by title. If it already learns calibrated per-action repair value from outcome data, the surviving contribution collapses and this verdict becomes STOP.
+- **Decisions:** retire the name CA-MVOI — "marginal value of information" overstates what survives; the work is *calibrated action-conditioned gain estimation for intervention policies*. Four claim classes are now forbidden and listed in the audit section. Proceed to the Gate 2 pilot, which is worth running for its own sake, but obtain Yin & Zhang before any paper claim.
+- **Remaining tasks:** obtain Yin & Zhang by institutional access or author request; then Checkpoint 3 (wire counterfactual branching, behaviour policies, split manifests, action executors) and Gate 2 (signal and repairability pilot).
+- **Exact next resumption command:** `python scripts/collect_traces.py --n 40 --dataset gsm8k --split pilot --run-id gate2-pilot-mock` — but only after Checkpoint 3 wires randomized behaviour policies, since a run under the deterministic heuristic reproduces the zero-coverage result already recorded in Checkpoint 1 and cannot answer Gate 2.
 
 ## Executive research thesis
+
+> **Superseded in part by Checkpoint 2 (2026-09-06).** The full-text audit returned
+> **NARROW**, not GO. Sequential utility-guided selection over heterogeneous
+> interventions ([arXiv:2603.19896](https://arxiv.org/abs/2603.19896)) and calibrated
+> value-threshold stopping ([arXiv:2604.18419](https://arxiv.org/abs/2604.18419)) are
+> both already published. Read the sections below as the original hypothesis; the
+> surviving contribution is stated in the audit section and is narrower than what
+> follows. The name CA-MVOI is retired.
 
 Triage is not presently a novel routing algorithm. It is a well-engineered, response-aware heuristic cascade: a small model answers, proxies of answer reliability trigger a fixed retrieve/verify path, and a weighted risk threshold optionally escalates to a big model. That framing overlaps materially with **AutoMix**'s response verification plus POMDP routing and with recent model cascades. The published GSM8K failure is therefore more valuable than the existing positive plots: an answer can be estimated as risky while *no available intervention has positive expected value*. Escalating in that situation incurs both small- and large-model cost and can lower quality.
 
@@ -88,44 +109,149 @@ The decisive negative is the older 90-item GSM8K `ministral-8b -> gpt-oss-120b` 
 
 MT-Bench receipts use a first-turn LLM judge and 50/50 tune/test threshold selection; the held-out halves contain 40 items and the free model is near-saturated on some pairs. The README already disclaims the old in-sample headline. Unit tests are mock-only and validate contracts and invariants, not live reliability, retrieval quality, policy value, or serving behavior.
 
-## Literature and novelty audit
+## Literature and novelty audit (Decision Gate 1, full text, 2026-09-06)
 
-### What is substantially solved
+Audited from primary sources. Where only the abstract and metadata page could be
+reached, the row says so. **One source could not be obtained at all and the gate
+is provisional on it — see "Unresolved source" below.**
 
-| Work | Prior result | Consequence for Triage |
-|---|---|---|
-| Chen, Zaharia, Zou, **FrugalGPT** (TMLR 2024; [arXiv:2305.05176](https://arxiv.org/abs/2305.05176)) | Learns cost-aware combinations/cascades of API LLMs. | A small-to-large cost cascade is not novel. |
-| Ong et al., **RouteLLM** (ICLR 2025; [arXiv:2406.18665](https://arxiv.org/abs/2406.18665)) | Preference-trained prompt router with cross-pair transfer. | Prompt-only learned routing is a required baseline. |
-| Aggarwal et al., **AutoMix** (NeurIPS 2024; [arXiv:2310.12963](https://arxiv.org/abs/2310.12963)) | Small-answer self-verification and POMDP/threshold routing to a larger LM. | Triage's observe-then-escalate claim is already close prior art. |
-| Chen et al., **RouterDC** (NeurIPS 2024; [arXiv:2409.19886](https://arxiv.org/abs/2409.19886)) | Query/LLM embeddings with dual contrastive routing and OOD tests. | Specialist-model selection and model substitution are established. |
-| Wang et al., **MixLLM** (NAACL 2025; [arXiv:2502.18482](https://arxiv.org/abs/2502.18482)) | Continual contextual-bandit query-to-model routing under quality/cost/latency trade-offs. | A generic contextual-bandit model router is insufficiently new. |
-| Dekoninck, Baader, Vechev, **A Unified Approach to Routing and Cascading for LLMs** (ICML 2025; [arXiv:2410.10347](https://arxiv.org/abs/2410.10347)) | Formal optimal routing/cascading and unified cascade routing. | Do not claim a generic optimal cascade or merely combine routing and cascading. |
-| Ding et al., **BEST-Route** (ICML 2025; [arXiv:2506.22716](https://arxiv.org/abs/2506.22716)) | Chooses model and number of sampled responses by query difficulty. | Adaptive sample count alone is solved. |
-| Panda et al., **Adaptive LLM Routing under Budget Constraints / PILOT** (Findings of EMNLP 2025; [arXiv:2508.21141](https://arxiv.org/abs/2508.21141)) | Preference-informed contextual bandit plus online budget policy. | Budgeted contextual-bandit framing alone is solved. |
-| Wei et al., **Learning to Route LLMs from Bandit Feedback** (2025 preprint; [arXiv:2510.07429](https://arxiv.org/abs/2510.07429)) | Preference-tunable prompt-level bandit policy under partial feedback. | Online bandit feedback is a required comparison, not the main novelty. |
-| Li et al., **LLMRouterBench** (Findings of ACL 2026; [arXiv:2601.07206](https://arxiv.org/abs/2601.07206)) | 400K instances, 21 datasets, 33 models, and ten router baselines; reports that simple baselines often remain competitive. | Use it for model-routing comparability, but it cannot by itself evaluate sequential intervention outcomes. |
+### The novelty question
 
-### Closest threat and required distinction
+> "Has prior work already learned a calibrated, sequential, action-conditioned marginal repair-value policy over observed response state, with conservative stopping and explicit reliability/cost/latency constraints, evaluated through action-outcome traces?"
 
-Yin and Zhang, **Failure-mode-aware uncertainty intervention routing for large language models** (Information Sciences, 2026, [article](https://www.sciencedirect.com/science/article/pii/S0950705126014115)) predicts one of commit, deliberation, retrieval-augmented regeneration, or defer from a behavioral uncertainty signature. It is the closest prior work. A method that merely chooses among resampling, retrieval, and abstention is therefore not publishable.
+**Answer: No — not in combination. But four of the six clauses are individually
+solved, two of them by 2026 work the previous version of this memo did not
+contain.** The verdict is **NARROW**, not GO.
 
-CA-MVOI must differ empirically and mathematically in all of these ways:
+### Claim-by-claim comparison
 
-- Its policy is **sequential**: an action changes the observed state and the remaining action set, rather than making a single intervention choice from a precomputed signature.
-- It estimates **conditional incremental utility of each action**, including strong/specialized models and tools, rather than classifying a failure mode or response confidence.
-- It is **conservative and resource-constrained**: stopping is selected when no lower-confidence action benefit clears cost, latency, and reliability constraints.
-- It directly tests action complementarity and negative marginal interventions with randomized/exhaustive intervention traces.
+Columns are the six clauses of the novelty question. `~` means partial.
 
-If full-paper audit reveals this exact combination in prior work, CA-MVOI is not a paper direction. The fallback is a narrower systems paper on policy-aware local serving, or no paper claim.
+| Work | Year / venue | Action space | Observes response | Sequential | Learns action-conditioned value | Calibrated | Conservative stop | Cost/latency/reliability constraints | Action-outcome traces |
+|---|---|---|---|---|---|---|---|---|---|
+| **Utility-Guided Agent Orchestration** ([arXiv:2603.19896](https://arxiv.org/abs/2603.19896)) Liu, Zhao, Xu | 2026-03, preprint | `{respond, retrieve, tool_call, verify, stop}` | yes | **yes** | **no** — heuristic LLM self-estimate | **no** (states so explicitly) | no | step budget only | no |
+| **Knowing When to Quit** ([arXiv:2604.18419](https://arxiv.org/abs/2604.18419)) Davidov et al. | 2026-07, preprint | `{continue, abstain}` | yes (prefix) | yes (token-level) | one value function, **not per-action** | **yes**, isotonic | **yes**, with dominance proof | no | on-policy, no propensities |
+| **Agentic Abstention** ([arXiv:2606.28733](https://arxiv.org/abs/2606.28733)) Luo, Wen, Wang | 2026-06, preprint | `{ANSWER, ABSTAIN, ACT}` | yes | yes (POMDP) | no | no | ~ (learned stopping rules) | 10-turn budget | trajectories, no propensities |
+| **Failure-mode-aware uncertainty intervention routing** (KBS, DOI [10.1016/j.knosys.2026.116685](https://doi.org/10.1016/j.knosys.2026.116685)) Yin, Zhang | 2026, Knowledge-Based Systems | **UNVERIFIED** | ? | ? | ? | ? | ? | ? | ? |
+| **AutoMix** ([arXiv:2310.12963](https://arxiv.org/abs/2310.12963)) Aggarwal et al. | NeurIPS 2024 | `{small, large}` | **yes** | no (one decision) | no — self-verification of correctness | no | no | cost only | no |
+| **RACER** ([arXiv:2603.06616](https://arxiv.org/abs/2603.06616)) Hao, Zeng, Wei, Jing | 2026-02, preprint | model **sets** + abstain | ~ | no | no — risk control | **yes**, finite-sample | ~ (risk-controlled) | misrouting risk | no |
+| **CP-Router** ([arXiv:2505.19970](https://arxiv.org/abs/2505.19970)) Su et al. | 2025-05, preprint | `{LLM, LRM}` | yes | no | no — conformal set size | **yes**, conformal | no | implicit token cost | no |
+| **A2RAG** ([arXiv:2601.21162](https://arxiv.org/abs/2601.21162)) Liu et al. | 2026-01, preprint | gate / retrieve / rewrite+retry | yes | **yes** | no — threshold `TripleCheck` | no (binary validators) | no | ≤ `I_max` retries | no |
+| **FrugalGPT** ([arXiv:2305.05176](https://arxiv.org/abs/2305.05176)) Chen, Zaharia, Zou | 2023 arXiv / TMLR 2024 | model cascade | yes | ~ (over models) | no | no | no | cost | no |
+| **RouteLLM** ([arXiv:2406.18665](https://arxiv.org/abs/2406.18665)) Ong et al. | ICLR 2025 | `{weak, strong}` | **no** (prompt only) | no | no — preference | no | no | cost | no |
+| **Unified Routing and Cascading** ([arXiv:2410.10347](https://arxiv.org/abs/2410.10347)) Dekoninck, Baader, Vechev | ICML 2025 | model selection | yes | ~ (over models) | no — quality per model | no | no | cost | no |
+| **BEST-Route** ([arXiv:2506.22716](https://arxiv.org/abs/2506.22716)) Ding et al. | ICML 2025 | model + **#samples** | yes | no | no — difficulty/quality | no | no | cost | no |
+| **PILOT** ([arXiv:2508.21141](https://arxiv.org/abs/2508.21141)) Panda et al. | Findings of EMNLP 2025 | model selection | bandit feedback | no | per-model reward | **LinUCB bound** | no | **budget (knapsack)** | bandit logs |
+| **BaRP** ([arXiv:2510.07429](https://arxiv.org/abs/2510.07429)) Wei et al. | 2025-10, preprint | model selection | no (prompt + prefs) | no | per-model reward | no | no | cost dial | bandit logs |
+| **RouterDC** ([arXiv:2409.19886](https://arxiv.org/abs/2409.19886)) Chen et al. | NeurIPS 2024 | model selection | **no** | no | no — contrastive score | no | no | none stated | no |
+| **MixLLM** ([arXiv:2502.18482](https://arxiv.org/abs/2502.18482)) Wang et al. | NAACL 2025 | model selection | yes (predicted) | ~ (evolving pool) | per-model reward | no | no | **quality+cost+latency** | bandit logs |
+| **LLMRouterBench** ([arXiv:2601.07206](https://arxiv.org/abs/2601.07206)) Li et al. | 2026-01, Findings of ACL 2026 | benchmark, model routing only | n/a | no | n/a | n/a | n/a | latency-aware analysis | no |
+| **Uncertainty-Aware Decision Making in MLLMs (survey)** ([arXiv:2608.17084](https://arxiv.org/abs/2608.17084)) Boudiaf, Hussain, Javed | 2026-08 | survey | n/a | n/a | **names the gap** | n/a | n/a | n/a | **names the gap** |
 
-### Adjacent foundations and controls
+### What this changes
 
-- Wang et al., **Self-Consistency Improves Chain of Thought Reasoning in Language Models** (ICLR 2023; [arXiv:2203.11171](https://arxiv.org/abs/2203.11171)): resampling can help but is an action with a cost, not free evidence.
-- Lewis et al., **Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks** (NeurIPS 2020; [arXiv:2005.11401](https://arxiv.org/abs/2005.11401)): retrieval is an intervention whose value depends on knowledge need and corpus quality.
-- Kuhn, Gal, Farquhar, **Semantic Uncertainty: Linguistic Invariances for Uncertainty Estimation in Natural Language Generation** (ICLR 2024; [arXiv:2302.09664](https://arxiv.org/abs/2302.09664)): semantic uncertainty is a stronger uncertainty baseline than surface agreement.
-- TARo, **Token-level Adaptive Routing for LLM Test-time Alignment** (Findings of ACL 2026; [paper](https://aclanthology.org/2026.findings-acl.50.pdf)), and R2R, **Efficiently Navigating Divergent Reasoning Paths with Small-Large Model Token Routing** (2025; [paper](https://nicsefc.ee.tsinghua.edu.cn/%2Fnics_file%2Fpdf%2Fc660550f-13f6-4bb6-8b37-440a66b51879.pdf)): token-level delegation is already active work. It is an optional local-serving study, never the headline unless it adds a clearly distinct cache-aware contribution.
+The 2024–2025 model-routing literature is not the binding constraint, and never
+was: FrugalGPT, RouteLLM, RouterDC, MixLLM, BEST-Route, PILOT, BaRP, Unified
+Cascade Routing and LLMRouterBench all choose **which model answers**. None
+chooses **which intervention to apply next**, and none estimates an action's
+marginal value against a stopping baseline.
+
+Two 2026 preprints do bind, and neither was in the previous audit:
+
+1. **Utility-Guided Agent Orchestration** already publishes the framing this memo
+   was going to claim. It selects sequentially over `{respond, retrieve,
+   tool_call, verify, stop}` by
+   `a* = argmax_a Gain(a|s) - λ₁StepCost - λ₂Uncertainty - λ₃Redundancy`.
+   So "utility-guided selection over heterogeneous interventions including an
+   explicit STOP" is **no longer a novel framing** and must not be claimed.
+   What it does not do is exactly the interesting part, and the authors say so
+   plainly: *"Gain(a|s_t) measures the self-estimated marginal value of taking
+   action a. In our implementation, this term is a heuristic self-estimated
+   signal rather than a calibrated probability."* There is no learning from
+   outcomes, no calibration, no confidence bound, no cost constraint beyond a
+   step budget, and the evaluation is 200 HotpotQA examples on which the policy
+   **loses to ReAct** (F1 0.2360 vs 0.2662).
+
+2. **Knowing When to Quit** already establishes calibrated value-threshold
+   stopping — abstain iff `V_β(x, y_{1:t-1}; π) < r_⊥`, calibrated by isotonic
+   regression, with Proposition 4.2 proving dominance over never abstaining. So
+   "conservative stopping when estimated value falls below the stop baseline" is
+   **solved for the binary continue/abstain case** and must not be claimed as
+   novel either. It estimates one value function for continuing, not per-action
+   values, and models no cost or latency constraint.
+
+The survey that closes the loop is [arXiv:2608.17084](https://arxiv.org/abs/2608.17084)
+§9.2, which names the missing piece as an open problem: benchmarks need *"tasks
+where the desired output may be an answer, an abstention, a clarification, a
+retrieval step, a prediction set, a self-check, or an escalation"* with the next
+priority being to *"make action costs explicit so that methods can be compared by
+downstream utility."* Its survey of the field turns up methods that **trigger**
+actions from uncertainty and none that **value** them.
+
+### Verdict: NARROW
+
+The surviving contribution is one clause of the original six, plus the artifact:
+
+> **Replace the heuristic self-estimated gain with an outcome-supervised, calibrated, per-action marginal value learned from randomized action-outcome traces with recorded propensities — and test whether doing so actually beats the heuristic-gain utility policy, calibrated risk-threshold escalation, and prompt-only routing at equal measured cost.**
+
+That is testable, it is not done anywhere audited, and there is a concrete reason
+to think it matters: the one published utility-guided intervention policy uses an
+uncalibrated self-estimate of gain and underperforms a simple ReAct baseline.
+Whether calibrated, outcome-supervised gains fix that is an open empirical
+question with a real chance of answering "no", which is what makes it worth
+running.
+
+**Claims now forbidden by this audit:**
+
+- first/novel utility-guided selection over heterogeneous interventions — no ([arXiv:2603.19896](https://arxiv.org/abs/2603.19896));
+- novel conservative value-threshold stopping — no ([arXiv:2604.18419](https://arxiv.org/abs/2604.18419));
+- novel sequential intervention routing — no ([arXiv:2603.19896](https://arxiv.org/abs/2603.19896), [arXiv:2601.21162](https://arxiv.org/abs/2601.21162), [arXiv:2606.28733](https://arxiv.org/abs/2606.28733));
+- novel abstention-as-action, calibrated routing, or budgeted routing — no (Knowing When to Quit; CP-Router/RACER; PILOT).
+
+**The name CA-MVOI should be retired** — "marginal value of information" overstates
+what survives. The work is now: *calibrated action-conditioned gain estimation for
+intervention policies*.
+
+### Unresolved source (the gate is provisional on this)
+
+**Yin, S. and Zhang, R., "Failure-mode-aware uncertainty intervention routing for
+large language models", Knowledge-Based Systems, 2026, DOI
+[10.1016/j.knosys.2026.116685](https://doi.org/10.1016/j.knosys.2026.116685).**
+
+Existence, title, authors, year, journal and DOI are confirmed via the Crossref
+API. The full text could **not** be obtained: ScienceDirect returns HTTP 403 to
+both the article and abstract URLs, Semantic Scholar records the paper with
+`openAccessPdf.status = "CLOSED"` and a null abstract, and web search does not
+surface an accessible copy or preprint.
+
+Two consequences, recorded rather than papered over:
+
+1. The previous version of this memo asserted that this paper "predicts one of
+   commit, deliberation, retrieval-augmented regeneration, or defer from a
+   behavioral uncertainty signature" and used that to set the novelty bar. **That
+   description is unverified**; no primary source for it was obtainable. It has
+   been removed from the comparison table, whose row for this paper is marked
+   UNVERIFIED.
+2. The same memo cited the venue as *Information Sciences*. It is
+   **Knowledge-Based Systems**. Corrected.
+
+This is the single closest work by title and it is the one source the audit could
+not read. The NARROW verdict therefore stands **provisionally**: if that paper
+already learns calibrated per-action repair value from outcome data, the surviving
+contribution collapses and the verdict becomes STOP. Obtaining it — via
+institutional access, interlibrary loan, or an author request — is a blocking
+prerequisite before any paper claim, though not before the Gate 2 pilot, which is
+worth running for its own sake.
 
 ## Candidate directions
+
+> **Superseded in part by Checkpoint 2 (2026-09-06).** The full-text audit returned
+> **NARROW**, not GO. Sequential utility-guided selection over heterogeneous
+> interventions ([arXiv:2603.19896](https://arxiv.org/abs/2603.19896)) and calibrated
+> value-threshold stopping ([arXiv:2604.18419](https://arxiv.org/abs/2604.18419)) are
+> both already published. Read the sections below as the original hypothesis; the
+> surviving contribution is stated in the audit section and is narrower than what
+> follows. The name CA-MVOI is retired.
 
 Scores are 1–5, where higher novelty/depth/fit/paper probability is better and higher burden is worse.
 
@@ -145,6 +271,14 @@ Scores are 1–5, where higher novelty/depth/fit/paper probability is better and
 | 12 | Specialized-model selection/model substitution | 1 | 3 | 3 | 3 | 1 | Covered by RouterDC and router benchmarks |
 
 ## Top three proposals
+
+> **Superseded in part by Checkpoint 2 (2026-09-06).** The full-text audit returned
+> **NARROW**, not GO. Sequential utility-guided selection over heterogeneous
+> interventions ([arXiv:2603.19896](https://arxiv.org/abs/2603.19896)) and calibrated
+> value-threshold stopping ([arXiv:2604.18419](https://arxiv.org/abs/2604.18419)) are
+> both already published. Read the sections below as the original hypothesis; the
+> surviving contribution is stated in the audit section and is narrower than what
+> follows. The name CA-MVOI is retired.
 
 ### 1. CA-MVOI — recommended primary direction
 
@@ -228,7 +362,7 @@ Use a pessimistic estimate `LCB_a(s) = DeltaHat_a(s) - beta * sigmaHat_a(s)`. St
 ## Publication-risk assessment
 
 **Current project:** high risk as a paper; good engineering foundation, insufficient novelty and evidence.  
-**CA-MVOI:** medium-high risk but potentially publishable if it clears the novelty and sequentiality gates. Its strongest possible contribution is a validated principle: *routing should allocate interventions by calibrated marginal repair value, not by answer risk*.  
+**CA-MVOI (as originally scoped):** ruled out by Checkpoint 2 — its framing and its stopping rule are both published. **The narrowed successor** (calibrated, outcome-supervised per-action gain estimation, learned from randomized action-outcome traces) remains medium-high risk and is publishable only if it clears the sequentiality and robustness gates AND Yin & Zhang turns out not to have done it. Its strongest possible contribution is a validated principle: *routing should allocate interventions by calibrated marginal repair value, not by answer risk*.  
 **Robust variant:** high methodological burden but stronger ML story.  
 **Load-aware variant:** high systems burden and dependent on real infrastructure, but potentially strongest MLSys fit.
 
