@@ -3,8 +3,6 @@ adapter + provider-specific model name, and falls back to the mock provider when
 the mapped provider has no key (or SV_FORCE_MOCK=1)."""
 from __future__ import annotations
 
-from typing import Any
-
 from ..config import get_model, get_settings
 from .base import ProviderAdapter
 from .huggingface import HuggingFaceAdapter

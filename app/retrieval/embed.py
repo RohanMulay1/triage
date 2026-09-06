@@ -2,7 +2,6 @@
 hashing bag-of-words embedding so retrieval works out of the box."""
 from __future__ import annotations
 
-import math
 import re
 
 import numpy as np

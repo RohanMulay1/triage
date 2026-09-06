@@ -15,10 +15,10 @@ Defaults to the offline mock provider, so the default invocation spends nothing:
     python scripts/collect_traces.py --n 20 --dataset traps --mode fanout
     python scripts/collect_traces.py --n 50 --dataset gsm8k --mode fanout --policy response_risk
 
-A live run requires BOTH `--live` and an explicit `--max-usd` cap, and the cap is
-enforced before each action rather than reported after the run. The strategy says
-no paid traces until the schemas and their tests pass; the flags make spending a
-decision someone has to make on purpose.
+A live run requires BOTH `--live` and an explicit finite positive `--max-usd`.
+The caller owns one run-wide accumulator. Admission estimates include every
+call's completion cap; actual reported costs are settled after execution.
+Live served mode is refused because the legacy router has no budget control.
 
 Writes <trace_dir>/<run_id>/{manifest.json,trajectories.jsonl,splits.json}.
 """
@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import math
 import os
 import random
 import sys
@@ -54,10 +55,15 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--live", action="store_true",
                     help="allow live providers and real spend (requires --max-usd)")
     ap.add_argument("--max-usd", type=float, default=None,
-                    help="hard per-run spend cap, enforced before each action")
+                    help="finite positive run-wide admission cap in listed-price dollars")
     args = ap.parse_args()
-    if args.live and (args.max_usd is None or args.max_usd <= 0):
-        ap.error("--live requires an explicit positive --max-usd cap")
+    if (args.live and args.max_usd is None) or (args.max_usd is not None and (
+            not math.isfinite(args.max_usd) or args.max_usd <= 0)):
+        ap.error("--live requires an explicit positive --max-usd cap that is finite")
+    if args.n <= 0:
+        ap.error("--n must be a strictly positive integer")
+    if args.live and args.mode == "served":
+        ap.error("--mode served --live refused: served mode has no cost control")
     return args
 
 
@@ -74,7 +80,7 @@ from app.schemas import ChatRequest  # noqa: E402
 from app.telemetry import db as telemetry_db  # noqa: E402
 from app.trace import store  # noqa: E402
 from app.trace.adapter import TraceRecorder  # noqa: E402
-from app.trace.branching import BudgetExceeded, collect_fanout  # noqa: E402
+from app.trace.branching import BudgetExceeded, RunBudget, collect_fanout  # noqa: E402
 from app.trace.contract import Budget  # noqa: E402
 from app.trace.policies import build_policy  # noqa: E402
 from app.trace.splits import GroupKey, SplitManifest, prompt_fingerprint  # noqa: E402
@@ -153,6 +159,8 @@ def make_labeler(dataset: str, item: dict):
 
 
 async def collect(args: argparse.Namespace) -> str:
+    if args.live and args.mode == "served":
+        raise ValueError("served mode has no cost control; live collection refused")
     random.seed(args.seed)
     telemetry_db.init_db()
     memory.init_db()
@@ -162,17 +170,18 @@ async def collect(args: argparse.Namespace) -> str:
     big_id = args.big or (cfg.get("escalation") or {}).get("default_target")
     run_id = args.run_id or store.new_run_id(f"{args.dataset}-{args.mode}")
 
-    store.create_run(store.build_manifest(
+    manifest = store.build_manifest(
         run_id, dataset=args.dataset, split=args.split or "mixed", seeds=[args.seed],
         command=" ".join(sys.argv),
         notes=(args.notes or "") + f" | mode={args.mode} policy={args.policy} "
                                    f"small={small_id} big={big_id}",
-    ))
+    )
+    store.create_run(manifest)
 
     splits = SplitManifest(run_id=run_id, salt=args.split_salt)
     items = load_items(args.dataset, args.n)
     policy = build_policy(args.policy, cfg)
-    budget = Budget(max_usd=args.max_usd) if args.max_usd else Budget()
+    budget = RunBudget(Budget(max_usd=args.max_usd), manifest.model_snapshot)
     n_written = 0
 
     for i, item in enumerate(items):
@@ -212,6 +221,8 @@ async def collect(args: argparse.Namespace) -> str:
                                                  resp.route.abstained)),
                     label_source=f"rigor.score:{item.get('kind', args.dataset)}")]
         except BudgetExceeded as e:
+            for trajectory in e.trajectories:
+                store.append(trajectory)
             print(f"\n[collect_traces] STOPPED at item {i}: {e}")
             print("[collect_traces] traces written so far are intact and readable.")
             break

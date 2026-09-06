@@ -71,7 +71,7 @@ def _load() -> None:
 
 def record(question: str, tier: int, escalated: bool, risk: float, model: str,
            correct: bool | None = None) -> None:
-    global _MAT, _META
+    global _MAT
     v = embed([question])[0].astype(np.float32)
     with _conn() as conn:
         conn.execute(

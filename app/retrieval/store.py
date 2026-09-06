@@ -12,7 +12,7 @@ from typing import Any
 import numpy as np
 
 from ..config import get_settings
-from .embed import backend_name, cosine, embed
+from .embed import backend_name, embed
 
 
 @dataclass

@@ -16,14 +16,14 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-06, Checkpoint 5 access follow-up)
+### Current state (2026-09-07, Checkpoint 6 money repairs)
 
 | | |
 |---|---|
-| **Checkpoints complete** | 0–4 as recorded below; 5 (source-access follow-up; full-text audit remains blocked) |
-| **Tests** | 222 passing (`python -m pytest -q`); see Checkpoint 5 validation |
+| **Checkpoints complete** | 0–5 as recorded below; 6 (strategy addendum and CLI cap validation; D1–D10 repairs pending) |
+| **Tests** | 240 passing (`python -m pytest -q`); see Checkpoint 6 validation |
 | **Trace schema** | 1.2.0; reads 1.0.0 and 1.1.0 |
-| **Gate 1 (novelty)** | **NARROW, provisional and unresolved**; Yin & Zhang publisher preview read, full methods unavailable |
+| **Gate 1 (novelty)** | **NARROW: investigate deltas against readable bases**; candidates unproven; Yin & Zhang is a disclosed risk, not a gate |
 | **Gate 2 (signal)** | **INCONCLUSIVE** — cannot be decided on mock data |
 | **Gate 3 (sequentiality)** | not started; the fan-out is depth-1 only |
 | **Total spend to date** | **$0.** Every run has been on the mock provider |
@@ -36,33 +36,36 @@ after execution and resets per item, and the signal comparison has control/split
 defects. See Checkpoint 5. Do not run the earlier live command until these are
 fixed and tested. Existing tests passing does not establish those properties.
 
-**What is not true.** Nothing about repairability has been established. The
-Gate 2 pilot returned exactly zero marginal value for every intervention, which
-is a property of the mock provider rather than a finding. Gate 1 narrowed the
-contribution to one clause — calibrated, outcome-supervised per-action gain
-estimation — and even that is provisional on a paper that could not be obtained.
+**What is not true.** No real-model repairability or candidate contribution has
+been established. The prompt-only comparison was retracted in `7479ff2`. Several
+depth-1 zeros follow from answer-preserving action definitions, not just the mock
+provider. The [current strategy](docs/research/novelty-delta-strategy.md) treats
+C1–C4 as falsifiable changes to readable prior work. An unread related paper is
+an overlap risk to disclose; it no longer prevents progressing through repairs.
 
 **Things blocking progress, in order.**
 
-1. **Read Yin & Zhang** (KBS 2026, DOI 10.1016/j.knosys.2026.116685) via
-   institutional access or an author request. If it already learns calibrated
-   per-action repair value, Gate 1 becomes STOP and the direction ends. The
-   publisher preview establishes learned intervention routing but cannot decide
-   the calibrated-value question. [Access evidence and request draft](docs/research/gate1-yin-zhang-20260906/README.md).
-2. **Repair live-collection and causal-validity blockers** listed at Checkpoint 5.
-3. **Approve an explicit live dollar cap.** No budget has been approved. The
-   presence of `--max-usd` alone currently does not enforce a run-wide cap.
+1. **Repairs D1-D11.** The committed [defect spec](docs/research/pre-live-defect-spec.md)
+   is authoritative. Money repairs are complete; inference and measurement
+   repairs remain. No live collection is authorized.
+2. **Fresh mock validation**, then a full-text-derived heuristic-gain comparator,
+   then the chosen differentiator and its controlled ablation. Experimental
+   implementations do not establish a scientific contribution or authorize a
+   production controller. Detailed requirements are in the strategy addendum.
+3. **Explicit finite live budget approval** after the preceding work. No budget
+   is approved; admission estimates are not invoice guarantees.
 
-**Single next command** (public source recheck; no paid provider calls):
+**Single next command** (mock-only repair regression suite):
 
 ```
-python scripts/check_literature_source.py --doi 10.1016/j.knosys.2026.116685 --output-dir docs/research/gate1-yin-zhang-access-recheck-01
+python -m pytest -q tests/test_trace_collection_cli.py tests/test_trace_branching.py tests/test_trace_analysis.py tests/test_trace_splits.py
 ```
 
-The output directory must be fresh. Exit 2 records an access refusal or metadata
-only; even a body candidate needs manual reading. An authorized full manuscript
-is the practical unblock. Prior checkpoint commands below are historical, not
-authorization to spend or evidence that live collection is ready.
+The committed defect spec is now available. Manuscript access can continue
+opportunistically without blocking repairs. The 2026-09-07 strategy supersedes
+manuscript-gated STOP language in historical Checkpoints 0-5 and access records.
+Their old commands are not live authorization. The charter and forbidden claims
+remain in force.
 
 **Checkpoint 0 — repository and research memo audit (complete).**
 
@@ -207,6 +210,40 @@ the Checkpoint 5 access work and are recorded here rather than edited away.
   collection/analysis defects, define effective interventions, and obtain an
   explicit budget before collecting live evidence. No controller started.
 - **Exact next resumption command:** `python scripts/check_literature_source.py --doi 10.1016/j.knosys.2026.116685 --output-dir docs/research/gate1-yin-zhang-access-recheck-01`.
+
+**Checkpoint 6 — pre-live repairs and the delta strategy (in progress).**
+
+- **Requirements:** the user supplied `docs/research/pre-live-defect-spec.md`
+  and `docs/research/novelty-strategy.md` at `8170e03`; the missing-spec request
+  is resolved. D11 extends the original ten defects.
+- **Strategy:** Yin & Zhang is a related-work citation and disclosed overlap
+  risk, not a repair or experiment gate. Candidates remain hypotheses; see
+  [experimental interpretation notes](docs/research/novelty-delta-strategy.md).
+  Preserved the prompt-only retraction in `7479ff2`.
+- **Money phase completed (D1-D3, D11):** before-action estimates use the run's
+  price snapshot, all capped completions and conservative input-byte allowances.
+  The caller threads one mutable accumulator across items. Actual cost settles
+  separately; completed partial trajectories and actual overruns are retained.
+  Live served mode, nonfinite/nonpositive caps, and invalid sample counts refuse
+  before application initialization. No live provider was called.
+- **Evidence:** new tests count executions, assert cross-item spend accumulation,
+  preserve partial costs, test snapshot immutability and overrun recording, and
+  exercise CLI refusals. Regression evidence against `7479ff2` and current-suite
+  output are in `docs/research/repairs-money-20260907/`. The old code executes a
+  second call under a one-call cap, cannot share an accumulator, and admits
+  live served/NaN/infinite-cap arguments. Full-tree pyflakes also exposed unused
+  declarations in legacy modules; removed only those declarations.
+- **Checks:** 240 tests pass; full-tree `python -m pyflakes app/ scripts/ tests/`
+  is clean. The money acceptance selection fails on `7479ff2` as expected
+  (8 failed, 7 passed). These are test counts, not experimental results.
+- **Limitations:** admission is a conservative token/price estimate, not a
+  provider-invoice guarantee; an actual overrun is recorded and halts further
+  calls. No latency forecast is claimed. Inference and measurement repairs are
+  next; no controller, candidate effect, or live readiness is claimed yet.
+- **Remaining tasks:** D4-D6/D9-D10, then D7-D8, then a fresh mock validation run.
+  The base comparator and candidate ablation follow those repairs; live evidence
+  still requires an explicit approved cap.
+- **Exact next resumption command:** `python -m pytest -q tests/test_trace_budget_repairs.py tests/test_trace_collection_cli.py`.
 
 ## Executive research thesis
 
@@ -370,7 +407,7 @@ running.
 what survives. The work is now: *calibrated action-conditioned gain estimation for
 intervention policies*.
 
-### Unresolved source (updated by Checkpoint 5)
+### Related-work access limitation (updated by the 2026-09-07 addendum)
 
 Yin and Zhang, Knowledge-Based Systems, DOI
 [10.1016/j.knosys.2026.116685](https://doi.org/10.1016/j.knosys.2026.116685).
@@ -379,13 +416,14 @@ metadata-only description is superseded. Complete methods remain unavailable.
 See the [dated access record](docs/research/gate1-yin-zhang-20260906/README.md)
 for verified scope, remaining questions, access failures, and an unsent request.
 
-The full-text requirement remains. If the paper learns calibrated per-action
-repair value from outcome data, the direction stops. Its absence cannot be
-inferred from an abbreviated preview. The provisional verdict is not permission
-to claim novelty; live collection is additionally blocked by Checkpoint 5's code
-findings and the absence of budget approval.
+Full-text access is no longer a prerequisite to proceeding. Use the preview only
+for supported related-work statements and disclose that its full methods remain
+unread. A later manuscript that contains the chosen delta retires that candidate
+and triggers evaluation of the next ranked candidate. It does not authorize
+claiming the same delta as novel. See the current strategy addendum; the code
+repairs and approved-budget requirement remain blockers to live collection.
 
-## Candidate directions
+## Historical candidate directions (superseded by C1–C4)
 
 > **Superseded in part by Checkpoint 2 (2026-09-06).** The full-text audit returned
 > **NARROW**, not GO. Sequential utility-guided selection over heterogeneous
@@ -483,7 +521,7 @@ Use a pessimistic estimate `LCB_a(s) = DeltaHat_a(s) - beta * sigmaHat_a(s)`. St
 
 ### Decision gates
 
-1. **Novelty gate:** read the full closest intervention-routing, adaptive-compute, and sequential-agent papers. Stop if any already learns calibrated sequential action-conditioned repair value under equivalent constraints.
+1. **Novelty gate:** read the base method in full before claiming or implementing a delta against it. Investigate C1–C4 in the current addendum, retaining the forbidden framing claims. Unread related work is disclosed risk, not an access gate. Retire an overlapping candidate; do not claim its novelty or automatically abandon other candidates.
 2. **Signal gate:** before RL, show that response state predicts action benefit beyond prompt-only difficulty with held-out confidence intervals.
 3. **Sequentiality gate:** show action values change after a prior action and that two-step decisions beat a strong one-step policy. Otherwise publish only a myopic method, if its novelty survives.
 4. **Systems gate:** use measured cost/latency. Abandon load/token claims if replay instrumentation cannot support them.

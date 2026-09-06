@@ -15,7 +15,7 @@ from .providers.registry import get_registry
 from .retrieval.store import get_store, store_info
 from .router import memory, online
 from .router.router import route_and_answer
-from .schemas import BenchmarkRequest, ChatRequest, ChatResponse, IngestRequest
+from .schemas import BenchmarkRequest, ChatRequest, IngestRequest
 from .telemetry import anomaly, db
 
 ROOT = Path(__file__).resolve().parent.parent

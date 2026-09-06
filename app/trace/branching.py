@@ -38,6 +38,7 @@ from .actions import (
     InterventionExecutor,
 )
 from .adapter import answer_action, stop_action
+from .budgeting import BudgetExceeded, RunBudget, estimate_action_cost
 from .contract import (
     Action,
     ActionCost,
@@ -54,33 +55,6 @@ from .contract import (
 
 #: (answer, abstained) -> label in [0, 1], or None when no label is available.
 Labeler = Callable[[str, bool], Optional[float]]
-
-
-class BudgetExceeded(RuntimeError):
-    """A live collection run hit its configured per-run spend cap."""
-
-
-class RunBudget:
-    """Mutable accumulator around the immutable Budget.
-
-    `Budget.charge` returns a new object, so a cap enforced against a fresh
-    Budget each time would never bind. This holds the running state and refuses
-    an action *before* it is executed rather than reporting the overspend after.
-    """
-
-    def __init__(self, budget: Optional[Budget] = None) -> None:
-        self.state = budget or Budget()
-
-    def charge(self, cost: ActionCost) -> None:
-        if not self.state.can_afford(cost):
-            raise BudgetExceeded(
-                f"an action costing ${cost.est_cost_usd:.6f} would exceed the run "
-                f"budget (remaining: {self.state.remaining()})"
-            )
-        self.state = self.state.charge(cost)
-
-    def would_exceed(self, cost: ActionCost) -> bool:
-        return not self.state.can_afford(cost)
 
 
 @dataclass
@@ -187,7 +161,7 @@ class _Builder:
                 models_used=[self.current.model_id] if self.current.model_id else [],
                 label=label, label_source=label_source,
             ),
-            total_cost=total, budget=budget.charge(total), seed=self.seed,
+            total_cost=total, budget=budget, seed=self.seed,
             created_ts=time.time(),
         )
 
@@ -216,7 +190,7 @@ async def collect_fanout(
     labeler: Labeler,
     label_source: str,
     served_policy=None,
-    budget: Optional[Budget] = None,
+    budget: Optional[Budget | RunBudget] = None,
     prompt_features: Optional[dict] = None,
 ) -> list[Trajectory]:
     """One shared ANSWER prefix, then every available action once from that state.
@@ -229,7 +203,7 @@ async def collect_fanout(
     import random
 
     executor = InterventionExecutor(cfg)
-    run_budget = RunBudget(budget)
+    run_budget = budget if isinstance(budget, RunBudget) else RunBudget(budget)
     rng = random.Random(seed)
     features = dict(prompt_features or {})
 
@@ -241,8 +215,9 @@ async def collect_fanout(
                       "fanout_prefix", "1", features)
     prefix.start_root(small_id)
     answer = answer_action(small_id, cfg)
+    run_budget.admit(estimate_action_cost(answer, ctx, run_budget.model_prices))
     result = await executor.execute(answer, ctx)
-    run_budget.charge(result.cost)
+    run_budget.settle(result.cost)
     # The prefix is forced, not chosen: the feasible set is the single action the
     # collector was always going to take. Recording the full root action space
     # here would claim support this design does not provide.
@@ -256,6 +231,15 @@ async def collect_fanout(
     ctx1 = result.next_context(ctx)
     taken = [answer.key]
     trajectories = [prefix_traj]
+
+    def check_budget():
+        try:
+            run_budget.check()
+        except BudgetExceeded as exc:
+            exc.trajectories = trajectories
+            raise
+
+    check_budget()
 
     if result.status not in (OutcomeStatus.CHOSEN, OutcomeStatus.COUNTERFACTUAL):
         # The prefix itself failed; there is no state worth branching from and
@@ -295,10 +279,16 @@ async def collect_fanout(
             trajectories.append(builder.build(
                 status="unavailable", abstained=False, label=None,
                 label_source=None, budget=run_budget.state))
+            check_budget()
             continue
 
+        try:
+            run_budget.admit(estimate_action_cost(action, ctx1, run_budget.model_prices))
+        except BudgetExceeded as exc:
+            exc.trajectories = trajectories
+            raise
         res = await executor.execute(action, ctx1)
-        run_budget.charge(res.cost)
+        run_budget.settle(res.cost)
 
         if res.status is not OutcomeStatus.CHOSEN:
             # The action ran but produced nothing usable, errored, or was served
@@ -315,6 +305,7 @@ async def collect_fanout(
             trajectories.append(builder.build(
                 status=res.status.value, abstained=False, label=None,
                 label_source=None, budget=run_budget.state))
+            check_budget()
             continue
 
         # `is_counterfactual` on an outcome means "an observed execution of an
@@ -342,5 +333,6 @@ async def collect_fanout(
         trajectories.append(builder.build(
             status="PENDING_REVIEW" if abstained else "OK", abstained=abstained,
             label=label, label_source=label_source, budget=run_budget.state))
+        check_budget()
 
     return trajectories

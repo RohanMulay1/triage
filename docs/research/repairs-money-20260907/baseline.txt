@@ -1,0 +1,333 @@
+BASELINE: 7479ff2
+COMMAND: C:\Users\rohan\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\python.exe -m pytest -q tests/test_trace_budget_repairs.py::test_d1_one_call_cap_never_executes_a_second_model_call tests/test_trace_budget_repairs.py::test_d2_single_accumulator_retains_spend_into_second_item tests/test_trace_collection_cli.py
+EXIT: 1
+FF.FFF...F.FF..                                                          [100%]
+================================== FAILURES ===================================
+___________ test_d1_one_call_cap_never_executes_a_second_model_call ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000215511A31D0>
+
+    def test_d1_one_call_cap_never_executes_a_second_model_call(monkeypatch):
+        calls = []
+        original = LLMClient.generate
+    
+        async def counted(self, *args, **kwargs):
+            calls.append(self.model_id)
+            return await original(self, *args, **kwargs)
+    
+        monkeypatch.setattr(LLMClient, "generate", counted)
+        with pytest.raises(BudgetExceeded):
+            collect(Budget(max_llm_calls=1))
+>       assert len(calls) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len(['llama-3.1-8b', 'llama-3.1-8b'])
+
+tests\test_trace_budget_repairs.py:33: AssertionError
+__________ test_d2_single_accumulator_retains_spend_into_second_item __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021589FD4190>
+
+    def test_d2_single_accumulator_retains_spend_into_second_item(monkeypatch):
+        # Controlled priced stand-in, never a live provider. Each item costs 2 units:
+        # its shared answer plus one re-answer. The cap covers 1.5 items.
+        def feasible(self, ctx, taken=None):
+            return [(stop_action(), True, ""), (answer_action(ctx.small_id, ctx.cfg), True, "")]
+    
+        original = InterventionExecutor.execute
+        calls = []
+    
+        async def priced(self, action, ctx):
+            result = await original(self, action, ctx)
+            if action.kind == ActionKind.ANSWER:
+                calls.append(ctx.question)
+                result.cost = ActionCost(llm_calls=1, est_cost_usd=1, source="listed_price")
+            return result
+    
+        def estimate(action, ctx, prices):
+            return (ActionCost(llm_calls=1, est_cost_usd=1, source="listed_price")
+                    if action.kind == ActionKind.ANSWER else ActionCost())
+    
+        monkeypatch.setattr(InterventionExecutor, "feasible", feasible)
+        monkeypatch.setattr(InterventionExecutor, "execute", priced)
+        monkeypatch.setattr("app.trace.branching.estimate_action_cost", estimate, raising=False)
+        budget = RunBudget(Budget(max_usd=3))
+>       first = collect(budget, "first")
+
+tests\test_trace_budget_repairs.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_trace_budget_repairs.py:15: in collect
+    return asyncio.run(collect_fanout(
+C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py:190: in run
+    return runner.run(main)
+C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py:118: in run
+    return self._loop.run_until_complete(task)
+C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py:654: in run_until_complete
+    return future.result()
+app\trace\branching.py:245: in collect_fanout
+    run_budget.charge(result.cost)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <app.trace.branching.RunBudget object at 0x0000021589FD5390>
+cost = ActionCost(tokens_in=0, tokens_out=0, llm_calls=1, est_cost_usd=1.0, latency_ms=0.0, ttft_ms=0.0, compute_units=0.0, source='listed_price')
+
+    def charge(self, cost: ActionCost) -> None:
+>       if not self.state.can_afford(cost):
+E       AttributeError: 'RunBudget' object has no attribute 'can_afford'
+
+app\trace\branching.py:75: AttributeError
+________ test_live_requires_finite_positive_cap_before_app_import[nan] ________
+
+cap = 'nan'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002158B2718D0>
+capsys = <_pytest.capture.CaptureFixture object at 0x000002158B270FD0>
+
+    @pytest.mark.parametrize("cap", [None, "nan", "NaN", "inf", "-inf", "0", "-1"])
+    def test_live_requires_finite_positive_cap_before_app_import(cap, monkeypatch, capsys):
+        script = Path(__file__).resolve().parents[1] / "scripts" / "collect_traces.py"
+        argv = [str(script), "--live"]
+        if cap is not None:
+            argv.append(f"--max-usd={cap}")
+        monkeypatch.setattr(sys, "argv", argv)
+        monkeypatch.setattr(sys, "path", list(sys.path))
+        real_import = builtins.__import__
+    
+        def no_app_import(name, *args, **kwargs):
+            if name == "app" or name.startswith("app."):
+                pytest.fail("invalid cap reached application/provider initialization")
+            return real_import(name, *args, **kwargs)
+    
+        monkeypatch.setattr(builtins, "__import__", no_app_import)
+        with pytest.raises(SystemExit) as exc:
+>           runpy.run_path(str(script), run_name="__main__")
+
+tests\test_trace_collection_cli.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen runpy>:291: in run_path
+    ???
+<frozen runpy>:98: in _run_module_code
+    ???
+<frozen runpy>:88: in _run_code
+    ???
+scripts\collect_traces.py:69: in <module>
+    from app.benchmark import rigor  # noqa: E402
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'app.benchmark'
+args = ({'ARGS': Namespace(n=20, dataset='traps', mode='fanout', policy='response_risk', split=None, split_salt='', small=Non...ror'>, 'AttributeError': <class 'AttributeError'>, 'BaseException': <class 'BaseException'>, ...}, ...}, ('rigor',), 0)
+kwargs = {}
+
+    def no_app_import(name, *args, **kwargs):
+        if name == "app" or name.startswith("app."):
+>           pytest.fail("invalid cap reached application/provider initialization")
+E           Failed: invalid cap reached application/provider initialization
+
+tests\test_trace_collection_cli.py:37: Failed
+________ test_live_requires_finite_positive_cap_before_app_import[NaN] ________
+
+cap = 'NaN'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021589FD1FD0>
+capsys = <_pytest.capture.CaptureFixture object at 0x0000021589FD1390>
+
+    @pytest.mark.parametrize("cap", [None, "nan", "NaN", "inf", "-inf", "0", "-1"])
+    def test_live_requires_finite_positive_cap_before_app_import(cap, monkeypatch, capsys):
+        script = Path(__file__).resolve().parents[1] / "scripts" / "collect_traces.py"
+        argv = [str(script), "--live"]
+        if cap is not None:
+            argv.append(f"--max-usd={cap}")
+        monkeypatch.setattr(sys, "argv", argv)
+        monkeypatch.setattr(sys, "path", list(sys.path))
+        real_import = builtins.__import__
+    
+        def no_app_import(name, *args, **kwargs):
+            if name == "app" or name.startswith("app."):
+                pytest.fail("invalid cap reached application/provider initialization")
+            return real_import(name, *args, **kwargs)
+    
+        monkeypatch.setattr(builtins, "__import__", no_app_import)
+        with pytest.raises(SystemExit) as exc:
+>           runpy.run_path(str(script), run_name="__main__")
+
+tests\test_trace_collection_cli.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen runpy>:291: in run_path
+    ???
+<frozen runpy>:98: in _run_module_code
+    ???
+<frozen runpy>:88: in _run_code
+    ???
+scripts\collect_traces.py:69: in <module>
+    from app.benchmark import rigor  # noqa: E402
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'app.benchmark'
+args = ({'ARGS': Namespace(n=20, dataset='traps', mode='fanout', policy='response_risk', split=None, split_salt='', small=Non...ror'>, 'AttributeError': <class 'AttributeError'>, 'BaseException': <class 'BaseException'>, ...}, ...}, ('rigor',), 0)
+kwargs = {}
+
+    def no_app_import(name, *args, **kwargs):
+        if name == "app" or name.startswith("app."):
+>           pytest.fail("invalid cap reached application/provider initialization")
+E           Failed: invalid cap reached application/provider initialization
+
+tests\test_trace_collection_cli.py:37: Failed
+________ test_live_requires_finite_positive_cap_before_app_import[inf] ________
+
+cap = 'inf'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002158B2B2A50>
+capsys = <_pytest.capture.CaptureFixture object at 0x000002158B2B2450>
+
+    @pytest.mark.parametrize("cap", [None, "nan", "NaN", "inf", "-inf", "0", "-1"])
+    def test_live_requires_finite_positive_cap_before_app_import(cap, monkeypatch, capsys):
+        script = Path(__file__).resolve().parents[1] / "scripts" / "collect_traces.py"
+        argv = [str(script), "--live"]
+        if cap is not None:
+            argv.append(f"--max-usd={cap}")
+        monkeypatch.setattr(sys, "argv", argv)
+        monkeypatch.setattr(sys, "path", list(sys.path))
+        real_import = builtins.__import__
+    
+        def no_app_import(name, *args, **kwargs):
+            if name == "app" or name.startswith("app."):
+                pytest.fail("invalid cap reached application/provider initialization")
+            return real_import(name, *args, **kwargs)
+    
+        monkeypatch.setattr(builtins, "__import__", no_app_import)
+        with pytest.raises(SystemExit) as exc:
+>           runpy.run_path(str(script), run_name="__main__")
+
+tests\test_trace_collection_cli.py:42: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+<frozen runpy>:291: in run_path
+    ???
+<frozen runpy>:98: in _run_module_code
+    ???
+<frozen runpy>:88: in _run_code
+    ???
+scripts\collect_traces.py:69: in <module>
+    from app.benchmark import rigor  # noqa: E402
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'app.benchmark'
+args = ({'ARGS': Namespace(n=20, dataset='traps', mode='fanout', policy='response_risk', split=None, split_salt='', small=Non...ror'>, 'AttributeError': <class 'AttributeError'>, 'BaseException': <class 'BaseException'>, ...}, ...}, ('rigor',), 0)
+kwargs = {}
+
+    def no_app_import(name, *args, **kwargs):
+        if name == "app" or name.startswith("app."):
+>           pytest.fail("invalid cap reached application/provider initialization")
+E           Failed: invalid cap reached application/provider initialization
+
+tests\test_trace_collection_cli.py:37: Failed
+____________ test_live_served_is_refused_before_app_initialization ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002158B27B5D0>
+capsys = <_pytest.capture.CaptureFixture object at 0x000002158B278FD0>
+
+    def test_live_served_is_refused_before_app_initialization(monkeypatch, capsys):
+        with pytest.raises(SystemExit) as exc:
+>           run_cli(["--live", "--mode=served", "--max-usd=1"], monkeypatch)
+
+tests\test_trace_collection_cli.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_trace_collection_cli.py:22: in run_cli
+    runpy.run_path(str(script), run_name="__main__")
+<frozen runpy>:291: in run_path
+    ???
+<frozen runpy>:98: in _run_module_code
+    ???
+<frozen runpy>:88: in _run_code
+    ???
+scripts\collect_traces.py:69: in <module>
+    from app.benchmark import rigor  # noqa: E402
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'app.benchmark'
+a = ({'ARGS': Namespace(n=20, dataset='traps', mode='served', policy='response_risk', split=None, split_salt='', small=Non...ror'>, 'AttributeError': <class 'AttributeError'>, 'BaseException': <class 'BaseException'>, ...}, ...}, ('rigor',), 0)
+kw = {}
+
+    def intercept(name, *a, **kw):
+        if name == "app" or name.startswith("app."):
+>           raise RuntimeError("arguments accepted before app initialization")
+E           RuntimeError: arguments accepted before app initialization
+
+tests\test_trace_collection_cli.py:18: RuntimeError
+_________ test_invalid_sample_sizes_refused_before_initialization[0] __________
+
+value = '0'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000021587B39810>
+
+    @pytest.mark.parametrize("value", ["0", "-1", "inf", "nan"])
+    def test_invalid_sample_sizes_refused_before_initialization(value, monkeypatch):
+        with pytest.raises(SystemExit) as exc:
+>           run_cli([f"--n={value}"], monkeypatch)
+
+tests\test_trace_collection_cli.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_trace_collection_cli.py:22: in run_cli
+    runpy.run_path(str(script), run_name="__main__")
+<frozen runpy>:291: in run_path
+    ???
+<frozen runpy>:98: in _run_module_code
+    ???
+<frozen runpy>:88: in _run_code
+    ???
+scripts\collect_traces.py:69: in <module>
+    from app.benchmark import rigor  # noqa: E402
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'app.benchmark'
+a = ({'ARGS': Namespace(n=0, dataset='traps', mode='fanout', policy='response_risk', split=None, split_salt='', small=None...ror'>, 'AttributeError': <class 'AttributeError'>, 'BaseException': <class 'BaseException'>, ...}, ...}, ('rigor',), 0)
+kw = {}
+
+    def intercept(name, *a, **kw):
+        if name == "app" or name.startswith("app."):
+>           raise RuntimeError("arguments accepted before app initialization")
+E           RuntimeError: arguments accepted before app initialization
+
+tests\test_trace_collection_cli.py:18: RuntimeError
+_________ test_invalid_sample_sizes_refused_before_initialization[-1] _________
+
+value = '-1'
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000002158B2EC810>
+
+    @pytest.mark.parametrize("value", ["0", "-1", "inf", "nan"])
+    def test_invalid_sample_sizes_refused_before_initialization(value, monkeypatch):
+        with pytest.raises(SystemExit) as exc:
+>           run_cli([f"--n={value}"], monkeypatch)
+
+tests\test_trace_collection_cli.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_trace_collection_cli.py:22: in run_cli
+    runpy.run_path(str(script), run_name="__main__")
+<frozen runpy>:291: in run_path
+    ???
+<frozen runpy>:98: in _run_module_code
+    ???
+<frozen runpy>:88: in _run_code
+    ???
+scripts\collect_traces.py:69: in <module>
+    from app.benchmark import rigor  # noqa: E402
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+name = 'app.benchmark'
+a = ({'ARGS': Namespace(n=-1, dataset='traps', mode='fanout', policy='response_risk', split=None, split_salt='', small=Non...ror'>, 'AttributeError': <class 'AttributeError'>, 'BaseException': <class 'BaseException'>, ...}, ...}, ('rigor',), 0)
+kw = {}
+
+    def intercept(name, *a, **kw):
+        if name == "app" or name.startswith("app."):
+>           raise RuntimeError("arguments accepted before app initialization")
+E           RuntimeError: arguments accepted before app initialization
+
+tests\test_trace_collection_cli.py:18: RuntimeError
+=========================== short test summary info ===========================
+FAILED tests/test_trace_budget_repairs.py::test_d1_one_call_cap_never_executes_a_second_model_call
+FAILED tests/test_trace_budget_repairs.py::test_d2_single_accumulator_retains_spend_into_second_item
+FAILED tests/test_trace_collection_cli.py::test_live_requires_finite_positive_cap_before_app_import[nan]
+FAILED tests/test_trace_collection_cli.py::test_live_requires_finite_positive_cap_before_app_import[NaN]
+FAILED tests/test_trace_collection_cli.py::test_live_requires_finite_positive_cap_before_app_import[inf]
+FAILED tests/test_trace_collection_cli.py::test_live_served_is_refused_before_app_initialization
+FAILED tests/test_trace_collection_cli.py::test_invalid_sample_sizes_refused_before_initialization[0]
+FAILED tests/test_trace_collection_cli.py::test_invalid_sample_sizes_refused_before_initialization[-1]
+8 failed, 7 passed in 24.51s
+C:\Users\rohan\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\pytest_asyncio\plugin.py:208: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
