@@ -1,0 +1,65 @@
+[collect_traces] mock provider forced: this run spends nothing.
+  [1/8] mixed-0000 split=train branches=11 written=11
+  [2/8] mixed-0001 split=train branches=11 written=22
+  [3/8] mixed-0002 split=calib branches=11 written=33
+  [4/8] mixed-0003 split=calib branches=11 written=44
+  [5/8] mixed-0004 split=train branches=11 written=55
+  [6/8] mixed-0005 split=test branches=11 written=66
+  [7/8] mixed-0006 split=train branches=11 written=77
+  [8/8] mixed-0007 split=train branches=11 written=88
+
+run_id: fixture-fanout
+written to: C:\Users\rohan\triage\data\traces\fixture-fanout
+
+--- validation ---
+{
+  "run_id": "fixture-fanout",
+  "schema_version": "1.2.0",
+  "trajectories": 88,
+  "manifest_present": true,
+  "force_mock": true,
+  "synthetic_trajectories": 48,
+  "cost_conservation_ok": true,
+  "chain_ok": true,
+  "analysis_grade": false,
+  "errors": []
+}
+
+--- missingness ---
+{
+  "chosen": 16,
+  "counterfactual": 108,
+  "unchosen": 0,
+  "attempted": 0,
+  "unavailable": 14,
+  "failed": 0,
+  "synthetic_fallback": 0
+}
+
+--- action support ---
+  abstain                                        taken=   8 observed=   8 feasible=  80 coverage=0.1
+  answer:llama-3.1-8b:t=0.2                      taken=  16 observed=  16 feasible=  88 coverage=0.1818
+  resample:llama-3.1-8b:n=3,t=0.7                taken=   8 observed=   8 feasible=  80 coverage=0.1
+  retrieve:min_score=0.2,top_k=4                 taken=   8 observed=   8 feasible=  80 coverage=0.1
+  self_check:llama-3.1-8b                        taken=   8 observed=   8 feasible=  80 coverage=0.1
+  specialist_model                               taken=   8 observed=   0 feasible=   8 coverage=1.0
+  stop                                           taken=  58 observed=  58 feasible= 130 coverage=0.4462
+  stronger_model:gpt-4o                          taken=   8 observed=   8 feasible=  80 coverage=0.1
+  tool:name="calculator"                         taken=   8 observed=   2 feasible=  26 coverage=0.3077
+  verify:llama-3.1-8b:max_rounds=1               taken=   8 observed=   8 feasible=  80 coverage=0.1
+
+  unsupported actions : ['specialist_model']
+  off-policy ready    : False
+  analysis grade      : False
+
+--- marginal value vs STOP (items with baseline: 8) ---
+  abstain                                        n=   8 mean delta=-0.1250 95% CI [-0.8117, +0.5617] (+3/-4/=1)
+  answer:llama-3.1-8b:t=0.2                      n=   8 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=8)
+  resample:llama-3.1-8b:n=3,t=0.7                n=   8 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=8)
+  retrieve:min_score=0.2,top_k=4                 n=   8 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=8)
+  self_check:llama-3.1-8b                        n=   8 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=8)
+  stronger_model:gpt-4o                          n=   8 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=8)
+  tool:name="calculator"                         n=   2 mean delta=+0.5000 95% CI [-0.4800, +1.4800] (+1/-0/=1)
+  verify:llama-3.1-8b:max_rounds=1               n=   8 mean delta=+0.0000 95% CI [+0.0000, +0.0000] (+0/-0/=8)
+
+next: python -m app.trace.support --run fixture-fanout

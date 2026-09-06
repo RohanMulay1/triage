@@ -33,11 +33,12 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from ..schemas import SignalSet
 
-SCHEMA_VERSION = "1.1.0"
-# 1.1.0 widened CostSource (see below). Every 1.0.0 field and value is still
-# valid, so traces written at 1.0.0 read back unchanged -- the reader accepts
-# them explicitly rather than coercing an unknown version.
-SUPPORTED_SCHEMA_VERSIONS = frozenset({"1.0.0", "1.1.0"})
+SCHEMA_VERSION = "1.2.0"
+# 1.1.0 widened CostSource. 1.2.0 added OutcomeStatus, cumulative cost, action
+# execution detail, and behaviour-policy provenance on PolicyDecision -- all
+# additive with defaults, so 1.0.0 and 1.1.0 traces read back unchanged. The
+# reader accepts known versions explicitly rather than coercing an unknown one.
+SUPPORTED_SCHEMA_VERSIONS = frozenset({"1.0.0", "1.1.0", "1.2.0"})
 
 # Where a cost number came from. The distinction that matters for a results
 # table is between a figure someone was actually invoiced for and a figure
@@ -111,6 +112,39 @@ class ActionKind(str, Enum):
     SPECIALIST_MODEL = "specialist_model"
     ABSTAIN = "abstain"
     STOP = "stop"
+
+
+class OutcomeStatus(str, Enum):
+    """What actually happened to an action. These are NOT interchangeable.
+
+    Collapsing them is how a dataset silently lies: an action that was never
+    tried, one that was tried and failed, and one that has no implementation at
+    all would otherwise all look like "no benefit observed", which would bias
+    every value estimate toward zero for exactly the actions that are hardest to
+    execute.
+
+      CHOSEN              executed on the served path
+      COUNTERFACTUAL      executed as an unchosen branch from the same state
+      UNCHOSEN            feasible and considered, not executed (no outcome)
+      ATTEMPTED           executed but produced nothing usable (empty answer)
+      UNAVAILABLE         no real integration exists for this action here
+      FAILED              executed and raised or returned a provider error
+      SYNTHETIC_FALLBACK  a live call failed and the mock provider answered
+    """
+
+    CHOSEN = "chosen"
+    COUNTERFACTUAL = "counterfactual"
+    UNCHOSEN = "unchosen"
+    ATTEMPTED = "attempted"
+    UNAVAILABLE = "unavailable"
+    FAILED = "failed"
+    SYNTHETIC_FALLBACK = "synthetic_fallback"
+
+
+#: Statuses whose outcome reflects a real execution, so a value estimate may use
+#: it. UNCHOSEN and UNAVAILABLE carry no observation; ATTEMPTED/FAILED/
+#: SYNTHETIC_FALLBACK carry an observation that is not about model capability.
+OBSERVED_STATUSES = frozenset({OutcomeStatus.CHOSEN, OutcomeStatus.COUNTERFACTUAL})
 
 
 class Action(BaseModel):
@@ -270,20 +304,47 @@ class StateSnapshot(BaseModel):
 # Outcome
 # --------------------------------------------------------------------------- #
 class ActionOutcome(BaseModel):
-    """What one action did. Recorded whether or not it was on the served path."""
+    """What one action did. Recorded whether or not it was on the served path.
+
+    ``cost`` is the **incremental** cost of this action alone. ``cumulative_cost``
+    is the trajectory's cost through this step. Both are stored because a
+    marginal-value estimate needs the increment while a budget check needs the
+    running total, and deriving one from the other after the fact is where
+    accounting mistakes hide. For STRONGER_MODEL specifically, ``cost`` is the
+    big-model pass only -- the small-model trajectory was already paid for and is
+    not re-charged.
+    """
 
     model_config = ConfigDict(frozen=True)
 
     action: Action
     parent_state_id: str
     result_state_id: str
+    status: OutcomeStatus = OutcomeStatus.CHOSEN
     cost: ActionCost = Field(default_factory=ActionCost)
+    cumulative_cost: ActionCost = Field(default_factory=ActionCost)
     answer_changed: bool = False
     answer_similarity: Optional[float] = None
     signal_delta: dict[str, float] = Field(default_factory=dict)
     provider_label: str = "unknown"
     error: Optional[str] = None
     is_counterfactual: bool = False
+    seed: Optional[int] = None
+    detail: dict[str, Any] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _status_and_flag_agree(self) -> "ActionOutcome":
+        if (self.status == OutcomeStatus.COUNTERFACTUAL) != self.is_counterfactual:
+            raise ValueError(
+                f"status={self.status.value!r} contradicts "
+                f"is_counterfactual={self.is_counterfactual}"
+            )
+        if self.status == OutcomeStatus.SYNTHETIC_FALLBACK and self.provider_label != "mock":
+            raise ValueError(
+                "SYNTHETIC_FALLBACK requires provider_label='mock'; "
+                f"got {self.provider_label!r}"
+            )
+        return self
 
     @property
     def is_synthetic(self) -> bool:
@@ -293,6 +354,11 @@ class ActionOutcome(BaseModel):
         this can be true inside an otherwise-live run.
         """
         return self.provider_label == "mock"
+
+    @property
+    def is_observed(self) -> bool:
+        """True when this outcome is a real execution a value estimate may use."""
+        return self.status in OBSERVED_STATUSES
 
 
 # --------------------------------------------------------------------------- #
@@ -383,6 +449,11 @@ class PolicyDecision(BaseModel):
     feasible: list[Action]
     chosen: Action
     policy_id: str
+    policy_version: str = "0"
+    #: How `feasible` was derived, so a support denominator computed under one
+    #: action-space definition is never silently compared with another.
+    feasible_set_definition: str = "unspecified"
+    exploration_seed: Optional[int] = None
     propensity: float = 1.0
     scores: dict[str, ActionScore] = Field(default_factory=dict)
     stop_reason: Optional[str] = None
@@ -543,7 +614,10 @@ class TraceManifest(BaseModel):
     seeds: list[int] = Field(default_factory=list)
     force_mock: bool = False
     dataset: str = "unknown"
-    split: Split = "pilot"
+    #: The run's split POLICY, not a split: "mixed" when items are assigned by
+    #: group hash, or a split name when the run forced one. The authoritative
+    #: per-item split is Trajectory.split, which stays strictly typed.
+    split: str = "pilot"
     command: str = ""
     env: dict[str, Any] = Field(default_factory=dict)
     notes: str = ""

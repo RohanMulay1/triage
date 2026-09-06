@@ -111,7 +111,7 @@ def build_manifest(
         seeds=seeds or [],
         force_mock=get_settings().force_mock,
         dataset=dataset,
-        split=split,  # type: ignore[arg-type]
+        split=split,
         command=command or " ".join(sys.argv),
         env={"python": sys.version.split()[0], "pydantic": pydantic.VERSION},
         notes=notes,

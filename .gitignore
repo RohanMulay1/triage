@@ -12,6 +12,7 @@ data/online_state.json
 # research traces: runs can be large, keep the mock fixture only
 data/traces/*
 !data/traces/fixture-mock/
+!data/traces/fixture-fanout/
 nohup.out
 *.log
 
@@ -39,3 +40,4 @@ CLAUDE_MEMORY.md
 
 # ...but the fixture run's collection log is checkpoint evidence (beats *.log above)
 !data/traces/fixture-mock/collect.log
+!data/traces/fixture-fanout/collect.log
