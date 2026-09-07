@@ -1,0 +1,8 @@
+{
+  "paper": "https://arxiv.org/html/2603.19896v1",
+  "read_scope": "full paper sections 1-7 and references; released policies.py in full",
+  "code_commit": "992e5b74e600cb5b50fbcef69416baaeca4ba904",
+  "code_url": "https://github.com/kagami-kasumi/Utility-Guided-Agent-Orchestration-for-Efficient-LLM-Tool-Use/blob/992e5b74e600cb5b50fbcef69416baaeca4ba904/agent_policy_pilot/policies.py",
+  "policies_py_sha256": "84d90652437fe907003acb7ab3c26595d62828d043c23af6fa676fa536087e31",
+  "reproduction_scope": "equation-level Triage adaptation, not reproduction of released search/stop experiment"
+}

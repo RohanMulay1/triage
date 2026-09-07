@@ -1,0 +1,440 @@
+{
+  "run_id": "checkpoint7-c2-mock",
+  "analysis_grade": false,
+  "not_evidence": true,
+  "validation": {
+    "run_id": "checkpoint7-c2-mock",
+    "schema_version": "1.3.0",
+    "trajectories": 208,
+    "manifest_present": true,
+    "force_mock": true,
+    "synthetic_trajectories": 120,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "continuation": "verify",
+  "continuation_selection": "fixed_not_oracle",
+  "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+  "support_thresholds": {
+    "min_coverage": 0.0,
+    "min_observations": 1,
+    "min_propensity": 0.001,
+    "min_ess_ratio": 0.1,
+    "allow_synthetic": true
+  },
+  "verdict": "C2_NOT_ESTABLISHED",
+  "per_action": {
+    "resample": {
+      "status": "DIAGNOSTIC",
+      "not_evidence": true,
+      "n": 8,
+      "depth1": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "depth2": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "paired_depth2_minus_depth1_ci95": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "matched_information_ci95": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "matched_selection_interval": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "extra_continuation_usd": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "extra_continuation_calls": {
+        "point": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n": 8
+      },
+      "information_usd": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "pairs": [
+        {
+          "item_id": "mixed-0000",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0001",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0002",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0003",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0004",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0005",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0006",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0007",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        }
+      ]
+    },
+    "self_check": {
+      "status": "DIAGNOSTIC",
+      "not_evidence": true,
+      "n": 8,
+      "depth1": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "depth2": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "paired_depth2_minus_depth1_ci95": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "matched_information_ci95": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "matched_selection_interval": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "extra_continuation_usd": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "extra_continuation_calls": {
+        "point": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n": 8
+      },
+      "information_usd": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "pairs": [
+        {
+          "item_id": "mixed-0000",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0001",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0002",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0003",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0004",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0005",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0006",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0007",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        }
+      ]
+    },
+    "retrieve": {
+      "status": "DIAGNOSTIC",
+      "not_evidence": true,
+      "n": 8,
+      "depth1": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "depth2": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "paired_depth2_minus_depth1_ci95": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "matched_information_ci95": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "matched_selection_interval": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8,
+        "excludes_zero": false
+      },
+      "extra_continuation_usd": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "extra_continuation_calls": {
+        "point": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n": 8
+      },
+      "information_usd": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 8
+      },
+      "pairs": [
+        {
+          "item_id": "mixed-0000",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0001",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0002",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0003",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0004",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0005",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0006",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        },
+        {
+          "item_id": "mixed-0007",
+          "depth1": 0.0,
+          "depth2": 0.0,
+          "direct": 0.0,
+          "extra_usd": 0.0,
+          "extra_calls": 1,
+          "information_usd": 0.0
+        }
+      ]
+    }
+  },
+  "next_candidate": "C4",
+  "c4": {
+    "not_evidence": true,
+    "fitting_status": "NOT_RUN",
+    "reason": "support check only; held-out policy experiment remains required",
+    "counterfactual": {
+      "status": "SUPPORTED",
+      "trajectories": 208,
+      "actions_with_support": 9
+    },
+    "served_projection": {
+      "status": "REFUSED",
+      "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - tool:name=\"calculator\": 0 executed outcome(s) in 2 feasible occasions (need >= 1)"
+    }
+  },
+  "limitations": [
+    "mock contrasts are harness diagnostics only",
+    "one stochastic execution per branch; no equal-cost policy comparison",
+    "response state and continuation mechanisms differ; no novelty demonstrated"
+  ]
+}

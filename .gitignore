@@ -47,3 +47,8 @@ CLAUDE_MEMORY.md
 
 !data/traces/repairs-depth2-mock-20260907/
 !data/traces/repairs-depth2-mock-20260907/collect.log
+
+!data/traces/checkpoint7-comparator-mock/
+!data/traces/checkpoint7-comparator-mock/collect.log
+!data/traces/checkpoint7-c2-mock/
+!data/traces/checkpoint7-c2-mock/collect.log

@@ -1,0 +1,50 @@
+[collect_traces] mock provider forced: this run spends nothing.
+  [1/8] mixed-0000 split=train branches=1 written=1
+  [2/8] mixed-0001 split=train branches=1 written=2
+  [3/8] mixed-0002 split=calib branches=1 written=3
+  [4/8] mixed-0003 split=calib branches=1 written=4
+  [5/8] mixed-0004 split=train branches=1 written=5
+  [6/8] mixed-0005 split=test branches=1 written=6
+  [7/8] mixed-0006 split=train branches=1 written=7
+  [8/8] mixed-0007 split=train branches=1 written=8
+
+run_id: checkpoint7-comparator-mock
+written to: C:\Users\rohan\triage\data\traces\checkpoint7-comparator-mock
+
+--- validation ---
+{
+  "run_id": "checkpoint7-comparator-mock",
+  "schema_version": "1.3.0",
+  "trajectories": 8,
+  "manifest_present": true,
+  "force_mock": true,
+  "synthetic_trajectories": 8,
+  "cost_conservation_ok": true,
+  "chain_ok": true,
+  "analysis_grade": false,
+  "errors": []
+}
+
+--- missingness ---
+{
+  "chosen": 8,
+  "counterfactual": 0,
+  "unchosen": 0,
+  "attempted": 8,
+  "unavailable": 0,
+  "failed": 0,
+  "synthetic_fallback": 0
+}
+
+--- action support ---
+  answer:llama-3.1-8b:t=0.2                      taken=   8 observed=   8 feasible=   8 coverage=1.0
+  self_check:llama-3.1-8b:purpose="heuristic_gain_scoring",version=1 taken=   8 observed=   0 feasible=   8 coverage=1.0
+
+  unsupported actions : ['self_check:llama-3.1-8b:purpose="heuristic_gain_scoring",version=1']
+  off-policy ready    : False
+  analysis grade      : False
+Marginal-value estimate REFUSED: support diagnostics failed; refusing to produce an off-policy estimate:
+  - answer:llama-3.1-8b:t=0.2: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - self_check:llama-3.1-8b:purpose="heuristic_gain_scoring",version=1: 0 executed outcome(s) in 8 feasible occasions (need >= 1)
+
+next: python -m app.trace.support --run checkpoint7-comparator-mock

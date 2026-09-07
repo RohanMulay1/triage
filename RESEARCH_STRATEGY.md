@@ -16,23 +16,24 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-07, Checkpoint 6 complete)
+### Current state (2026-09-07, Checkpoint 7 complete)
 
 | | |
 |---|---|
-| **Checkpoints complete** | 0–5 as recorded below; 6 complete (all eleven defects repaired) |
-| **Tests** | 255 passing (`python -m pytest -q`); see Checkpoint 6 validation |
+| **Checkpoints complete** | 0–5 as recorded below; 6 repairs complete; 7 comparator and mock C2/C4 diagnostics complete |
+| **Tests** | 272 passing (`python -m pytest -q`); see Checkpoint 7 validation |
 | **Trace schema** | 1.3.0; reads 1.0.0, 1.1.0 and 1.2.0 |
 | **Gate 1 (novelty)** | **NARROW: investigate deltas against readable bases**; candidates unproven; Yin & Zhang is a disclosed risk, not a gate |
 | **Gate 2 (signal)** | **REFUSED on mock input** by repaired gates; historical pilot was INCONCLUSIVE |
 | **Gate 3 (sequentiality)** | not established; optional depth-2 measurement now available |
 | **Total spend to date** | **$0.** Every run has been on the mock provider |
-| **Paper status** | no claim is supported; no controller has been implemented |
+| **Paper status** | no claim is supported; comparator behavior policy implemented; no learned or production controller |
 
-**What is true right now.** Money and inference repairs have behavioral tests
-that fail on the specified baseline. The legacy-router equivalence tests pass.
-Prompt features vary and depth-2 parent-relative branches validate in a fresh mock run. No live collection,
-controller, or performance claim is authorized by these software checks.
+**What is true right now.** The heuristic-gain comparator and fixed-continuation
+C2 ablation are implemented. The ordinary mock scorer refuses malformed JSON;
+scripted tests cover successful selection. C2's mock paired intervals include
+zero, so C2 is not established and the program moves to C4. Both new runs validate
+structurally and remain non-analysis-grade. See Checkpoint 7 below.
 
 **What is not true.** No real-model repairability or candidate contribution has
 been established. The prompt-only comparison was retracted in `7479ff2`. Several
@@ -45,17 +46,16 @@ an overlap risk to disclose; it no longer prevents progressing through repairs.
 
 1. **Repairs D1-D11.** The committed [defect spec](docs/research/pre-live-defect-spec.md)
    is authoritative. All eleven repairs and fresh mock validation are complete. No live collection is authorized.
-2. **Fresh mock validation**, then a full-text-derived heuristic-gain comparator,
-   then the chosen differentiator and its controlled ablation. Experimental
-   implementations do not establish a scientific contribution or authorize a
-   production controller. Detailed requirements are in the strategy addendum.
+2. **C4 protocol experiment.** Comparator implementation and C2 mock diagnostics
+   are complete. The served-projection support refusal is a diagnostic, not a
+   fitted-policy result; design a supported held-out artifact evaluation next.
 3. **Explicit finite live budget approval** after the preceding work. No budget
    is approved; admission estimates are not invoice guarantees.
 
-**Single next command** (mock-only repair regression suite):
+**Single next command** (reproduce C2 and C4 diagnostics):
 
 ```
-python -m app.trace.analysis --run repairs-depth2-mock-20260907
+python -m app.trace.information_value --run checkpoint7-c2-mock --diagnostic-mock --continuation verify
 ```
 
 The committed defect spec is now available. Manuscript access can continue
@@ -283,6 +283,45 @@ the Checkpoint 5 access work and are recorded here rather than edited away.
   then build the heuristic-gain comparator with its fidelity limitations recorded.
   Candidate ablations follow; live evidence requires an explicit approved cap.
 - **Exact next resumption command:** `python -m app.trace.analysis --run repairs-depth2-mock-20260907`.
+
+**Checkpoint 7 - heuristic-gain comparator, C2 ablation, move to C4 (complete).**
+
+- **Implementation:** `heuristic_gain` is a registered behavior policy using
+  uncalibrated LLM gain/uncertainty and the published utility equation. Its
+  budgeted scoring call is recorded once as prefix overhead. Invalid scoring
+  refuses; unknown usage stops collection. Source defaults and adaptation limits
+  are documented in `docs/research/checkpoint7/method-notes.md`; full paper and
+  released policy code were read, with revision/hash in `source-record.json`.
+- **C2:** `app.trace.information_value` fixes VERIFY before observing outcomes,
+  pairs depth 1 and depth 2 on the same items, and also contrasts information plus
+  VERIFY with VERIFY alone. No oracle continuation selection. Support, provenance,
+  completeness and parent-matching gates precede estimates. Synthetic diagnostics
+  require an explicit flag; they cannot establish C2.
+- **Evidence:** for each of RESAMPLE, SELF_CHECK and RETRIEVE, paired depth gain
+  is 0.000, 95% CI [0.000, 0.000], n=8 mock items. Matched information contrasts
+  also equal 0.000, 95% CI [0.000, 0.000], n=8 each. All intervals include zero.
+  C2_NOT_ESTABLISHED; do not restate the structural distinction as a contribution.
+- **C4 transition:** exhaustive mock support passes explicit diagnostic thresholds;
+  the designated served projection refuses for unsupported TOOL outcomes. No
+  fitted policy comparison is admissible from that projection. C4 is the next
+  candidate, not a demonstrated contribution.
+- **Artifacts/checks:** `checkpoint7-comparator-mock` and `checkpoint7-c2-mock`
+  have manifests, splits, trajectories and collection logs. Validation reports
+  intact chains, conserved costs and zero errors; analysis_grade is false and
+  Gate 2 refuses both. `docs/research/checkpoint7/` contains the paired report,
+  source audit, artifact checks and logs. Full suite: 272 passed; full-tree
+  pyflakes clean, including the legacy-router guard. Prior artifacts unchanged.
+- **Failures/limitations:** ordinary mock text cannot satisfy the scoring JSON
+  contract; comparator run records unlabelled failures, while scripted-client
+  tests verify successful selection. The released baseline code is search/stop;
+  heterogeneous Triage scoring is an explicit adaptation. This fan-out designates
+  a root choice, not a complete sequential policy rollout. Mock zeros do not
+  establish benefit or absence of benefit on real models. Quality contrasts do
+  not prove equal-cost superiority, calibration, sequentiality, or novelty.
+  Gate 1 stays provisionally NARROW; unread Yin & Zhang is a disclosed risk.
+- **Remaining:** design C4's supported, held-out protocol experiment and comparator
+  fidelity evaluation. No paid calls were made; no live budget is approved.
+- **Exact next command:** `python -m app.trace.information_value --run checkpoint7-c2-mock --diagnostic-mock --continuation verify`.
 
 ## Executive research thesis
 

@@ -237,6 +237,21 @@ async def collect_fanout(
                     status=result.status,
                     rationale={"role": "shared prefix", "forced": True},
                     exploration_seed=seed)
+    # Policy scoring is a paid assessment, recorded once in the shared prefix.
+    # Failure leaves an unlabelled prefix and cannot designate a served branch.
+    if result.status == OutcomeStatus.CHOSEN and hasattr(served_policy, "prepare"):
+        try:
+            scoring_action, scoring = await served_policy.prepare(
+                result.next_context(ctx), executor, [answer.key], run_budget)
+        except BudgetExceeded as exc:
+            exc.trajectories = [prefix.build(status="prefix", abstained=False, label=None,
+                                            label_source=None, budget=run_budget.state)]
+            raise
+        s1 = prefix.add(scoring_action, scoring, feasible=[scoring_action], propensity=1.0,
+                        status=scoring.status, rationale={"forced": True, "policy_overhead": True},
+                        exploration_seed=seed)
+        if scoring.status != OutcomeStatus.CHOSEN:
+            result = scoring
     prefix_traj = prefix.build(status="prefix", abstained=False, label=None,
                                label_source=None, budget=run_budget.state)
 
@@ -252,6 +267,10 @@ async def collect_fanout(
             raise
 
     check_budget()
+    if prefix.steps[-1].outcome.detail.get("unknown_usage"):
+        exc = BudgetExceeded("policy scoring usage unknown; refusing further calls")
+        exc.trajectories = trajectories
+        raise exc
 
     if result.status not in (OutcomeStatus.CHOSEN, OutcomeStatus.COUNTERFACTUAL):
         # The prefix itself failed; there is no state worth branching from and
@@ -260,8 +279,10 @@ async def collect_fanout(
 
     # ---- which branch would the served policy have taken? ----------------- #
     served_key = None
+    served_choice = None
     if served_policy is not None:
-        served_key = served_policy.choose(ctx1, executor, taken, rng).action.key
+        served_choice = served_policy.choose(ctx1, executor, taken, rng)
+        served_key = served_choice.action.key
 
     branchable = executor.feasible(ctx1, taken)
     available = [a for a, ok, _ in branchable if ok]
@@ -328,7 +349,9 @@ async def collect_fanout(
         # remains recorded on `branch_id`/`parent_trajectory_id` regardless.
         status = OutcomeStatus.CHOSEN if is_served else OutcomeStatus.COUNTERFACTUAL
         builder.add(action, res, feasible=available, propensity=1.0, status=status,
-                    rationale={"fanout": True, "served": is_served},
+                    rationale={"fanout": True, "served": is_served,
+                               "sampling_design": "exhaustive_inclusion",
+                               "behavior_choice": served_choice.rationale if served_choice else None},
                     exploration_seed=seed)
 
         ctx2 = res.next_context(ctx1)

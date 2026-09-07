@@ -1,0 +1,44 @@
+{
+  "checkpoint7-comparator-mock": {
+    "validation": {
+      "run_id": "checkpoint7-comparator-mock",
+      "schema_version": "1.3.0",
+      "trajectories": 8,
+      "manifest_present": true,
+      "force_mock": true,
+      "synthetic_trajectories": 8,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": false,
+      "errors": []
+    },
+    "gate2_verdict": "REFUSED",
+    "artifacts": {
+      "manifest.json": true,
+      "splits.json": true,
+      "trajectories.jsonl": true,
+      "collect.log": true
+    }
+  },
+  "checkpoint7-c2-mock": {
+    "validation": {
+      "run_id": "checkpoint7-c2-mock",
+      "schema_version": "1.3.0",
+      "trajectories": 208,
+      "manifest_present": true,
+      "force_mock": true,
+      "synthetic_trajectories": 120,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": false,
+      "errors": []
+    },
+    "gate2_verdict": "REFUSED",
+    "artifacts": {
+      "manifest.json": true,
+      "splits.json": true,
+      "trajectories.jsonl": true,
+      "collect.log": true
+    }
+  }
+}

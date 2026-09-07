@@ -1,0 +1,61 @@
+[collect_traces] mock provider forced: this run spends nothing.
+  [1/8] mixed-0000 split=train branches=26 written=26
+  [2/8] mixed-0001 split=train branches=26 written=52
+  [3/8] mixed-0002 split=calib branches=26 written=78
+  [4/8] mixed-0003 split=calib branches=26 written=104
+  [5/8] mixed-0004 split=train branches=26 written=130
+  [6/8] mixed-0005 split=test branches=26 written=156
+  [7/8] mixed-0006 split=train branches=26 written=182
+  [8/8] mixed-0007 split=train branches=26 written=208
+
+run_id: checkpoint7-c2-mock
+written to: C:\Users\rohan\triage\data\traces\checkpoint7-c2-mock
+
+--- validation ---
+{
+  "run_id": "checkpoint7-c2-mock",
+  "schema_version": "1.3.0",
+  "trajectories": 208,
+  "manifest_present": true,
+  "force_mock": true,
+  "synthetic_trajectories": 120,
+  "cost_conservation_ok": true,
+  "chain_ok": true,
+  "analysis_grade": false,
+  "errors": []
+}
+
+--- missingness ---
+{
+  "chosen": 22,
+  "counterfactual": 282,
+  "unchosen": 0,
+  "attempted": 0,
+  "unavailable": 32,
+  "failed": 0,
+  "synthetic_fallback": 0
+}
+
+--- action support ---
+  abstain                                        taken=   8 observed=   8 feasible=  66 coverage=0.1212
+  answer:llama-3.1-8b:t=0.2                      taken=  40 observed=  40 feasible= 176 coverage=0.2273
+  resample:llama-3.1-8b:n=3,t=0.7                taken=   8 observed=   8 feasible=  66 coverage=0.1212
+  retrieve:min_score=0.2,top_k=4                 taken=   8 observed=   8 feasible=  66 coverage=0.1212
+  self_check:llama-3.1-8b                        taken=   8 observed=   8 feasible=  66 coverage=0.1212
+  specialist_model                               taken=   0 observed=   0 feasible=   0 coverage=0.0
+  stop                                           taken= 160 observed= 160 feasible= 296 coverage=0.5405
+  stronger_model:gpt-4o                          taken=  32 observed=  32 feasible= 168 coverage=0.1905
+  tool:name="calculator"                         taken=   8 observed=   8 feasible=  48 coverage=0.1667
+  verify:llama-3.1-8b:max_rounds=1               taken=  32 observed=  32 feasible= 168 coverage=0.1905
+
+  unsupported actions : []
+  off-policy ready    : True
+  analysis grade      : False
+Marginal-value estimate REFUSED: support diagnostics failed; refusing to produce an off-policy estimate:
+  - answer:llama-3.1-8b:t=0.2: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - resample:llama-3.1-8b:n=3,t=0.7: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - self_check:llama-3.1-8b: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - stronger_model:gpt-4o: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+  - verify:llama-3.1-8b:max_rounds=1: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour
+
+next: python -m app.trace.support --run checkpoint7-c2-mock

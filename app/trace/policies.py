@@ -206,8 +206,12 @@ class ResponseRiskThresholdPolicy:
                              "components": {k: round(v, 4) for k, v in components.items()}})
 
 
+from .heuristic_gain import HeuristicGainPolicy
+
+
 #: Registry for `scripts/collect_traces.py --policy`.
 POLICIES: dict[str, callable] = {
+    "heuristic_gain": lambda cfg: HeuristicGainPolicy(**cfg.get("heuristic_gain", {})),
     "random": lambda cfg: RandomFeasiblePolicy(),
     "balanced": lambda cfg: BalancedExplorationPolicy(),
     "epsilon_greedy": lambda cfg: EpsilonGreedyPolicy(

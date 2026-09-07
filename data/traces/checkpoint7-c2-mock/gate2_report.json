@@ -1,0 +1,26 @@
+{
+  "run_id": "checkpoint7-c2-mock",
+  "analysis_grade": false,
+  "not_evidence": true,
+  "validation": {
+    "run_id": "checkpoint7-c2-mock",
+    "schema_version": "1.3.0",
+    "trajectories": 208,
+    "manifest_present": true,
+    "force_mock": true,
+    "synthetic_trajectories": 120,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "support_thresholds": {
+    "min_coverage": 0.0,
+    "min_observations": 1,
+    "min_propensity": 0.001,
+    "min_ess_ratio": 0.1,
+    "allow_synthetic": false
+  },
+  "verdict": "REFUSED",
+  "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - answer:llama-3.1-8b:t=0.2: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - resample:llama-3.1-8b:n=3,t=0.7: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - self_check:llama-3.1-8b: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - stronger_model:gpt-4o: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - verify:llama-3.1-8b:max_rounds=1: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour"
+}
