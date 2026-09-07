@@ -189,24 +189,33 @@ def marginal_value_table(trajectories: list[Trajectory],
     items without one are reported as skipped rather than silently dropped.
     """
     assert_estimable(trajectories, thresholds)
-    by_item: dict[str, dict[str, float]] = {}
+    by_item: dict[tuple[str, str], dict[str, Trajectory]] = {}
     for t in trajectories:
-        if t.terminal.label is None or t.branch_id == "prefix":
-            continue
-        by_item.setdefault(t.item_id, {})[t.branch_id] = t.terminal.label
-
-    stop_key = "stop"
+        if t.branch_id != "prefix":
+            by_item.setdefault((t.run_id, t.item_id), {})[t.branch_id] = t
     deltas: dict[str, list[float]] = {}
+    baselines = {}
     skipped = 0
-    for item, branches in by_item.items():
-        if stop_key not in branches:
+    skipped_pairs = 0
+    for branches in by_item.values():
+        if "stop" not in branches or branches["stop"].terminal.label is None:
             skipped += 1
-            continue
-        base = branches[stop_key]
-        for key, label in branches.items():
-            if key == stop_key:
+        for key, t in branches.items():
+            if t.terminal.label is None or not t.steps:
                 continue
-            deltas.setdefault(key, []).append(label - base)
+            if t.steps[0].decision.chosen.kind.value == "stop":
+                continue
+            base_key = t.baseline_branch_id or "stop"
+            base = branches.get(base_key)
+            if base is None or base.terminal.label is None:
+                skipped_pairs += 1
+                continue
+            if t.decision_depth == 2 and (
+                    t.parent_trajectory_id != base.trajectory_id or
+                    t.root_state_id != base.steps[0].outcome.result_state_id):
+                raise SupportError("depth-2 baseline does not match the informational parent")
+            deltas.setdefault(key, []).append(t.terminal.label - base.terminal.label)
+            baselines[key] = base_key
 
     summary = {}
     for key, values in sorted(deltas.items()):
@@ -216,6 +225,7 @@ def marginal_value_table(trajectories: list[Trajectory],
         se = math.sqrt(var / n) if n else 0.0
         summary[key] = {
             "n": n,
+            "baseline_branch_id": baselines[key],
             "mean_delta": round(mean, 4),
             "se": round(se, 4),
             "ci95": [round(mean - 1.96 * se, 4), round(mean + 1.96 * se, 4)],
@@ -225,6 +235,7 @@ def marginal_value_table(trajectories: list[Trajectory],
         }
     return {"items_with_baseline": len(by_item) - skipped,
             "items_skipped_no_stop_branch": skipped,
+            "pairs_skipped_no_baseline": skipped_pairs,
             "per_action": summary}
 
 

@@ -16,22 +16,22 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-07, Checkpoint 6 inference repairs)
+### Current state (2026-09-07, Checkpoint 6 complete)
 
 | | |
 |---|---|
-| **Checkpoints complete** | 0–5 as recorded below; 6 in progress (money/inference repaired; measurement pending) |
-| **Tests** | 250 passing (`python -m pytest -q`); see Checkpoint 6 validation |
-| **Trace schema** | 1.2.0; reads 1.0.0 and 1.1.0 |
+| **Checkpoints complete** | 0–5 as recorded below; 6 complete (all eleven defects repaired) |
+| **Tests** | 255 passing (`python -m pytest -q`); see Checkpoint 6 validation |
+| **Trace schema** | 1.3.0; reads 1.0.0, 1.1.0 and 1.2.0 |
 | **Gate 1 (novelty)** | **NARROW: investigate deltas against readable bases**; candidates unproven; Yin & Zhang is a disclosed risk, not a gate |
 | **Gate 2 (signal)** | **REFUSED on mock input** by repaired gates; historical pilot was INCONCLUSIVE |
-| **Gate 3 (sequentiality)** | not started; the fan-out is depth-1 only |
+| **Gate 3 (sequentiality)** | not established; optional depth-2 measurement now available |
 | **Total spend to date** | **$0.** Every run has been on the mock provider |
 | **Paper status** | no claim is supported; no controller has been implemented |
 
 **What is true right now.** Money and inference repairs have behavioral tests
 that fail on the specified baseline. The legacy-router equivalence tests pass.
-Prompt-feature and depth-2 measurement repairs remain. No live collection,
+Prompt features vary and depth-2 parent-relative branches validate in a fresh mock run. No live collection,
 controller, or performance claim is authorized by these software checks.
 
 **What is not true.** No real-model repairability or candidate contribution has
@@ -44,8 +44,7 @@ an overlap risk to disclose; it no longer prevents progressing through repairs.
 **Things blocking progress, in order.**
 
 1. **Repairs D1-D11.** The committed [defect spec](docs/research/pre-live-defect-spec.md)
-   is authoritative. Money and inference repairs are complete; measurement
-   repairs remain. No live collection is authorized.
+   is authoritative. All eleven repairs and fresh mock validation are complete. No live collection is authorized.
 2. **Fresh mock validation**, then a full-text-derived heuristic-gain comparator,
    then the chosen differentiator and its controlled ablation. Experimental
    implementations do not establish a scientific contribution or authorize a
@@ -56,7 +55,7 @@ an overlap risk to disclose; it no longer prevents progressing through repairs.
 **Single next command** (mock-only repair regression suite):
 
 ```
-python -m pytest -q tests/test_trace_collection_cli.py tests/test_trace_branching.py tests/test_trace_analysis.py tests/test_trace_splits.py
+python -m app.trace.analysis --run repairs-depth2-mock-20260907
 ```
 
 The committed defect spec is now available. Manuscript access can continue
@@ -209,7 +208,7 @@ the Checkpoint 5 access work and are recorded here rather than edited away.
   explicit budget before collecting live evidence. No controller started.
 - **Exact next resumption command:** `python scripts/check_literature_source.py --doi 10.1016/j.knosys.2026.116685 --output-dir docs/research/gate1-yin-zhang-access-recheck-01`.
 
-**Checkpoint 6 — pre-live repairs and the delta strategy (in progress).**
+**Checkpoint 6 — pre-live repairs and the delta strategy (complete).**
 
 - **Requirements:** the user supplied `docs/research/pre-live-defect-spec.md`
   and `docs/research/novelty-strategy.md` at `8170e03`; the missing-spec request
@@ -253,12 +252,37 @@ the Checkpoint 5 access work and are recorded here rather than edited away.
 - **Limitations:** admission is a conservative token/price estimate, not a
   provider-invoice guarantee; an actual overrun is recorded and halts further
   calls. No latency forecast is claimed. Percentile bootstrap intervals rely on
-  sampling assumptions, not a finite-sample theorem. Measurement repairs are
-  next; no controller, candidate effect, or live readiness is claimed yet.
-- **Remaining tasks:** D7-D8, then a fresh mock validation run.
-  The base comparator and candidate ablation follow those repairs; live evidence
-  still requires an explicit approved cap.
-- **Exact next resumption command:** `python -m pytest -q tests/test_trace_inference_repairs.py tests/test_trace_branching.py`.
+  sampling assumptions, not a finite-sample theorem. No controller, candidate
+  effect, or live readiness is established by these software checks.
+- **Measurement phase completed (D7-D8):** shared feature helpers use the served
+  definitions, with fan-out explicitly using cold memory. Depth 1 remains the
+  default; `--depth 2` adds answer-changing continuations and STOP after each
+  observed informational action. Schema 1.3.0 records parent, branch path, depth,
+  and baseline. Continuations charge only new costs under the same run cap.
+  Assembly uses the informational state and marginal tables use its local STOP;
+  mismatched parent references refuse. Failed/unavailable outcomes stay unlabelled.
+- **Measurement evidence:** D7 and D8 acceptance tests fail on `7479ff2` (constant
+  prompt features and unsupported depth argument). The full suite now passes
+  255 tests, including router equivalence; full-tree pyflakes is clean. Logs and
+  artifact checks: `docs/research/repairs-measurement-20260907/`.
+- **Fresh mock artifact:** `data/traces/repairs-depth2-mock-20260907/` contains
+  manifest, splits, trajectories, collection log, and refusal report. Eight mock
+  items produce 208 trajectories, including 120 depth-2 branches. Each prompt-only
+  feature has eight distinct values. These are structural counts, not effect
+  estimates. Chain and cost conservation pass with zero validation errors;
+  analysis_grade is false and Gate 2 returns REFUSED. No old run or benchmark
+  receipt was regenerated. No paid provider was called.
+- **Measurement limitations:** continuation minus informational STOP measures
+  the value of continuing after information, not the causal value of acquiring
+  information itself. The latter needs a matched continuation without that
+  information, plus cost and stochastic-replicate controls. Mock outcomes cannot
+  establish repairability, novelty, policy superiority, or Gate 3. Calibration
+  rows remain reserved and unused. Cold-memory features are explicitly different
+  from a warm served-memory context.
+- **Remaining tasks:** read the base method and available implementation in full,
+  then build the heuristic-gain comparator with its fidelity limitations recorded.
+  Candidate ablations follow; live evidence requires an explicit approved cap.
+- **Exact next resumption command:** `python -m app.trace.analysis --run repairs-depth2-mock-20260907`.
 
 ## Executive research thesis
 
@@ -557,7 +581,7 @@ Use a pessimistic estimate `LCB_a(s) = DeltaHat_a(s) - beta * sigmaHat_a(s)`. St
 ## Publication-risk assessment
 
 **Current project:** high risk as a paper; good engineering foundation, insufficient novelty and evidence.  
-**CA-MVOI (as originally scoped):** ruled out by Checkpoint 2 — its framing and its stopping rule are both published. **The narrowed successor** (calibrated, outcome-supervised per-action gain estimation, learned from randomized action-outcome traces) remains medium-high risk and is publishable only if it clears the sequentiality and robustness gates AND Yin & Zhang turns out not to have done it. Its strongest possible contribution is a validated principle: *routing should allocate interventions by calibrated marginal repair value, not by answer risk*.  
+**CA-MVOI (as originally scoped):** ruled out by Checkpoint 2 — its framing and its stopping rule are both published. **The narrowed successor** (calibrated, outcome-supervised per-action gain estimation, learned from randomized action-outcome traces) remains medium-high risk and is publishable only if it clears the sequentiality and robustness gates with a measured delta against a fully read base; unread Yin & Zhang remains a disclosed overlap risk. Its strongest possible contribution is a validated principle: *routing should allocate interventions by calibrated marginal repair value, not by answer risk*.
 **Robust variant:** high methodological burden but stronger ML story.  
 **Load-aware variant:** high systems burden and dependent on real infrastructure, but potentially strongest MLSys fit.
 

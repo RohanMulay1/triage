@@ -1,0 +1,53 @@
+python : C:\Users\rohan\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\pytest_
+asyncio\plugin.py:208: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+At line:2 char:1
++ python -m pytest -q tests/test_trace_measurement_repairs.py -k 'test_ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\rohan\...cope" is unset.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope 
+for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid 
+fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))
+FF                                                                       [100%]
+================================== FAILURES ===================================
+___________________ test_d7_prompt_control_is_nondegenerate ___________________
+
+    def test_d7_prompt_control_is_nondegenerate():
+        prompts = ['What is the capital of France?',
+                   'Compute the square root of 123456 and explain why step by step.']
+        features = [collect(question=q)[0].states[0].prompt_features for q in prompts]
+        for key in ('message_chars', 'approx_prompt_tokens', 'predicted_difficulty'):
+>           assert len({f.get(key, 0.0) for f in features}) > 1
+E           assert 1 > 1
+E            +  where 1 = len({0.0})
+
+tests\test_trace_measurement_repairs.py:25: AssertionError
+___________ test_d8_child_has_information_parent_and_local_baseline ___________
+
+    def test_d8_child_has_information_parent_and_local_baseline():
+>       traces = collect(depth=2)
+
+tests\test_trace_measurement_repairs.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+kwargs = {'depth': 2}
+args = {'big_id': 'gpt-4o', 'cfg': {'abstain': {'abstain_threshold': 0.62, 'min_elevated_level': 0.5, 'min_elevated_signals':...isk_high': 0.55}, 'memory': {'enabled': True, 'k': 5, 'min_similarity': 0.6}, ...}, 'dataset': 'unit', 'depth': 2, ...}
+
+    def collect(**kwargs):
+        args = dict(item_id='item', question='What is the capital of France?',
+                    cfg=load_router_config(), small_id='llama-3.1-8b', big_id='gpt-4o',
+                    run_id='measurement', dataset='unit', split='train', seed=0,
+                    labeler=lambda answer, abstained: float('Paris' in answer and not abstained),
+                    label_source='unit')
+        args.update(kwargs)
+>       return asyncio.run(collect_fanout(**args))
+E       TypeError: collect_fanout() got an unexpected keyword argument 'depth'
+
+tests\test_trace_measurement_repairs.py:17: TypeError
+=========================== short test summary info ===========================
+FAILED tests/test_trace_measurement_repairs.py::test_d7_prompt_control_is_nondegenerate
+FAILED tests/test_trace_measurement_repairs.py::test_d8_child_has_information_parent_and_local_baseline
+2 failed, 2 deselected in 12.40s

@@ -1,0 +1,131 @@
+{
+  "run_id": "repairs-depth2-mock-20260907",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788751299.5808342,
+  "group_count": 8,
+  "counts": {
+    "train": 5,
+    "calib": 2,
+    "test": 1
+  },
+  "groups": {
+    "25fc146fc07aec6d57c951f7c49c6c51f09fc5bd08d0428061f07d4f30db2244": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "arith",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is 17 23 5"
+      },
+      "items": [
+        "mixed-0000"
+      ]
+    },
+    "751da02ecefc67d9f0b9c812be4770b1dd71e13dc347e61f09e5878a483fe3ed": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "arith",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is the square root of 144"
+      },
+      "items": [
+        "mixed-0001"
+      ]
+    },
+    "597d7a21a674533b97708312d8dd735d5385cc14e46826509e4494dbd749aa6d": {
+      "split": "calib",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "factual",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is the capital of france"
+      },
+      "items": [
+        "mixed-0002"
+      ]
+    },
+    "7f15970b7186ea877854daac29571bbb587a9556b63f56b4041cbb535361d9ef": {
+      "split": "calib",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "factual",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "who wrote hamlet"
+      },
+      "items": [
+        "mixed-0003"
+      ]
+    },
+    "7386861d9d7d35eeb4cb8f335ae75a85033b04d34a38bb377935b6787d2d3148": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "factual",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "at what temperature does water boil at sea level"
+      },
+      "items": [
+        "mixed-0004"
+      ]
+    },
+    "d683db3605cbc9353776902fa6beec780e204f4eec7c84a8c3a33113296f8dbb": {
+      "split": "test",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "trap",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what are next week s winning lottery numbers"
+      },
+      "items": [
+        "mixed-0005"
+      ]
+    },
+    "bdb9d4dce4462d763c2daccec8a9c03da4a5caf9fccb26f97c4ce95a0027fb68": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "trap",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what did i eat for breakfast this morning"
+      },
+      "items": [
+        "mixed-0006"
+      ]
+    },
+    "676922db5a6f190d0f16136b680fe1cbd42cf0bc916069499d8ce29a7fc6db28": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "trap",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "4",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is the exact current population of the planet mars right now"
+      },
+      "items": [
+        "mixed-0007"
+      ]
+    }
+  }
+}

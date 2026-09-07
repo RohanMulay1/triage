@@ -33,6 +33,7 @@ from ..tools import calculator
 from . import memory, online, prefilter
 from .abstain import should_abstain
 from .longcontext import long_context_route
+from ..trace.features import root_prompt_features, prefilter_prompt_features
 
 TIER_NAMES = {0: "fast", 1: "retrieve", 2: "verify", 3: "abstain"}
 _ABSTAIN_MSG = (
@@ -276,11 +277,8 @@ async def route_and_answer(req: ChatRequest, recorder=None) -> tuple[ChatRespons
                          and ecfg.get("max_escalations", 0) >= 1)
     if recorder:
         recorder.set_context(small_id, big_id, big_valid, escalation_on)
-        recorder.begin(model_id=small_id, prompt_features={
-            "long_context": lc["long_context"],
-            "approx_prompt_tokens": lc["approx_prompt_tokens"],
-            "message_chars": len(req.message),
-        })
+        recorder.begin(model_id=small_id,
+                       prompt_features=root_prompt_features(req.message, lc))
 
     # ---- Tier T: deterministic tool (exact math) BEFORE any LLM spend ---- #
     # Tool-aware routing: if the request reduces to a pure math expression, the
@@ -303,10 +301,7 @@ async def route_and_answer(req: ChatRequest, recorder=None) -> tuple[ChatRespons
     prefiltered_to_big = pf["route"] == "hard_direct" and escalation_on and big_valid
     fast_path = pf["route"] == "easy_direct"
     if recorder:
-        recorder.update_features({
-            "prefilter_route": pf["route"], "predicted_difficulty": pf["difficulty"],
-            "memory_hit": mem.get("hit"), "memory_neighbours": mem.get("n"),
-        })
+        recorder.update_features(prefilter_prompt_features(pf, mem))
 
     # ---- Assessment on the started model (big if pre-filter said hard) ---- #
     start_id = big_id if prefiltered_to_big else small_id

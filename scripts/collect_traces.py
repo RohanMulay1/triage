@@ -42,6 +42,8 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--n", type=int, default=20, help="number of items")
     ap.add_argument("--dataset", default="traps", choices=["mixed", "traps", "gsm8k", "mmlu"])
     ap.add_argument("--mode", default="fanout", choices=["served", "fanout"])
+    ap.add_argument("--depth", type=int, choices=[1, 2], default=1,
+                    help="fan-out decision depth; depth 2 multiplies calls within the same run cap")
     ap.add_argument("--policy", default="response_risk",
                     help="behaviour policy that designates the served branch in fanout mode")
     ap.add_argument("--split", default=None,
@@ -64,6 +66,8 @@ def _parse_args() -> argparse.Namespace:
         ap.error("--n must be a strictly positive integer")
     if args.live and args.mode == "served":
         ap.error("--mode served --live refused: served mode has no cost control")
+    if args.depth != 1 and args.mode == "served":
+        ap.error("--depth 2 requires --mode fanout")
     return args
 
 
@@ -176,7 +180,8 @@ async def collect(args: argparse.Namespace) -> str:
         run_id, dataset=args.dataset, split=args.split or "mixed", seeds=[args.seed],
         command=" ".join(sys.argv),
         notes=(args.notes or "") + f" | mode={args.mode} policy={args.policy} "
-                                   f"small={small_id} big={big_id}",
+                                   f"small={small_id} big={big_id} depth={args.depth} "
+                                   "prompt_features=cold_memory",
     )
     store.create_run(manifest)
 
@@ -209,6 +214,7 @@ async def collect(args: argparse.Namespace) -> str:
                     seed=args.seed, labeler=make_labeler(args.dataset, item),
                     label_source=f"rigor.score:{item.get('kind', args.dataset)}",
                     served_policy=policy, budget=budget,
+                    depth=args.depth,
                     prompt_features={"task_family": item.get("kind", args.dataset)},
                 )
             else:

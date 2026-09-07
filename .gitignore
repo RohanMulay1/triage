@@ -44,3 +44,6 @@ CLAUDE_MEMORY.md
 !data/traces/fixture-fanout/collect.log
 !data/traces/gate2-pilot-mock/collect.log
 !data/traces/gate2-pilot-mock/gate2_report.json
+
+!data/traces/repairs-depth2-mock-20260907/
+!data/traces/repairs-depth2-mock-20260907/collect.log

@@ -33,12 +33,12 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator, model_valida
 
 from ..schemas import SignalSet
 
-SCHEMA_VERSION = "1.2.0"
+SCHEMA_VERSION = "1.3.0"
 # 1.1.0 widened CostSource. 1.2.0 added OutcomeStatus, cumulative cost, action
 # execution detail, and behaviour-policy provenance on PolicyDecision -- all
 # additive with defaults, so 1.0.0 and 1.1.0 traces read back unchanged. The
 # reader accepts known versions explicitly rather than coercing an unknown one.
-SUPPORTED_SCHEMA_VERSIONS = frozenset({"1.0.0", "1.1.0", "1.2.0"})
+SUPPORTED_SCHEMA_VERSIONS = frozenset({"1.0.0", "1.1.0", "1.2.0", "1.3.0"})
 
 # Where a cost number came from. The distinction that matters for a results
 # table is between a figure someone was actually invoiced for and a figure
@@ -522,6 +522,11 @@ class Trajectory(BaseModel):
     dataset: str = "unknown"
     split: Split = "pilot"
     branch_id: str = "served"
+    # 1.3.0: explicit decision depth and local STOP comparator. Defaults retain
+    # the interpretation of historical depth-1 traces without rewriting them.
+    decision_depth: int = Field(default=1, ge=1, le=2)
+    branch_path: list[str] = Field(default_factory=list)
+    baseline_branch_id: Optional[str] = None
     parent_trajectory_id: Optional[str] = None
     root_state_id: str
     # The states themselves, root first. Steps reference them by id rather than

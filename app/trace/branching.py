@@ -26,6 +26,7 @@ costs across a run gives what the run actually spent.
 from __future__ import annotations
 
 import time
+from copy import deepcopy
 import uuid
 from dataclasses import dataclass
 from typing import Callable, Optional
@@ -39,6 +40,7 @@ from .actions import (
 )
 from .adapter import answer_action, stop_action
 from .budgeting import BudgetExceeded, RunBudget, estimate_action_cost
+from .features import build_prompt_features
 from .contract import (
     Action,
     ActionCost,
@@ -71,6 +73,9 @@ class _Builder:
     policy_id: str
     policy_version: str
     prompt_features: dict
+    decision_depth: int = 1
+    branch_path: Optional[list[str]] = None
+    baseline_branch_id: Optional[str] = None
 
     def __post_init__(self) -> None:
         self.states: list[StateSnapshot] = []
@@ -153,6 +158,8 @@ class _Builder:
             trajectory_id=uuid.uuid4().hex[:16], run_id=self.run_id, item_id=self.item_id,
             dataset=self.dataset, split=self.split,  # type: ignore[arg-type]
             branch_id=self.branch_id, parent_trajectory_id=self.parent_trajectory_id,
+            decision_depth=self.decision_depth, branch_path=self.branch_path or [],
+            baseline_branch_id=self.baseline_branch_id,
             root_state_id=self._root_id, states=self.states, steps=self.steps,
             terminal=TerminalRecord(
                 served_answer=self.current.answer,
@@ -192,6 +199,7 @@ async def collect_fanout(
     served_policy=None,
     budget: Optional[Budget | RunBudget] = None,
     prompt_features: Optional[dict] = None,
+    depth: int = 1,
 ) -> list[Trajectory]:
     """One shared ANSWER prefix, then every available action once from that state.
 
@@ -202,6 +210,8 @@ async def collect_fanout(
     """
     import random
 
+    if depth not in (1, 2):
+        raise ValueError("depth must be 1 or 2")
     executor = InterventionExecutor(cfg)
     run_budget = budget if isinstance(budget, RunBudget) else RunBudget(budget)
     rng = random.Random(seed)
@@ -209,6 +219,8 @@ async def collect_fanout(
 
     ctx = InterventionContext(question=question, cfg=cfg, small_id=small_id,
                               big_id=big_id, model_id=small_id, seed=seed)
+
+    features.update(build_prompt_features(question, ctx.system, cfg))
 
     # ---- shared prefix: one ANSWER on the small model --------------------- #
     prefix = _Builder(item_id, run_id, dataset, split, seed, "prefix", None,
@@ -256,11 +268,14 @@ async def collect_fanout(
     if served_key is None:
         served_key = stop_action().key
 
+    informational = []
     for action, ok, reason in branchable:
         builder = _Builder(item_id, run_id, dataset, split, seed, action.key,
                            prefix_traj.trajectory_id,
                            getattr(served_policy, "policy_id", "exhaustive_fanout"),
                            getattr(served_policy, "policy_version", "1"), features)
+        builder.branch_path = [action.key]
+        builder.baseline_branch_id = "stop"
         builder.start_at(s1)
         is_served = action.key == served_key
 
@@ -287,7 +302,7 @@ async def collect_fanout(
         except BudgetExceeded as exc:
             exc.trajectories = trajectories
             raise
-        res = await executor.execute(action, ctx1)
+        res = await executor.execute(action, deepcopy(ctx1))
         run_budget.settle(res.cost)
 
         if res.status is not OutcomeStatus.CHOSEN:
@@ -317,6 +332,7 @@ async def collect_fanout(
                     exploration_seed=seed)
 
         ctx2 = res.next_context(ctx1)
+        information_state = builder.current
         abstained = action.kind == ActionKind.ABSTAIN
         if action.kind not in executor.TERMINAL:
             stop = stop_action()
@@ -334,5 +350,64 @@ async def collect_fanout(
             status="PENDING_REVIEW" if abstained else "OK", abstained=abstained,
             label=label, label_source=label_source, budget=run_budget.state))
         check_budget()
+        if action.kind in (ActionKind.RESAMPLE, ActionKind.SELF_CHECK, ActionKind.RETRIEVE):
+            informational.append((action, ctx2, information_state, trajectories[-1]))
 
+    if depth == 2:
+        for prior, parent_ctx, parent_state, parent_traj in informational:
+            await _collect_second_level(
+                prior, parent_ctx, parent_state, parent_traj, executor, run_budget,
+                trajectories, labeler, label_source, check_budget)
     return trajectories
+
+
+async def _collect_second_level(prior, ctx, state, parent, executor, run_budget,
+                                trajectories, labeler, label_source, check_budget):
+    """Consume the observed state; the parent branch supplies the local STOP.
+
+    Only the new action's cost is charged here. The informational prefix is
+    already stored in parent; every continuation references that same state.
+    All depth-2 branches are exhaustive observations, not a learned policy.
+    """
+    kinds = {ActionKind.STOP, ActionKind.ANSWER, ActionKind.VERIFY,
+             ActionKind.STRONGER_MODEL, ActionKind.TOOL}
+    options = [(a, ok, why) for a, ok, why in executor.feasible(ctx, state.actions_taken)
+               if a.kind in kinds]
+    feasible = [a for a, ok, _ in options if ok]
+    for action, ok, reason in options:
+        path = [prior.key, action.key]
+        builder = _Builder(parent.item_id, parent.run_id, parent.dataset, parent.split,
+                           parent.seed, " -> ".join(path), parent.trajectory_id,
+                           "exhaustive_depth2", "1", dict(state.prompt_features),
+                           decision_depth=2, branch_path=path,
+                           baseline_branch_id=parent.branch_id)
+        builder.start_at(state)
+        if not ok:
+            result = ExecutionResult(status=OutcomeStatus.UNAVAILABLE, answer=ctx.answer,
+                                     signals=ctx.signals, evidence=ctx.evidence,
+                                     cost=ActionCost(), error=reason)
+        else:
+            try:
+                run_budget.admit(estimate_action_cost(action, ctx, run_budget.model_prices))
+            except BudgetExceeded as exc:
+                exc.trajectories = trajectories
+                raise
+            result = await executor.execute(action, deepcopy(ctx))
+            run_budget.settle(result.cost)
+        observed = result.status == OutcomeStatus.CHOSEN
+        status = OutcomeStatus.COUNTERFACTUAL if observed else result.status
+        builder.add(action, result, feasible=feasible, propensity=1.0, status=status,
+                    rationale={"fanout": True, "depth": 2,
+                               "sampling_design": "exhaustive", "served": False},
+                    exploration_seed=parent.seed)
+        if observed and action.kind != ActionKind.STOP:
+            stop = stop_action()
+            terminal = await executor.execute(stop, result.next_context(ctx))
+            builder.add(stop, terminal, feasible=[stop], propensity=1.0, status=status,
+                        rationale={"forced": True, "terminal": True},
+                        exploration_seed=parent.seed)
+        trajectories.append(builder.build(
+            status="OK" if observed else status.value, abstained=False,
+            label=labeler(builder.current.answer, False) if observed else None,
+            label_source=label_source if observed else None, budget=run_budget.state))
+        check_budget()

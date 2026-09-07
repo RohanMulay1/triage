@@ -126,8 +126,8 @@ def test_schema_version_is_current_and_older_traces_still_read():
     """Widening the schema must not orphan traces written by an earlier version."""
     from app.trace.contract import SCHEMA_VERSION, SUPPORTED_SCHEMA_VERSIONS
 
-    assert SCHEMA_VERSION == "1.2.0"
-    assert {"1.0.0", "1.1.0"} <= SUPPORTED_SCHEMA_VERSIONS
+    assert SCHEMA_VERSION == "1.3.0"
+    assert {"1.0.0", "1.1.0", "1.2.0"} <= SUPPORTED_SCHEMA_VERSIONS
 
     run_id = store.new_run_id("oldschema")
     path = store.append(_trajectory(run_id, "item-0"))

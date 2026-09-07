@@ -167,7 +167,10 @@ class LogisticProbe:
 # --------------------------------------------------------------------------- #
 def branch_features(prefix: Trajectory, cfg: dict) -> dict[str, float]:
     """State features observed at the fan-out branch point, before any action."""
-    state = prefix.states[-1]
+    return state_features(prefix.states[-1], cfg)
+
+
+def state_features(state, cfg):
     s = state.signals
     risk, _ = abstain_risk(s, cfg["abstain"])
     pf = state.prompt_features or {}
@@ -192,35 +195,42 @@ def assemble(run_id: str, thresholds: Optional[SupportThresholds] = None) -> lis
     cfg = load_router_config()
     trajectories = read_run(run_id)
     assert_estimable(trajectories, thresholds)
-    prefixes = {t.item_id: t for t in trajectories if t.branch_id == "prefix"}
     rows: list[dict[str, Any]] = []
-
-    for item_id, prefix in prefixes.items():
-        branches = {t.branch_id: t for t in trajectories
-                    if t.item_id == item_id and t.branch_id != "prefix"}
-        stop = branches.get(STOP_BRANCH)
-        if stop is None or stop.terminal.label is None:
+    contexts = {}
+    for t in trajectories:
+        if t.branch_id == "prefix":
             continue
+        contexts.setdefault((t.item_id, t.baseline_branch_id or "stop"), []).append(t)
+    for (item_id, base_key), branches in contexts.items():
+        baseline = next((t for t in trajectories if t.item_id == item_id
+                         and t.branch_id == base_key), None)
+        if baseline is None or baseline.terminal.label is None:
+            continue
+        state = branches[0].states[0]
         labels, deltas, costs = {}, {}, {}
-        for key, t in branches.items():
-            if t.terminal.label is None:
+        for t in branches:
+            if t.terminal.label is None or not t.steps:
                 continue
-            if not t.steps or t.steps[0].outcome.status not in (
+            if t.steps[0].outcome.status not in (
                     OutcomeStatus.CHOSEN, OutcomeStatus.COUNTERFACTUAL):
                 continue
-            labels[key] = t.terminal.label
-            deltas[key] = t.terminal.label - stop.terminal.label
-            costs[key] = t.steps[0].outcome.cost.est_cost_usd
+            if t.decision_depth == 2 and (
+                    t.parent_trajectory_id != baseline.trajectory_id or
+                    t.root_state_id != baseline.steps[0].outcome.result_state_id):
+                raise SupportError("depth-2 baseline does not match the informational parent")
+            if t.decision_depth == 2 and t.steps[0].decision.chosen.kind.value == "stop":
+                continue
+            labels[t.branch_id] = t.terminal.label
+            deltas[t.branch_id] = t.terminal.label - baseline.terminal.label
+            costs[t.branch_id] = t.total_cost.est_cost_usd
         rows.append({
-            "item_id": item_id,
-            "split": prefix.split,
-            "task_family": (prefix.states[-1].prompt_features or {}).get("task_family",
-                                                                         "unknown"),
-            "features": branch_features(prefix, cfg),
-            "stop_label": stop.terminal.label,
-            "labels": labels,
-            "deltas": deltas,
-            "action_cost_usd": costs,
+            "item_id": item_id, "split": baseline.split,
+            "decision_depth": branches[0].decision_depth,
+            "baseline_branch_id": base_key,
+            "task_family": (state.prompt_features or {}).get("task_family", "unknown"),
+            "features": state_features(state, cfg),
+            "stop_label": baseline.terminal.label, "labels": labels,
+            "deltas": deltas, "action_cost_usd": costs,
         })
     return rows
 
@@ -337,7 +347,10 @@ def gate2_report(run_id: str, seed: int = 0,
     if not validation["analysis_grade"]:
         return {**meta, "verdict": "REFUSED",
                 "reason": "non-analysis-grade run cannot supply scientific estimates"}
-    rows = assemble(run_id, thresholds)
+    try:
+        rows = assemble(run_id, thresholds)
+    except SupportError as exc:
+        return {**meta, "verdict": "REFUSED", "support_error": str(exc)}
     if not rows:
         return {**meta, "status": "no_labelled_fanout_rows",
                 "verdict": "INCONCLUSIVE"}
@@ -350,7 +363,7 @@ def gate2_report(run_id: str, seed: int = 0,
         comparisons[key] = {name: predict_repair(rows, key, name, seed)
                             for name in FEATURE_SETS}
 
-    correctness = {f: correctness_signal(rows, f)
+    correctness = {f: correctness_signal([r for r in rows if r.get("decision_depth", 1) == 1], f)
                    for f in ("triage_risk", "uncertainty", "predicted_difficulty")}
 
     # A gate can only pass if some action's benefit actually varies across items.

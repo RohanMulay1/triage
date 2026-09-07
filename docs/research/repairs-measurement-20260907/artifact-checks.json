@@ -1,0 +1,27 @@
+{
+  "validation": {
+    "run_id": "repairs-depth2-mock-20260907",
+    "schema_version": "1.3.0",
+    "trajectories": 208,
+    "manifest_present": true,
+    "force_mock": true,
+    "synthetic_trajectories": 120,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "gate2_verdict": "REFUSED",
+  "depth2_branches": 120,
+  "prompt_feature_distinct_values": {
+    "message_chars": 8,
+    "approx_prompt_tokens": 8,
+    "predicted_difficulty": 8
+  },
+  "required_artifacts": {
+    "manifest.json": true,
+    "splits.json": true,
+    "trajectories.jsonl": true,
+    "collect.log": true
+  }
+}
