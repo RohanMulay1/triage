@@ -5,8 +5,9 @@ trace substrate. The production router uses black-box signals from an actual
 model response to choose among serving, retrieving, verifying, using a calculator,
 escalating, or abstaining to PENDING_REVIEW. Its heuristic decisions are preserved.
 
-**No performance claim is currently supported by this research program.** All
-research runs so far are synthetic. Calibration and ablation machinery are
+**No performance claim is currently supported by this research program.** The approved live smoke could not obtain a real generation: both requested
+NVIDIA endpoints returned HTTP 410 (retired). Its fallback outcomes are synthetic;
+the full run is blocked pending an approved replacement model pair. Calibration and ablation machinery are
 implemented; real-model repairability, utility gains, and sequential superiority
 remain unresolved. Historical benchmark receipts are preserved for audit and are
 not evidence for the new action-policy contribution.
@@ -46,6 +47,8 @@ python scripts/run_gate2.py --n 8 --dataset mixed --depth 2 --policy balanced --
 The command prints a planning cost estimate before generation, collects under one
 run-wide accumulator, freezes the retrieval corpus, validates traces, checks
 support, runs Gate 2, calibrates eligible action estimators, and attempts C1/C2/C4.
+Live collection defaults to `--rps 0.6` across the run, with bounded rate-limit
+retries and recorded request events. Exhausted retries remain unlabelled failures.
 Artifacts under `data/traces/<run-id>/` include:
 
 - `manifest.json`, `splits.json`, `trajectories.jsonl`, and `collect.log`;

@@ -1,0 +1,91 @@
+{
+  "run_id": "gate2-smoke-20260907",
+  "validation": {
+    "run_id": "gate2-smoke-20260907",
+    "schema_version": "1.3.0",
+    "trajectories": 3,
+    "manifest_present": true,
+    "force_mock": false,
+    "synthetic_trajectories": 3,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "full_run_started": false,
+  "blocker": "NVIDIA HTTP 410 Gone: both requested models retired 2026-08-26",
+  "provider_probe_responses": [
+    {
+      "model": "llama-3.1-8b",
+      "provider": "nvidia",
+      "provider_model": "meta/llama-3.1-8b-instruct",
+      "error": "HTTP 410: {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.1-8b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "text": "",
+      "latency_ms": 554.7067999723367
+    },
+    {
+      "model": "llama-3.3-70b",
+      "provider": "nvidia",
+      "provider_model": "meta/llama-3.3-70b-instruct",
+      "error": "HTTP 410: {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'meta/llama-3.3-70b-instruct' has reached its end of life on 2026-08-26T09:00:00Z and is no longer available.\"}\n",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "text": "",
+      "latency_ms": 384.8069999949075
+    }
+  ],
+  "research_decision": "REFUSED_INFRASTRUCTURE; not a scientific STOP or negative model result",
+  "gate1": "NARROW_PROVISIONAL; Yin and Zhang unread",
+  "gate2": "REFUSED; no analysis-grade live observations",
+  "C1": "UNAVAILABLE",
+  "calibration": "UNAVAILABLE",
+  "C2": "UNRESOLVED",
+  "C4": "UNAVAILABLE",
+  "gate3": "UNRESOLVED",
+  "approved_cap_usd": 2.0,
+  "smoke_cap_usd": 0.1,
+  "listed_price_spend_usd": 0.0,
+  "billed_api_spend": "not independently invoiced",
+  "successful_live_generations": 0,
+  "labelled_items": 0,
+  "smoke_synthetic_tokens": {
+    "input": 135,
+    "output": 31,
+    "not_live_usage": true
+  },
+  "smoke_wall_seconds": {
+    "value": 6.703000000037719,
+    "n_runs": 1,
+    "ci95": null,
+    "limitation": "single observed wall clock, no repeated runs"
+  },
+  "smoke_rejected_provider_and_fallback_latency_ms": {
+    "p50": {
+      "point": 2203.0,
+      "lo": 2000.0,
+      "hi": 2407.0,
+      "n": 3
+    },
+    "p95": {
+      "point": 2386.6,
+      "lo": 2000.0,
+      "hi": 2407.0,
+      "n": 3
+    },
+    "not_successful_model_latency": true
+  },
+  "completed_scoring_overhead_calls": 0,
+  "rate_limit_incidents": 0,
+  "rps": 0.6,
+  "max_attempts": 3,
+  "limitations": [
+    "retired endpoints prevented the planned comparison",
+    "no valid held-out accuracy, repair, calibration or policy comparison",
+    "8B-to-70B escalation-gap confound remains; GPT-4o confirmation is not authorized here",
+    "GSM8K is a single domain; no generalization or robustness result",
+    "initial smoke fallback discarded original errors; fresh minimal direct probes identify HTTP 410",
+    "no replacement model pair authorized; no controller built"
+  ]
+}

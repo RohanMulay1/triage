@@ -57,3 +57,6 @@ CLAUDE_MEMORY.md
 !data/traces/checkpoint8-comparator-mock/collect.log
 !data/traces/checkpoint8-pipeline-mock/
 !data/traces/checkpoint8-pipeline-mock/collect.log
+
+!data/traces/gate2-smoke-20260907/
+!data/traces/gate2-smoke-20260907/collect.log

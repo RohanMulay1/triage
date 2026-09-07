@@ -52,6 +52,7 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--small", default=None, help="small model id (auto-pick if omitted)")
     ap.add_argument("--big", default=None, help="escalation target model id")
     ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--rps", type=float, default=.6)
     ap.add_argument("--run-id", default=None)
     ap.add_argument("--notes", default="")
     ap.add_argument("--diagnostic-scores", action="store_true", help="explicit synthetic scoring JSON; mock only")
@@ -65,6 +66,8 @@ def _parse_args() -> argparse.Namespace:
         ap.error("--live requires an explicit positive --max-usd cap that is finite")
     if args.live and args.diagnostic_scores:
         ap.error("diagnostic scores are forbidden with --live")
+    if not math.isfinite(args.rps) or args.rps <= 0:
+        ap.error("--rps must be finite and strictly positive")
     if args.n <= 0:
         ap.error("--n must be a strictly positive integer")
     if args.live and args.mode == "served":
@@ -89,6 +92,7 @@ from app.trace import store  # noqa: E402
 from app.trace.adapter import TraceRecorder  # noqa: E402
 from app.trace.branching import BudgetExceeded, RunBudget, collect_fanout  # noqa: E402
 from app.trace.contract import Budget  # noqa: E402
+from app.trace.pacing import RequestControl, active_control
 from app.trace.policies import build_policy  # noqa: E402
 from app.trace.splits import GroupKey, SplitManifest, prompt_fingerprint  # noqa: E402
 from app.trace.support import (  # noqa: E402
@@ -183,7 +187,7 @@ async def collect(args: argparse.Namespace) -> str:
         run_id, dataset=args.dataset, split=args.split or "mixed", seeds=[args.seed],
         command=" ".join(sys.argv),
         notes=(args.notes or "") + f" | mode={args.mode} policy={args.policy} "
-                                   f"small={small_id} big={big_id} depth={args.depth} "
+                                   f"small={small_id} big={big_id} depth={args.depth} rps={getattr(args, 'rps', .6)} "
                                    f"prompt_features=cold_memory diagnostic_scores={getattr(args, 'diagnostic_scores', False)}",
     )
     store.create_run(manifest)
@@ -198,56 +202,65 @@ async def collect(args: argparse.Namespace) -> str:
     budget = RunBudget(Budget(max_usd=args.max_usd), manifest.model_snapshot)
     n_written = 0
 
-    for i, item in enumerate(items):
-        item_id = f"{args.dataset}-{i:04d}"
-        prompt = build_prompt(args.dataset, item)
-        key = GroupKey(
-            item_id=item_id, dataset=args.dataset,
-            task_family=item.get("kind", args.dataset),
-            model_pair=f"{small_id}->{big_id}",
-            retriever_version=str(cfg["retrieval"]["top_k"]),
-            prompt_template=args.dataset,
-            prompt_fingerprint=prompt_fingerprint(prompt),
-        )
-        split = args.split or splits.add(key)
-        if args.split:
-            splits.add(key)
+    control = RequestControl(getattr(args, "rps", .6))
+    token = active_control.set(control) if args.live else None
+    try:
+        for i, item in enumerate(items):
+            item_id = f"{args.dataset}-{i:04d}"
+            prompt = build_prompt(args.dataset, item)
+            key = GroupKey(
+                item_id=item_id, dataset=args.dataset,
+                task_family=item.get("kind", args.dataset),
+                model_pair=f"{small_id}->{big_id}",
+                retriever_version=str(cfg["retrieval"]["top_k"]),
+                prompt_template=args.dataset,
+                prompt_fingerprint=prompt_fingerprint(prompt),
+            )
+            split = args.split or splits.add(key)
+            if args.split:
+                splits.add(key)
 
-        try:
-            if args.mode == "fanout":
-                trajectories = await collect_fanout(
-                    item_id=item_id, question=prompt, cfg=cfg, small_id=small_id,
-                    big_id=big_id, run_id=run_id, dataset=args.dataset, split=split,
-                    seed=args.seed, labeler=make_labeler(args.dataset, item),
-                    label_source=f"rigor.score:{item.get('kind', args.dataset)}",
-                    served_policy=policy, budget=budget,
-                    depth=args.depth,
-                    prompt_features={"task_family": item.get("kind", args.dataset)},
-                )
-            else:
-                recorder = TraceRecorder(run_id, item_id, cfg, dataset=args.dataset,
-                                         split=split, seed=args.seed)
-                req = ChatRequest(message=prompt, model=args.small,
-                                  escalate_to=args.big, max_signals=True)
-                resp, telem = await route_and_answer(req, recorder=recorder)
-                telemetry_db.log_request(telem)
-                trajectories = [recorder.finish(
-                    resp, label=float(score_item(args.dataset, item, resp.answer,
-                                                 resp.route.abstained)),
-                    label_source=f"rigor.score:{item.get('kind', args.dataset)}")]
-        except BudgetExceeded as e:
-            for trajectory in e.trajectories:
-                store.append(trajectory)
-            print(f"\n[collect_traces] STOPPED at item {i}: {e}")
-            print("[collect_traces] traces written so far are intact and readable.")
-            break
+            try:
+                if args.mode == "fanout":
+                    trajectories = await collect_fanout(
+                        item_id=item_id, question=prompt, cfg=cfg, small_id=small_id,
+                        big_id=big_id, run_id=run_id, dataset=args.dataset, split=split,
+                        seed=args.seed, labeler=make_labeler(args.dataset, item),
+                        label_source=f"rigor.score:{item.get('kind', args.dataset)}",
+                        served_policy=policy, budget=budget,
+                        depth=args.depth,
+                        prompt_features={"task_family": item.get("kind", args.dataset)},
+                    )
+                else:
+                    recorder = TraceRecorder(run_id, item_id, cfg, dataset=args.dataset,
+                                             split=split, seed=args.seed)
+                    req = ChatRequest(message=prompt, model=args.small,
+                                      escalate_to=args.big, max_signals=True)
+                    resp, telem = await route_and_answer(req, recorder=recorder)
+                    telemetry_db.log_request(telem)
+                    trajectories = [recorder.finish(
+                        resp, label=float(score_item(args.dataset, item, resp.answer,
+                                                     resp.route.abstained)),
+                        label_source=f"rigor.score:{item.get('kind', args.dataset)}")]
+            except BudgetExceeded as e:
+                for trajectory in e.trajectories:
+                    store.append(trajectory)
+                print(f"\n[collect_traces] STOPPED at item {i}: {e}")
+                print("[collect_traces] traces written so far are intact and readable.")
+                break
 
-        for t in trajectories:
-            store.append(t)
-        n_written += len(trajectories)
-        print(f"  [{i + 1}/{len(items)}] {item_id} split={split} "
-              f"branches={len(trajectories)} written={n_written}", flush=True)
+            for t in trajectories:
+                store.append(t)
+            n_written += len(trajectories)
+            print(f"  [{i + 1}/{len(items)}] {item_id} split={split} "
+                  f"branches={len(trajectories)} written={n_written}", flush=True)
 
+    finally:
+        if token is not None:
+            active_control.reset(token)
+        with (store.run_dir(run_id)/"request-events.json").open("x",encoding="utf-8") as handle:
+            json.dump({"rps":control.rps,"max_attempts":control.attempts,
+                       "events":control.events},handle,indent=2)
     splits.write(store.run_dir(run_id))
     return run_id
 

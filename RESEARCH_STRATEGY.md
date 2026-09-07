@@ -16,55 +16,88 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-07, Checkpoint 8 complete; live boundary)
+### Current state (2026-09-08, Checkpoint 9; requested live lane retired)
 
 | | |
 |---|---|
-| **Checkpoints complete** | 0–5 as recorded below; 6 repairs complete; 7 complete; 8 assembled pipeline verified, live deferred |
-| **Tests** | 294 passing (`python -m pytest -q`); includes cold-start assembled pipeline |
-| **Trace schema** | 1.3.0; reads 1.0.0, 1.1.0 and 1.2.0 |
-| **Gate 1 (novelty)** | **NARROW: investigate deltas against readable bases**; candidates unproven; Yin & Zhang is a disclosed risk, not a gate |
-| **Gate 2 (signal)** | **REFUSED on mock input** by repaired gates; historical pilot was INCONCLUSIVE |
-| **Gate 3 (sequentiality)** | not established; optional depth-2 measurement now available |
-| **Total spend to date** | **$0.** Every run has been on the mock provider |
-| **Paper status** | no claim is supported; comparator behavior policy implemented; no learned or production controller |
+| **Checkpoint** | 9: D12 repaired; live smoke refused; full collection not started |
+| **Tests** | 305 passing; final receipt in `docs/research/checkpoint9/validation-final.txt` |
+| **Trace schema** | 1.3.0; historical readers preserved |
+| **Gate 1** | Provisionally NARROW; Yin & Zhang unread and disclosed as an overlap risk |
+| **Gate 2** | REFUSED: no analysis-grade live observations; not a scientific STOP |
+| **C1 / calibration / C4** | Unavailable on the failed smoke |
+| **C2 / Gate 3** | Unresolved on real data |
+| **Budget** | Operator approved $2.00; listed-price spend $0.00, no invoice verification |
+| **Paper / controller** | No performance claim supported; no learned controller implemented |
 
-**What is true right now.** The single-command pipeline now collects a balanced
-fan-out with budgeted heuristic scoring, validates, checks support, attempts
-calibrated analysis and C1/C2/C4, and writes a consolidated report. An explicit
-seeded diagnostic provider exercises comparator selections through its real client.
-The final cold-start test passes. No live cap was supplied: the live phase did not
-run. Calibration/C1 and C4 numerical comparisons refuse on the small mock fixture;
-C2 remains unresolved on real data, not refuted by its mock null.
+The requested NVIDIA model pair resolves to provider `nvidia`, but both generation
+endpoints return HTTP 410: retired on 2026-08-26. Registry resolution alone does
+not establish liveness. The preserved smoke is non-analysis-grade because the
+legacy client fell back to mock. No replacement pair has been authorized, and
+`gate2-live-20260907` was not created. The approved budget remains available as a
+cap; the blocker is the model pair, not missing spending authorization.
 
-**What is not true.** No real-model repairability or candidate contribution has
-been established. The prompt-only comparison was retracted in `7479ff2`. Several
-depth-1 zeros follow from answer-preserving action definitions, not just the mock
-provider. The [current strategy](docs/research/novelty-delta-strategy.md) treats
-C1–C4 as falsifiable changes to readable prior work. An unread related paper is
-an overlap risk to disclose; it no longer prevents progressing through repairs.
+The calibration, comparator, and ablation machinery from Checkpoint 8 remains
+available. Synthetic diagnostics establish plumbing only. The prompt-only claim
+retracted in `7479ff2` stays retracted, and all forbidden novelty claims stand.
 
-**Live boundary and remaining scientific blocks.**
+**Checkpoint 9 ? D12 repair and infrastructure-blocked live attempt.**
 
-1. No finite dollar cap was supplied. A real provider and an operator-approved cap
-   are required. The full-run planning estimate must fit that cap before any call.
-2. The mock fixture has too few train/calib/test rows to fit calibration maps;
-   served TOOL outcomes also lack support. Numeric C1/C4 intervals are unavailable,
-   not zero. Larger supported data and held-out replication are required.
-3. Gate 1 remains provisionally NARROW with unread Yin & Zhang disclosed. Gate 2,
-   C2 on real data, and Gate 3 remain unresolved. No learned controller is justified.
+The live smoke failed because both requested endpoints are retired; the full run
+was not started. This is an infrastructure refusal, not evidence against repair
+value, calibration, C2, or C4.
 
-**Single next command** (replace `<CAP>` only with the operator-approved value):
+- **Repair:** one run-wide `--rps` limiter (default 0.6) covers generation,
+  resampling, self-check, verification, comparator scoring, and HTTP parameter
+  retries. Live research calls retry rate limits at most three times, honor
+  `retry_after`, and record attempts/backoff. Exhausted rate limits become FAILED
+  outcomes with provider/error provenance, no labels, and retained partial costs.
+  Both collection CLIs record pacing in the manifest. The control is inactive
+  outside live research; legacy routing decisions remain unchanged.
+- **Regression evidence:** new tests cover all three previously unguarded action
+  paths, successful retry, bounded exhaustion, invalid pacing, partial resample
+  cost, and preservation of a fallback's original error. The first full suite
+  passed 303 tests; final validation passes 305 tests, including two additional regressions. An
+  intermediate collection failure was caused by a UTF-16 verification log being
+  discovered as a doctest; the log was renamed and normalized, and retained as
+  `validation-collection-error.txt`. Final suite and lint receipts live beside it.
+- **Live provenance:** `data/traces/gate2-smoke-20260907/` preserves the exact
+  items, corpus, manifest, splits, trajectories, request events, collect log,
+  calibration refusal and consolidated report. Its three trajectories have intact
+  chains, conserved costs and no validation errors, but `analysis_grade=false`.
+  Fresh minimal direct adapter probes in `lane-probe.txt` preserve both HTTP 410
+  responses without fallback. The initial smoke preceded the added original-error
+  preservation fix; its historical records were not rewritten.
+- **Accounting:** `checkpoint9-result.json` records listed-price cost, token
+  provenance, wall clock and bootstrap intervals for rejected-request/fallback
+  latency. There were no successful live generations and no labelled items
+  (n=0; scientific intervals unavailable). The synthetic token counts are not
+  live usage. The single smoke's wall clock has no repeat-run CI; its latency
+  sample has n=3 and is not successful-model performance. No scoring call
+  completed and no rate limit occurred in this failed smoke. Retry behavior is
+  therefore demonstrated by regression tests, not by this network attempt.
+- **Decisions:** Gate 1 remains provisionally NARROW with Yin & Zhang disclosed.
+  Gate 2 is REFUSED pending usable live observations. C1, calibration quality and
+  C4 are unavailable; C2 and Gate 3 remain unresolved. No controller was built.
+- **Limitations:** the intended 8B-to-70B escalation gap could confound a future
+  null; a separately approved stronger-target comparison would be needed to
+  distinguish insufficient target quality from no intervention benefit. The
+  attempted dataset is GSM8K only, so no cross-domain claim is justified. Neither
+  retired endpoints nor synthetic fallbacks constitute a scientific negative
+  result. Budget admission, failure costs and all existing support gates remain
+  binding for a replacement experiment.
+- **Remaining:** obtain an operator-approved usable replacement pair, verify its
+  pricing and liveness, then collect into fresh run IDs under the existing finite
+  cap. Pursue the unread manuscript without claiming its method is known.
 
+**One exact next command** (read-only audit while the replacement pair is pending):
+
+```powershell
+python -m app.trace.support --run gate2-smoke-20260907
 ```
-python scripts/run_gate2.py --n 120 --dataset gsm8k --depth 2 --policy balanced --live --max-usd <CAP> --run-id gate2-live-20260907
-```
 
-The committed defect spec is now available. Manuscript access can continue
-opportunistically without blocking repairs. The 2026-09-07 strategy supersedes
-manuscript-gated STOP language in historical Checkpoints 0-5 and access records.
-Their old commands are not live authorization. The charter and forbidden claims
-remain in force.
+Historical checkpoints below retain their original evidence and commands; they
+are not current live authorization or current gate verdicts.
 
 **Checkpoint 0 — repository and research memo audit (complete).**
 

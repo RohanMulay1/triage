@@ -1,0 +1,5 @@
+Preflight estimate (before any generation): {"listed_price_planning_usd": 0.0, "admission_estimate_usd": 0.0, "max_calls": 54, "n_items": 3, "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call", "not_invoice_guarantee": true}
+Collected 1/3: 1 trajectories; calls=1; usd=0.000000
+Collected 2/3: 1 trajectories; calls=2; usd=0.000000
+Collected 3/3: 1 trajectories; calls=3; usd=0.000000
+{"run_id": "gate2-smoke-20260907", "gate2": "REFUSED", "analysis_grade": false, "report": "report.json"}

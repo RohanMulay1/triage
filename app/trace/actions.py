@@ -124,6 +124,14 @@ def _model_status(client: LLMClient, answer: str) -> OutcomeStatus:
     return OutcomeStatus.CHOSEN
 
 
+def _rate_limited(client, mark, ctx, error):
+    return ExecutionResult(status=OutcomeStatus.FAILED, answer=ctx.answer,
+        signals=ctx.signals, evidence=ctx.evidence,
+        cost=cost_delta(mark, client.cost, error.provider), provider_label=error.provider,
+        error=str(error), detail={"rate_limited": True, "retry_after": error.retry_after,
+                                 "model_id": client.model_id})
+
+
 class InterventionExecutor:
     """Executes one typed action against a context. Stateless between calls."""
 
@@ -242,11 +250,7 @@ class InterventionExecutor:
                 max_tokens=pcfg["max_tokens"], want_logprobs=True,
             )
         except RateLimitError as e:
-            return ExecutionResult(
-                status=OutcomeStatus.FAILED, answer=ctx.answer, signals=ctx.signals,
-                evidence=ctx.evidence, cost=ActionCost(), provider_label=e.provider,
-                error=str(e), detail={"model_id": ctx.model_id},
-            )
+            return _rate_limited(client, mark, ctx, e)
         answer = res.text or "(no answer)"
         signals = ctx.signals.model_copy(deep=True)
         signals.uncertainty, signals.detail["uncertainty"] = proxy.uncertainty(res, [])
@@ -281,11 +285,14 @@ class InterventionExecutor:
         client = LLMClient(model_id)
         mark = snapshot_cost(client)
         samples: list[str] = []
-        for _ in range(n):
-            r = await client.generate(ctx.messages(), temperature=temp,
-                                      max_tokens=pcfg["max_tokens"])
-            if r.text:
-                samples.append(r.text)
+        try:
+            for _ in range(n):
+                r = await client.generate(ctx.messages(), temperature=temp,
+                                          max_tokens=pcfg["max_tokens"])
+                if r.text:
+                    samples.append(r.text)
+        except RateLimitError as e:
+            return _rate_limited(client, mark, ctx, e)
         signals = ctx.signals.model_copy(deep=True)
         if samples:
             signals.instability, signals.detail["instability"] = proxy.instability(
@@ -305,7 +312,10 @@ class InterventionExecutor:
         model_id = action.model_id or ctx.model_id or ctx.small_id
         client = LLMClient(model_id)
         mark = snapshot_cost(client)
-        score, detail = await proxy.contradiction_probe(client, ctx.question, ctx.answer)
+        try:
+            score, detail = await proxy.contradiction_probe(client, ctx.question, ctx.answer)
+        except RateLimitError as e:
+            return _rate_limited(client, mark, ctx, e)
         signals = ctx.signals.model_copy(deep=True)
         signals.contradiction, signals.detail["contradiction"] = score, detail
         status = OutcomeStatus.CHOSEN
@@ -340,7 +350,10 @@ class InterventionExecutor:
         model_id = action.model_id or ctx.model_id or ctx.small_id
         client = LLMClient(model_id)
         mark = snapshot_cost(client)
-        v = await verify(client, ctx.question, ctx.answer, ctx.evidence)
+        try:
+            v = await verify(client, ctx.question, ctx.answer, ctx.evidence)
+        except RateLimitError as e:
+            return _rate_limited(client, mark, ctx, e)
         signals = ctx.signals.model_copy(deep=True)
         signals.detail["verify"] = {"pass": v["pass"], "reason": v["reason"]}
         answer = v["revised"] if v["pass"] else ctx.answer

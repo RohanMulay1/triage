@@ -10,7 +10,7 @@ import math
 from dataclasses import replace
 
 from ..config import get_settings
-from ..llm import LLMClient
+from ..llm import LLMClient, RateLimitError
 from .actions import ExecutionResult
 from .adapter import cost_delta, snapshot_cost
 from .budgeting import estimate_action_cost
@@ -95,6 +95,9 @@ class HeuristicGainPolicy:
                     raise ValueError("nonfinite, out-of-range or nonnumeric self-estimate")
                 scores[a.key] = [min(1.0, max(0.0, v)) for v in values]
             self._prepared = (prompt, scores)
+        except RateLimitError as exc:
+            error = str(exc)
+            status = OutcomeStatus.FAILED
         except Exception as exc:
             error = str(exc)
             if status == OutcomeStatus.CHOSEN:
@@ -107,7 +110,7 @@ class HeuristicGainPolicy:
             samples=ctx.samples, cost=cost, provider_label=client.provider_label, error=error,
             detail={"purpose": "policy_overhead", "scores": payload if error is None else None,
                     "raw_response": raw_text,
-                    "unknown_usage": error is not None and client.cost.llm_calls == 0,
+                    "unknown_usage": error is not None and client.cost.llm_calls == 0 and status != OutcomeStatus.FAILED,
                     "weights": self.weights, "max_steps": self.max_steps,
                     "adaptation": "heterogeneous_actions_exact_key_redundancy",
                     "uncalibrated": True})

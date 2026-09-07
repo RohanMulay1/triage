@@ -21,7 +21,10 @@ def main():
     parser.add_argument('--seed',type=int,default=0)
     parser.add_argument('--small')
     parser.add_argument('--big')
+    parser.add_argument('--rps',type=float,default=.6)
     args = parser.parse_args()
+    if not math.isfinite(args.rps) or args.rps <= 0:
+        parser.error("--rps must be finite and strictly positive")
     if args.n <= 0:
         parser.error('n must be strictly positive')
     if (args.live and args.max_usd is None) or (args.max_usd is not None and

@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import time
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -18,6 +19,7 @@ from .calibration import calibration_report
 from .contract import Budget
 from .heuristic_gain import HeuristicGainPolicy
 from .information_value import c2_report
+from .pacing import RequestControl, active_control
 from .policies import build_policy
 from .splits import GroupKey, SplitManifest, prompt_fingerprint
 from .support import SupportError, action_support, assert_estimable, missingness, positivity_violations
@@ -36,9 +38,12 @@ class PipelineOptions:
     seed: int = 0
     small: str | None = None
     big: str | None = None
+    rps: float = .6
 
 
 def validate_options(args):
+    if not math.isfinite(args.rps) or args.rps <= 0:
+        raise ValueError("rps must be finite and strictly positive")
     if not isinstance(args.n, int) or args.n <= 0:
         raise ValueError("n must be positive integer")
     if args.depth != 2 or args.policy != 'balanced':
@@ -107,10 +112,11 @@ async def run_pipeline(args: PipelineOptions):
     manifest = store.build_manifest(args.run_id,dataset=args.dataset,split='mixed',seeds=[args.seed],
         command='scripts/run_gate2.py '+json.dumps(vars(args),sort_keys=True),
         notes='consolidated depth2; frozen seed corpus '+corpus_hash+
-              '; diagnostic_scores='+str(args.diagnostic_scores))
+              '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+'; max_attempts=3')
     store.create_run(manifest)
     root = store.run_dir(args.run_id)
     write_json(root/'preflight.json',estimate)
+    write_json(root/'items.json',{'dataset':args.dataset,'items':items,'prompts':prompts})
     write_json(root/'corpus.json',{'sha256':corpus_hash,'documents':SEED_CORPUS})
     splits = SplitManifest(args.run_id)
     budget = RunBudget(Budget(max_usd=args.max_usd),prices)
@@ -121,6 +127,9 @@ async def run_pipeline(args: PipelineOptions):
     frozen.add(SEED_CORPUS,source='frozen:'+corpus_hash)
     retrieval._store = frozen
     stopped = None
+    control = RequestControl(args.rps)
+    control_token = active_control.set(control) if args.live else None
+    wall_start = time.monotonic()
     try:
         with (root/'collect.log').open('x',encoding='utf-8') as log:
             log.write(json.dumps({'options':vars(args),'preflight':estimate})+'\n')
@@ -142,10 +151,17 @@ async def run_pipeline(args: PipelineOptions):
                     store.append(trace)
                 log.write(json.dumps({'item_id':item_id,'trajectories':len(traces),'stop':stopped})+'\n')
                 log.flush()
+                print(f"Collected {i+1}/{len(items)}: {len(traces)} trajectories; "
+                      f"calls={budget.state.spent_llm_calls}; usd={budget.state.spent_usd:.6f}", flush=True)
                 if stopped:
                     break
     finally:
         retrieval._store = old_store
+        if control_token is not None:
+            active_control.reset(control_token)
+        write_json(root/'request-events.json', {'rps':args.rps,'max_attempts':3,
+            'wall_seconds':time.monotonic()-wall_start,'throttle_seconds':control.throttle_seconds,
+            'events':control.events})
     splits.write(root)
     traces = store.read_run(args.run_id)
     validation = store.validate_run(args.run_id)

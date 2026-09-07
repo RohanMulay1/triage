@@ -1,0 +1,25 @@
+{
+  "dataset": "gsm8k",
+  "items": [
+    {
+      "q": "A large bag of Starbursts candy has 232 pieces of individually wrapped candies.  If this bag has 54 red candies, twice that amount of orange candies and half as many yellow candies as red candies, how many candies are pink?",
+      "gold": "43",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "A juggler can juggle 16 balls.  Half of the balls are golf balls, and half of the golf balls are blue.  How many blue golf balls are there?",
+      "gold": "4",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "Mrs. Tatiana owns a grocery store that sells different fruits and vegetables, which includes carrots. The price of carrots in the grocery store increases by 5% of the original price every year. What would be the price of carrots after three years if it was $120 initially? (Round to the nearest integer)",
+      "gold": "138",
+      "kind": "gsm8k"
+    }
+  ],
+  "prompts": [
+    "A large bag of Starbursts candy has 232 pieces of individually wrapped candies.  If this bag has 54 red candies, twice that amount of orange candies and half as many yellow candies as red candies, how many candies are pink?\nGive the final numeric answer.",
+    "A juggler can juggle 16 balls.  Half of the balls are golf balls, and half of the golf balls are blue.  How many blue golf balls are there?\nGive the final numeric answer.",
+    "Mrs. Tatiana owns a grocery store that sells different fruits and vegetables, which includes carrots. The price of carrots in the grocery store increases by 5% of the original price every year. What would be the price of carrots after three years if it was $120 initially? (Round to the nearest integer)\nGive the final numeric answer."
+  ]
+}

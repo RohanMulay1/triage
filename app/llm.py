@@ -46,6 +46,12 @@ class LLMClient:
         max_tokens: int = 512,
         want_logprobs: bool = False,
     ) -> GenResult:
+        from .trace.pacing import active_control
+        control = active_control.get()
+        operation = lambda: self._generate_once(messages, temperature, max_tokens, want_logprobs)
+        return await control.call(self, operation) if control is not None else await operation()
+
+    async def _generate_once(self, messages, temperature, max_tokens, want_logprobs):
         adapter, provider_model, label = self.registry.resolve(self.model_id)
         self.provider_label = label
         res = await adapter.generate(
@@ -57,10 +63,12 @@ class LLMClient:
             raise RateLimitError(label, int(m.group(1)) if m else None)
         # Fall back to mock on a live-provider error so a request never hard-fails.
         if res.error and label != "mock":
+            provider_error = res.error
             res = await self.registry.mock.generate(
                 provider_model, messages, temperature, max_tokens, want_logprobs
             )
             res.raw["fell_back_from"] = label
+            res.raw["fallback_error"] = provider_error
             self.provider_label = "mock"
         self.cost.tokens_in += res.tokens_in
         self.cost.tokens_out += res.tokens_out

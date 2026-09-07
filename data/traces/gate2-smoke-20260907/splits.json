@@ -1,0 +1,60 @@
+{
+  "run_id": "gate2-smoke-20260907",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788791567.0897307,
+  "group_count": 3,
+  "counts": {
+    "train": 2,
+    "calib": 1
+  },
+  "groups": {
+    "52f7f2b96d5708973a4781bd4da2447541d8faa72541a58bb37b2d26c0e1a027": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->llama-3.3-70b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a large bag of starbursts candy has 232 pieces of individually wrapped"
+      },
+      "items": [
+        "gsm8k-0000"
+      ]
+    },
+    "abd79679fb9cb8c96f79419615ebae749dd47ec95ded37eb21c9c5827e456482": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->llama-3.3-70b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a juggler can juggle 16 balls half of the balls are golf"
+      },
+      "items": [
+        "gsm8k-0001"
+      ]
+    },
+    "9c1725a2d26f3e93bed97daeaec65da6a7cc27b3e6c6274ff7eed9381cf9ea5c": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "llama-3.1-8b->llama-3.3-70b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "mrs tatiana owns a grocery store that sells different fruits and vegetables"
+      },
+      "items": [
+        "gsm8k-0002"
+      ]
+    }
+  }
+}

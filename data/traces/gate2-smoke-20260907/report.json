@@ -1,0 +1,191 @@
+{
+  "run_id": "gate2-smoke-20260907",
+  "analysis_grade": false,
+  "not_evidence": true,
+  "validation": {
+    "run_id": "gate2-smoke-20260907",
+    "schema_version": "1.3.0",
+    "trajectories": 3,
+    "manifest_present": true,
+    "force_mock": false,
+    "synthetic_trajectories": 3,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "support": {
+    "trajectories": 3,
+    "decisions": 3,
+    "behavior_policies": {
+      "fanout_prefix": 3
+    },
+    "feasible_set_definitions": [
+      "executor_v1"
+    ],
+    "per_action": {
+      "answer:llama-3.1-8b:t=0.2": {
+        "n_feasible": 3,
+        "n_taken": 3,
+        "n_observed": 0,
+        "coverage": 1.0,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "synthetic_fallback": 3
+        },
+        "provider_counts": {
+          "mock": 3
+        },
+        "synthetic_outcomes": 3
+      }
+    },
+    "unsupported_actions": [
+      "answer:llama-3.1-8b:t=0.2"
+    ],
+    "actions_with_support": 0,
+    "off_policy_ready": false,
+    "mixed_feasible_set_definitions": false
+  },
+  "positivity": [
+    "answer:llama-3.1-8b:t=0.2: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+  ],
+  "missingness": {
+    "chosen": 0,
+    "counterfactual": 0,
+    "unchosen": 0,
+    "attempted": 0,
+    "unavailable": 0,
+    "failed": 0,
+    "synthetic_fallback": 3
+  },
+  "evidence_support": {
+    "status": "REFUSED",
+    "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - answer:llama-3.1-8b:t=0.2: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+  },
+  "preflight": {
+    "listed_price_planning_usd": 0.0,
+    "admission_estimate_usd": 0.0,
+    "max_calls": 54,
+    "n_items": 3,
+    "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call",
+    "not_invoice_guarantee": true
+  },
+  "budget": {
+    "max_usd": 0.1,
+    "max_llm_calls": null,
+    "max_wall_ms": null,
+    "max_compute_units": null,
+    "max_escalations": null,
+    "spent_usd": 0.0,
+    "spent_llm_calls": 3,
+    "spent_wall_ms": 0.0,
+    "spent_compute_units": 445.0,
+    "escalations_used": 0
+  },
+  "collection_stopped": null,
+  "gate2": {
+    "run_id": "gate2-smoke-20260907",
+    "analysis_grade": false,
+    "not_evidence": true,
+    "validation": {
+      "run_id": "gate2-smoke-20260907",
+      "schema_version": "1.3.0",
+      "trajectories": 3,
+      "manifest_present": true,
+      "force_mock": false,
+      "synthetic_trajectories": 3,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": false,
+      "errors": []
+    },
+    "support_thresholds": {
+      "min_coverage": 0.0,
+      "min_observations": 1,
+      "min_propensity": 0.001,
+      "min_ess_ratio": 0.1,
+      "allow_synthetic": false
+    },
+    "calibration": {
+      "analysis_grade": false,
+      "not_evidence": true,
+      "status": "REFUSED",
+      "reason": "non-analysis-grade run",
+      "per_action": {}
+    },
+    "verdict": "REFUSED",
+    "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - answer:llama-3.1-8b:t=0.2: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+  },
+  "calibration": {
+    "analysis_grade": false,
+    "not_evidence": true,
+    "status": "REFUSED",
+    "reason": "non-analysis-grade run",
+    "per_action": {}
+  },
+  "ablations": {
+    "C1": {
+      "not_evidence": true,
+      "established": false,
+      "design": "replace only gain; fixed recorded penalties and common feasible set",
+      "status": "REFUSED",
+      "reason": "non-analysis-grade run",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      }
+    },
+    "C2": {
+      "run_id": "gate2-smoke-20260907",
+      "analysis_grade": false,
+      "not_evidence": true,
+      "validation": {
+        "run_id": "gate2-smoke-20260907",
+        "schema_version": "1.3.0",
+        "trajectories": 3,
+        "manifest_present": true,
+        "force_mock": false,
+        "synthetic_trajectories": 3,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": false,
+        "errors": []
+      },
+      "continuation": "verify",
+      "continuation_selection": "fixed_not_oracle",
+      "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+      "support_thresholds": {
+        "min_coverage": 0.0,
+        "min_observations": 1,
+        "min_propensity": 0.001,
+        "min_ess_ratio": 0.1,
+        "allow_synthetic": false
+      },
+      "verdict": "REFUSED",
+      "reason": "non-analysis-grade input"
+    },
+    "C4": {
+      "not_evidence": true,
+      "analysis_grade": false,
+      "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+      "status": "REFUSED",
+      "reason": "non-analysis-grade run",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      },
+      "established": false
+    }
+  },
+  "gate1": "NARROW_PROVISIONAL",
+  "gate3": "UNRESOLVED",
+  "c2_real_data_status": "UNRESOLVED",
+  "live_boundary": false
+}

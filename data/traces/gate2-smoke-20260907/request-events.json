@@ -1,0 +1,38 @@
+{
+  "rps": 0.6,
+  "max_attempts": 3,
+  "wall_seconds": 6.703000000037719,
+  "throttle_seconds": 0.0,
+  "events": [
+    {
+      "model": "llama-3.1-8b",
+      "provider": "mock",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 2202.999999979511,
+      "tokens_in": 45,
+      "tokens_out": 5,
+      "error": null
+    },
+    {
+      "model": "llama-3.1-8b",
+      "provider": "mock",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 2407.0000000065193,
+      "tokens_in": 33,
+      "tokens_out": 21,
+      "error": null
+    },
+    {
+      "model": "llama-3.1-8b",
+      "provider": "mock",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 2000.0,
+      "tokens_in": 57,
+      "tokens_out": 5,
+      "error": null
+    }
+  ]
+}

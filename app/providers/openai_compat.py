@@ -66,6 +66,7 @@ class OpenAICompatAdapter(ProviderAdapter):
 
         headers = {"Authorization": f"Bearer {self._effective_key()}"}
         t0 = time.perf_counter()
+        from ..trace.pacing import active_control
         try:
             async with httpx.AsyncClient(timeout=150.0) as client:
                 resp = await client.post(
@@ -76,6 +77,11 @@ class OpenAICompatAdapter(ProviderAdapter):
                 if resp.status_code == 422 and "logprobs" in payload:
                     payload.pop("logprobs", None)
                     payload.pop("top_logprobs", None)
+                    control = active_control.get()
+                    if control is not None:
+                        await control.acquire()
+                        control.events.append({"status": "http_parameter_retry", "provider": self.name,
+                                               "model": model, "latency_ms": 0.0})
                     resp = await client.post(
                         f"{self.base_url}/chat/completions", json=payload, headers=headers
                     )
@@ -91,6 +97,11 @@ class OpenAICompatAdapter(ProviderAdapter):
                         payload.pop("temperature")
                     else:
                         break
+                    control = active_control.get()
+                    if control is not None:
+                        await control.acquire()
+                        control.events.append({"status": "http_parameter_retry", "provider": self.name,
+                                               "model": model, "latency_ms": 0.0})
                     resp = await client.post(
                         f"{self.base_url}/chat/completions", json=payload, headers=headers
                     )
