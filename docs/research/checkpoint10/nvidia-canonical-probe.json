@@ -1,0 +1,52 @@
+{
+  "planning_usd": 0.0,
+  "max_usd": 0.01,
+  "responses": [
+    {
+      "model": "nim-nemotron-nano-30b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-3-nano-30b-a3b",
+      "error": "HTTP 410: {\"type\":\"about:blank\",\"title\":\"Gone\",\"status\":410,\"detail\":\"The model 'nvidia/nemotron-3-nano-30b-a3b' has reached its end of life on 2026-09-01T09:00:00Z and is no longer available.\"}\n",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "text": "",
+      "latency_ms": 486.0867999959737,
+      "raw": {},
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-3-nano-30b-a3b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          }
+        },
+        "supports_logprobs": false
+      }
+    },
+    {
+      "model": "nim-nemotron-super-120b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-3-super-120b-a12b",
+      "error": "HTTP 503: {\"error\":{\"message\":\"Service temporarily overloaded\",\"type\":\"Service Unavailable\",\"code\":503}}",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "text": "",
+      "latency_ms": 905.6497999699786,
+      "raw": {},
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-3-super-120b-a12b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          }
+        },
+        "supports_logprobs": false
+      }
+    }
+  ]
+}

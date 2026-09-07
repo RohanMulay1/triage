@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 from dataclasses import replace
 
 from ..config import get_settings
@@ -19,7 +20,7 @@ from .contract import Action, ActionKind, OutcomeStatus
 
 class HeuristicGainPolicy:
     policy_id = "heuristic_gain_arxiv2603_19896_adapted"
-    policy_version = "1"
+    policy_version = "2"
 
     def __init__(self, lambda_cost=0.3, lambda_uncertainty=0.2,
                  lambda_redundancy=0.2, max_steps=3, diagnostic_seed=None):
@@ -57,7 +58,7 @@ class HeuristicGainPolicy:
             raise ValueError("diagnostic scores require forced mock; forbidden live")
         actions, system, prompt = self._request(ctx, executor, taken)
         action = Action(kind=ActionKind.SELF_CHECK, model_id=ctx.small_id,
-                        params={"purpose": "heuristic_gain_scoring", "version": 1})
+                        params={"purpose": "heuristic_gain_scoring", "version": 2})
         cfg = {**ctx.cfg, "proxy": {**ctx.cfg["proxy"], "max_tokens": 1024}}
         estimate_ctx = replace(ctx, question=prompt, system=system, cfg=cfg)
         estimate_action = Action(kind=ActionKind.ANSWER, model_id=ctx.small_id)
@@ -84,7 +85,7 @@ class HeuristicGainPolicy:
                 raise ValueError("synthetic fallback during policy scoring")
             if response.error:
                 raise ValueError(response.error)
-            payload = json.loads(response.text)
+            payload = decode_score_json(response.text)
             if not isinstance(payload, dict) or set(payload) != {a.key for a in actions}:
                 raise ValueError("scores must cover exactly the feasible action keys")
             scores = {}
@@ -138,4 +139,14 @@ class HeuristicGainPolicy:
         return PolicyChoice(chosen, 1.0, actions,
                             {"scores": rows, "weights": self.weights,
                              "propensity_condition": "conditional_on_recorded_llm_scores",
-                             "uncalibrated": True, "adapted_from": "arxiv:2603.19896v1"})
+                            "uncalibrated": True, "adapted_from": "arxiv:2603.19896v1"})
+
+
+def decode_score_json(text):
+    """Accept raw JSON or one complete JSON fence, never extract from prose.
+
+    This is transport-envelope handling only. All action coverage and numeric
+    validation still happens in prepare, with no repaired/default score values.
+    """
+    fenced = re.fullmatch(r"\s*```json\s*\n(.*?)\n```\s*", text, re.DOTALL)
+    return json.loads(fenced.group(1) if fenced else text)

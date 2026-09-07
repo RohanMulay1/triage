@@ -1,0 +1,138 @@
+{
+  "analysis_grade": true,
+  "not_evidence": false,
+  "status": "COMPLETE",
+  "n_fitted": 0,
+  "target": "normalized marginal quality gain (delta+1)/2",
+  "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+  "per_action": {
+    "abstain": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "answer:groq-gpt-oss-20b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "resample:groq-gpt-oss-20b:n=3,t=0.7 -> answer:groq-gpt-oss-20b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "resample:groq-gpt-oss-20b:n=3,t=0.7 -> stronger_model:groq-gpt-oss-120b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "resample:groq-gpt-oss-20b:n=3,t=0.7 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> answer:groq-gpt-oss-20b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> stronger_model:groq-gpt-oss-120b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "self_check:groq-gpt-oss-20b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "self_check:groq-gpt-oss-20b -> answer:groq-gpt-oss-20b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "self_check:groq-gpt-oss-20b -> stronger_model:groq-gpt-oss-120b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "self_check:groq-gpt-oss-20b -> verify:groq-gpt-oss-20b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "stronger_model:groq-gpt-oss-120b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    },
+    "verify:groq-gpt-oss-20b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 1
+      }
+    }
+  }
+}

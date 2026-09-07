@@ -18,7 +18,7 @@ class ProviderRegistry:
         self._adapters: dict[str, ProviderAdapter] = {
             "openai": OpenAICompatAdapter("openai", s.openai_key, s.openai_base, supports_logprobs=True),
             "nvidia": OpenAICompatAdapter("nvidia", s.nvidia_key, s.nvidia_base, supports_logprobs=True),
-            "groq": OpenAICompatAdapter("groq", s.groq_key, s.groq_base, supports_logprobs=True),
+            "groq": OpenAICompatAdapter("groq", s.groq_key, s.groq_base, supports_logprobs=False),
             "openrouter": OpenAICompatAdapter(
                 "openrouter", s.openrouter_key, s.openrouter_base, supports_logprobs=False
             ),
@@ -49,6 +49,11 @@ class ProviderRegistry:
         primary = m["provider"]
         adapter = self._adapters.get(primary)
         if adapter and adapter.available():
+            if isinstance(adapter, OpenAICompatAdapter) and (
+                    "request_options" in m or "supports_logprobs" in m):
+                adapter = OpenAICompatAdapter(primary, adapter.api_key, adapter.base_url,
+                    supports_logprobs=m.get("supports_logprobs", adapter.supports_logprobs),
+                    request_options=m.get("request_options"))
             return adapter, m["provider_model"], primary
 
         # Try alternate provider mappings.

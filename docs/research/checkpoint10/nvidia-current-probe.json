@@ -1,0 +1,76 @@
+{
+  "planning_usd": 0.0,
+  "max_usd": 0.01,
+  "responses": [
+    {
+      "model": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "error": null,
+      "tokens_in": 20,
+      "tokens_out": 2,
+      "text": "OK",
+      "latency_ms": 894.1838000318967,
+      "raw": {
+        "id": "chatcmpl-aa505bd1-bc6c-4642-8c79-a163e49fc969",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "content": "OK",
+              "role": "assistant",
+              "reasoning_content": null
+            },
+            "finish_reason": "stop",
+            "logprobs": null
+          }
+        ],
+        "created": 1788807772,
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "service_tier": null,
+        "system_fingerprint": null,
+        "object": "chat.completion",
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 2,
+          "total_tokens": 22
+        }
+      },
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "stream": false,
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          }
+        },
+        "supports_logprobs": false
+      }
+    },
+    {
+      "model": "nim-nemotron-super-120b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-3-super-120b-a12b",
+      "error": "HTTP 503: {\"error\":{\"message\":\"Service temporarily overloaded\",\"type\":\"Service Unavailable\",\"code\":503}}",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "text": "",
+      "latency_ms": 804.2304000118747,
+      "raw": {},
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-3-super-120b-a12b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "stream": false,
+          "reasoning_effort": "none"
+        },
+        "supports_logprobs": false
+      }
+    }
+  ]
+}

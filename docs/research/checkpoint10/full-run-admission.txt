@@ -1,0 +1,19 @@
+Preflight estimate (before any generation): {"listed_price_planning_usd": 29.332116000000003, "admission_estimate_usd": 29.332116000000003, "max_calls": 2160, "n_items": 120, "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call", "not_invoice_guarantee": true}
+Traceback (most recent call last):
+  File "C:\Users\rohan\triage\scripts\run_gate2.py", line 45, in <module>
+    main()
+  File "C:\Users\rohan\triage\scripts\run_gate2.py", line 39, in main
+    result = asyncio.run(run_pipeline(PipelineOptions(**vars(args))))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py", line 190, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 654, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\rohan\triage\app\trace\pipeline.py", line 110, in run_pipeline
+    raise BudgetExceeded('whole-run planning estimate exceeds supplied cap; no calls made')
+app.trace.budgeting.BudgetExceeded: whole-run planning estimate exceeds supplied cap; no calls made

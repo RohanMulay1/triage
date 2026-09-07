@@ -1,0 +1,1239 @@
+{
+  "run_id": "gate2-groq-smoke-json-20260908",
+  "analysis_grade": true,
+  "not_evidence": false,
+  "validation": {
+    "run_id": "gate2-groq-smoke-json-20260908",
+    "schema_version": "1.3.0",
+    "trajectories": 53,
+    "manifest_present": true,
+    "force_mock": false,
+    "synthetic_trajectories": 0,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": true,
+    "errors": []
+  },
+  "support": {
+    "trajectories": 53,
+    "decisions": 85,
+    "behavior_policies": {
+      "fanout_prefix": 5,
+      "balanced_exploration": 32,
+      "exhaustive_depth2": 48
+    },
+    "feasible_set_definitions": [
+      "executor_v1"
+    ],
+    "per_action": {
+      "abstain": {
+        "n_feasible": 16,
+        "n_taken": 2,
+        "n_observed": 2,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 2.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 2
+        },
+        "provider_counts": {
+          "none": 2
+        },
+        "synthetic_outcomes": 0
+      },
+      "answer:groq-gpt-oss-20b:t=0.2": {
+        "n_feasible": 43,
+        "n_taken": 11,
+        "n_observed": 10,
+        "coverage": 0.2558,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 11.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "attempted": 1,
+          "chosen": 3,
+          "counterfactual": 7
+        },
+        "provider_counts": {
+          "groq": 11
+        },
+        "synthetic_outcomes": 0
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+        "n_feasible": 16,
+        "n_taken": 2,
+        "n_observed": 2,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 2.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 2
+        },
+        "provider_counts": {
+          "groq": 2
+        },
+        "synthetic_outcomes": 0
+      },
+      "retrieve:min_score=0.2,top_k=4": {
+        "n_feasible": 16,
+        "n_taken": 2,
+        "n_observed": 2,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 2.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 2
+        },
+        "provider_counts": {
+          "retrieval": 2
+        },
+        "synthetic_outcomes": 0
+      },
+      "self_check:groq-gpt-oss-20b": {
+        "n_feasible": 16,
+        "n_taken": 2,
+        "n_observed": 2,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 2.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 2
+        },
+        "provider_counts": {
+          "groq": 2
+        },
+        "synthetic_outcomes": 0
+      },
+      "self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=2": {
+        "n_feasible": 2,
+        "n_taken": 2,
+        "n_observed": 2,
+        "coverage": 1.0,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 2.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 2
+        },
+        "provider_counts": {
+          "groq": 2
+        },
+        "synthetic_outcomes": 0
+      },
+      "specialist_model": {
+        "n_feasible": 0,
+        "n_taken": 0,
+        "n_observed": 0,
+        "coverage": 0.0,
+        "min_propensity": null,
+        "mean_propensity": null,
+        "effective_sample_size": 0.0,
+        "ess_ratio": 0.0,
+        "status_counts": {
+          "unavailable": 2
+        },
+        "provider_counts": {
+          "none": 2
+        },
+        "synthetic_outcomes": 0
+      },
+      "stop": {
+        "n_feasible": 70,
+        "n_taken": 38,
+        "n_observed": 38,
+        "coverage": 0.5429,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 38.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 36,
+          "chosen": 2
+        },
+        "provider_counts": {
+          "none": 38
+        },
+        "synthetic_outcomes": 0
+      },
+      "stronger_model:groq-gpt-oss-120b": {
+        "n_feasible": 40,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 0.2,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 7,
+          "chosen": 1
+        },
+        "provider_counts": {
+          "groq": 8
+        },
+        "synthetic_outcomes": 0
+      },
+      "tool:name=\"calculator\"": {
+        "n_feasible": 0,
+        "n_taken": 0,
+        "n_observed": 0,
+        "coverage": 0.0,
+        "min_propensity": null,
+        "mean_propensity": null,
+        "effective_sample_size": 0.0,
+        "ess_ratio": 0.0,
+        "status_counts": {
+          "unavailable": 8
+        },
+        "provider_counts": {
+          "none": 8
+        },
+        "synthetic_outcomes": 0
+      },
+      "verify:groq-gpt-oss-20b:max_rounds=1": {
+        "n_feasible": 40,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 0.2,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 8
+        },
+        "provider_counts": {
+          "groq": 8
+        },
+        "synthetic_outcomes": 0
+      }
+    },
+    "unsupported_actions": [],
+    "actions_with_support": 9,
+    "off_policy_ready": true,
+    "mixed_feasible_set_definitions": false
+  },
+  "positivity": [],
+  "missingness": {
+    "chosen": 8,
+    "counterfactual": 66,
+    "unchosen": 0,
+    "attempted": 1,
+    "unavailable": 10,
+    "failed": 0,
+    "synthetic_fallback": 0
+  },
+  "evidence_support": {
+    "status": "SUPPORTED"
+  },
+  "preflight": {
+    "listed_price_planning_usd": 0.7335107999999999,
+    "admission_estimate_usd": 0.7335107999999999,
+    "max_calls": 54,
+    "n_items": 3,
+    "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call",
+    "not_invoice_guarantee": true
+  },
+  "budget": {
+    "max_usd": 0.75,
+    "max_llm_calls": null,
+    "max_wall_ms": null,
+    "max_compute_units": null,
+    "max_escalations": null,
+    "spent_usd": 0.0021355499999999995,
+    "spent_llm_calls": 37,
+    "spent_wall_ms": 2526.8863999517635,
+    "spent_compute_units": 47600.0,
+    "escalations_used": 0
+  },
+  "collection_stopped": null,
+  "gate2": {
+    "run_id": "gate2-groq-smoke-json-20260908",
+    "analysis_grade": true,
+    "not_evidence": false,
+    "validation": {
+      "run_id": "gate2-groq-smoke-json-20260908",
+      "schema_version": "1.3.0",
+      "trajectories": 53,
+      "manifest_present": true,
+      "force_mock": false,
+      "synthetic_trajectories": 0,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": true,
+      "errors": []
+    },
+    "support_thresholds": {
+      "min_coverage": 0.0,
+      "min_observations": 1,
+      "min_propensity": 0.001,
+      "min_ess_ratio": 0.1,
+      "allow_synthetic": false
+    },
+    "calibration": {
+      "analysis_grade": true,
+      "not_evidence": false,
+      "status": "COMPLETE",
+      "n_fitted": 0,
+      "target": "normalized marginal quality gain (delta+1)/2",
+      "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+      "per_action": {
+        "abstain": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "answer:groq-gpt-oss-20b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "resample:groq-gpt-oss-20b:n=3,t=0.7 -> answer:groq-gpt-oss-20b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "resample:groq-gpt-oss-20b:n=3,t=0.7 -> stronger_model:groq-gpt-oss-120b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "resample:groq-gpt-oss-20b:n=3,t=0.7 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4 -> answer:groq-gpt-oss-20b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4 -> stronger_model:groq-gpt-oss-120b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "self_check:groq-gpt-oss-20b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "self_check:groq-gpt-oss-20b -> answer:groq-gpt-oss-20b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "self_check:groq-gpt-oss-20b -> stronger_model:groq-gpt-oss-120b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "self_check:groq-gpt-oss-20b -> verify:groq-gpt-oss-20b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "stronger_model:groq-gpt-oss-120b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "verify:groq-gpt-oss-20b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        }
+      }
+    },
+    "rows": 8,
+    "splits": {
+      "calib": 4,
+      "test": 4
+    },
+    "task_families": {
+      "gsm8k": 8
+    },
+    "correctness_signal": {
+      "triage_risk": {
+        "feature": "triage_risk",
+        "auc_wrong": null,
+        "ci": {
+          "point": null,
+          "lo": null,
+          "hi": null,
+          "n": 2
+        },
+        "n": 2,
+        "n_wrong": 0
+      },
+      "uncertainty": {
+        "feature": "uncertainty",
+        "auc_wrong": null,
+        "ci": {
+          "point": null,
+          "lo": null,
+          "hi": null,
+          "n": 2
+        },
+        "n": 2,
+        "n_wrong": 0
+      },
+      "predicted_difficulty": {
+        "feature": "predicted_difficulty",
+        "auc_wrong": null,
+        "ci": {
+          "point": null,
+          "lo": null,
+          "hi": null,
+          "n": 2
+        },
+        "n": 2,
+        "n_wrong": 0
+      }
+    },
+    "repairability": {
+      "abstain": {
+        "point": -1.0,
+        "lo": -1.0,
+        "hi": -1.0,
+        "n": 2,
+        "mean_delta": -1.0,
+        "n_positive": 0,
+        "n_negative": 2,
+        "n_zero": 0,
+        "negative_rate": 1.0,
+        "any_variation": false,
+        "mean_cost_usd": 0.0
+      },
+      "answer:groq-gpt-oss-20b:t=0.2": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 3.814e-05
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 0.00012041
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7 -> answer:groq-gpt-oss-20b:t=0.2": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 3.964e-05
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7 -> stronger_model:groq-gpt-oss-120b": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 8.437e-05
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 5.689e-05
+      },
+      "retrieve:min_score=0.2,top_k=4": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 0.0
+      },
+      "retrieve:min_score=0.2,top_k=4 -> answer:groq-gpt-oss-20b:t=0.2": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 3.964e-05
+      },
+      "retrieve:min_score=0.2,top_k=4 -> stronger_model:groq-gpt-oss-120b": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 8.437e-05
+      },
+      "retrieve:min_score=0.2,top_k=4 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 5.689e-05
+      },
+      "self_check:groq-gpt-oss-20b": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 3.997e-05
+      },
+      "self_check:groq-gpt-oss-20b -> answer:groq-gpt-oss-20b:t=0.2": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 3.649e-05
+      },
+      "self_check:groq-gpt-oss-20b -> stronger_model:groq-gpt-oss-120b": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 8.588e-05
+      },
+      "self_check:groq-gpt-oss-20b -> verify:groq-gpt-oss-20b:max_rounds=1": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 5.689e-05
+      },
+      "stronger_model:groq-gpt-oss-120b": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 8.527e-05
+      },
+      "verify:groq-gpt-oss-20b:max_rounds=1": {
+        "point": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n": 2,
+        "mean_delta": 0.0,
+        "n_positive": 0,
+        "n_negative": 0,
+        "n_zero": 2,
+        "negative_rate": 0.0,
+        "any_variation": false,
+        "mean_cost_usd": 5.689e-05
+      }
+    },
+    "actions_with_variation": [],
+    "feature_set_comparison": {},
+    "verdict": "INCONCLUSIVE",
+    "reasons": [
+      "no action's marginal benefit varies across items, so there is no target to predict; this is the expected result on mock-provider data"
+    ]
+  },
+  "calibration": {
+    "analysis_grade": true,
+    "not_evidence": false,
+    "status": "COMPLETE",
+    "n_fitted": 0,
+    "target": "normalized marginal quality gain (delta+1)/2",
+    "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+    "per_action": {
+      "abstain": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "answer:groq-gpt-oss-20b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7 -> answer:groq-gpt-oss-20b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7 -> stronger_model:groq-gpt-oss-120b": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "resample:groq-gpt-oss-20b:n=3,t=0.7 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4 -> answer:groq-gpt-oss-20b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4 -> stronger_model:groq-gpt-oss-120b": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4 -> verify:groq-gpt-oss-20b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "self_check:groq-gpt-oss-20b": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "self_check:groq-gpt-oss-20b -> answer:groq-gpt-oss-20b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "self_check:groq-gpt-oss-20b -> stronger_model:groq-gpt-oss-120b": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "self_check:groq-gpt-oss-20b -> verify:groq-gpt-oss-20b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "stronger_model:groq-gpt-oss-120b": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      },
+      "verify:groq-gpt-oss-20b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 0,
+          "calib": 1,
+          "test": 1
+        }
+      }
+    }
+  },
+  "ablations": {
+    "C1": {
+      "not_evidence": false,
+      "established": false,
+      "design": "replace only gain; fixed recorded penalties and common feasible set",
+      "status": "REFUSED",
+      "reason": "gain estimator refused for feasible action",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      },
+      "n_complete": 0
+    },
+    "C2": {
+      "run_id": "gate2-groq-smoke-json-20260908",
+      "analysis_grade": true,
+      "not_evidence": false,
+      "validation": {
+        "run_id": "gate2-groq-smoke-json-20260908",
+        "schema_version": "1.3.0",
+        "trajectories": 53,
+        "manifest_present": true,
+        "force_mock": false,
+        "synthetic_trajectories": 0,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": true,
+        "errors": []
+      },
+      "continuation": "verify",
+      "continuation_selection": "fixed_not_oracle",
+      "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+      "support_thresholds": {
+        "min_coverage": 0.0,
+        "min_observations": 1,
+        "min_propensity": 0.001,
+        "min_ess_ratio": 0.1,
+        "allow_synthetic": false
+      },
+      "verdict": "C2_NOT_ESTABLISHED",
+      "per_action": {
+        "resample": {
+          "status": "INSUFFICIENT_ROWS",
+          "not_evidence": false,
+          "n": 1,
+          "depth1": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "depth2": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "paired_depth2_minus_depth1_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "matched_information_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "matched_selection_interval": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "extra_continuation_usd": {
+            "point": 0.0001,
+            "lo": 0.0001,
+            "hi": 0.0001,
+            "n": 1
+          },
+          "extra_continuation_calls": {
+            "point": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "n": 1
+          },
+          "information_usd": {
+            "point": 0.0001,
+            "lo": 0.0001,
+            "hi": 0.0001,
+            "n": 1
+          },
+          "pairs": [
+            {
+              "item_id": "gsm8k-0002",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 6.405e-05,
+              "extra_calls": 1,
+              "information_usd": 0.000138
+            }
+          ]
+        },
+        "self_check": {
+          "status": "INSUFFICIENT_ROWS",
+          "not_evidence": false,
+          "n": 1,
+          "depth1": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "depth2": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "paired_depth2_minus_depth1_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "matched_information_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "matched_selection_interval": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "extra_continuation_usd": {
+            "point": 0.0001,
+            "lo": 0.0001,
+            "hi": 0.0001,
+            "n": 1
+          },
+          "extra_continuation_calls": {
+            "point": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "n": 1
+          },
+          "information_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "pairs": [
+            {
+              "item_id": "gsm8k-0002",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 6.405e-05,
+              "extra_calls": 1,
+              "information_usd": 4.215e-05
+            }
+          ]
+        },
+        "retrieve": {
+          "status": "INSUFFICIENT_ROWS",
+          "not_evidence": false,
+          "n": 1,
+          "depth1": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "depth2": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "paired_depth2_minus_depth1_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "matched_information_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "matched_selection_interval": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1,
+            "excludes_zero": false
+          },
+          "extra_continuation_usd": {
+            "point": 0.0001,
+            "lo": 0.0001,
+            "hi": 0.0001,
+            "n": 1
+          },
+          "extra_continuation_calls": {
+            "point": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "n": 1
+          },
+          "information_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 1
+          },
+          "pairs": [
+            {
+              "item_id": "gsm8k-0002",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 6.405e-05,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            }
+          ]
+        }
+      },
+      "next_candidate": "C4",
+      "c4": {
+        "not_evidence": true,
+        "fitting_status": "NOT_RUN",
+        "reason": "support check only; held-out policy experiment remains required",
+        "counterfactual": {
+          "status": "SUPPORTED",
+          "trajectories": 53,
+          "actions_with_support": 9
+        },
+        "served_projection": {
+          "status": "REFUSED",
+          "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - abstain: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - resample:groq-gpt-oss-20b:n=3,t=0.7: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - retrieve:min_score=0.2,top_k=4: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - self_check:groq-gpt-oss-20b: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - verify:groq-gpt-oss-20b:max_rounds=1: 0 executed outcome(s) in 2 feasible occasions (need >= 1)"
+        }
+      },
+      "limitations": [
+        "mock contrasts are harness diagnostics only",
+        "one stochastic execution per branch; no equal-cost policy comparison",
+        "response state and continuation mechanisms differ; no novelty demonstrated"
+      ]
+    },
+    "C4": {
+      "not_evidence": false,
+      "analysis_grade": true,
+      "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+      "status": "REFUSED",
+      "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - abstain: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - resample:groq-gpt-oss-20b:n=3,t=0.7: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - retrieve:min_score=0.2,top_k=4: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - self_check:groq-gpt-oss-20b: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - verify:groq-gpt-oss-20b:max_rounds=1: 0 executed outcome(s) in 2 feasible occasions (need >= 1)",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      },
+      "per_action": {
+        "abstain": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "answer:groq-gpt-oss-20b:t=0.2": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "self_check:groq-gpt-oss-20b": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "stronger_model:groq-gpt-oss-120b": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "verify:groq-gpt-oss-20b:max_rounds=1": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        }
+      },
+      "established": false,
+      "full_fits": {
+        "abstain": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "answer:groq-gpt-oss-20b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "self_check:groq-gpt-oss-20b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "stronger_model:groq-gpt-oss-120b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        },
+        "verify:groq-gpt-oss-20b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 0,
+            "calib": 1,
+            "test": 1
+          }
+        }
+      },
+      "served_fits": {},
+      "limitation": "legacy served trajectories cannot identify unchosen action values"
+    }
+  },
+  "gate1": "NARROW_PROVISIONAL",
+  "gate3": "UNRESOLVED",
+  "c2_real_data_status": "UNRESOLVED",
+  "live_boundary": false
+}

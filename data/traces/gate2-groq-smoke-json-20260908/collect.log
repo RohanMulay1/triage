@@ -1,0 +1,4 @@
+{"options": {"run_id": "gate2-groq-smoke-json-20260908", "n": 3, "dataset": "gsm8k", "depth": 2, "policy": "balanced", "live": true, "max_usd": 0.75, "diagnostic_scores": false, "seed": 0, "small": "groq-gpt-oss-20b", "big": "groq-gpt-oss-120b", "rps": 0.6}, "preflight": {"listed_price_planning_usd": 0.7335107999999999, "admission_estimate_usd": 0.7335107999999999, "max_calls": 54, "n_items": 3, "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call", "not_invoice_guarantee": true}}
+{"item_id": "gsm8k-0000", "trajectories": 1, "stop": null}
+{"item_id": "gsm8k-0001", "trajectories": 26, "stop": null}
+{"item_id": "gsm8k-0002", "trajectories": 26, "stop": null}

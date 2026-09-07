@@ -1,0 +1,8 @@
+{
+  "listed_price_planning_usd": 0.7339562999999999,
+  "admission_estimate_usd": 0.7339562999999999,
+  "max_calls": 54,
+  "n_items": 3,
+  "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call",
+  "not_invoice_guarantee": true
+}

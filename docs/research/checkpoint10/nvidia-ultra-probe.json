@@ -1,0 +1,100 @@
+{
+  "planning_usd": 0.0,
+  "max_usd": 0.01,
+  "responses": [
+    {
+      "model": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "error": null,
+      "tokens_in": 20,
+      "tokens_out": 2,
+      "text": "OK",
+      "latency_ms": 7591.437300026882,
+      "raw": {
+        "id": "chatcmpl-9847108c-f2a1-4c6e-9546-ab5011853bff",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "content": "OK",
+              "role": "assistant",
+              "reasoning_content": null
+            },
+            "finish_reason": "stop",
+            "logprobs": null
+          }
+        ],
+        "created": 1788807856,
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "service_tier": null,
+        "system_fingerprint": null,
+        "object": "chat.completion",
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 2,
+          "total_tokens": 22
+        }
+      },
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "stream": false,
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          }
+        },
+        "supports_logprobs": false
+      }
+    },
+    {
+      "model": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "error": null,
+      "tokens_in": 20,
+      "tokens_out": 2,
+      "text": "OK",
+      "latency_ms": 3364.8111000075005,
+      "raw": {
+        "id": "chatcmpl-8e00b95a-25b2-4044-824b-b1e23bb3b4ee",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "content": "OK",
+              "role": "assistant",
+              "reasoning_content": null
+            },
+            "finish_reason": "stop",
+            "logprobs": null
+          }
+        ],
+        "created": 1788807868,
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "service_tier": null,
+        "system_fingerprint": null,
+        "object": "chat.completion",
+        "usage": {
+          "prompt_tokens": 20,
+          "completion_tokens": 2,
+          "total_tokens": 22
+        }
+      },
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "stream": false,
+          "reasoning_effort": "none"
+        },
+        "supports_logprobs": false
+      }
+    }
+  ]
+}

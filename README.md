@@ -5,12 +5,20 @@ trace substrate. The production router uses black-box signals from an actual
 model response to choose among serving, retrieving, verifying, using a calculator,
 escalating, or abstaining to PENDING_REVIEW. Its heuristic decisions are preserved.
 
-**No performance claim is currently supported by this research program.** The approved live smoke could not obtain a real generation: both requested
-NVIDIA endpoints returned HTTP 410 (retired). Its fallback outcomes are synthetic;
-the full run is blocked pending an approved replacement model pair. Calibration and ablation machinery are
-implemented; real-model repairability, utility gains, and sequential superiority
-remain unresolved. Historical benchmark receipts are preserved for audit and are
-not evidence for the new action-policy contribution.
+**No performance claim is currently supported by this research program.**
+NVIDIA generation works with explicit current-model settings, but its latest
+smoke contains Ultra service failures and is excluded from evidence. The Groq
+fallback (GPT-OSS 20B to 120B) completed a live, analysis-grade smoke after fixing
+score-JSON envelope handling. Gate 2 remains INCONCLUSIVE at smoke-test size.
+The full Groq collection refuses because its conservative planning estimate
+exceeds the approved cap. Calibration and C1/C2/C4 remain unestablished.
+See [provider recovery evidence](docs/research/checkpoint10/provider-notes.md).
+
+Research model IDs: `nim-nemotron-lightning-30b` / `nim-nemotron-ultra-550b`,
+with `groq-gpt-oss-20b` / `groq-gpt-oss-120b` as a separately recorded fallback
+pair. Pass them explicitly as `--small` and `--big`; historical router defaults
+are preserved. Credentials belong in ignored `.env` (`NVIDIA_API_KEY`,
+`GROQ_API_KEY`). Successful catalog access does not guarantee generation availability.
 
 ## Run the application
 

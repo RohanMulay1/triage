@@ -1,0 +1,7 @@
+{
+  "analysis_grade": true,
+  "not_evidence": false,
+  "status": "REFUSED",
+  "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)",
+  "per_action": {}
+}

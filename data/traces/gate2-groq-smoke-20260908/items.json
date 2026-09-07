@@ -1,0 +1,25 @@
+{
+  "dataset": "gsm8k",
+  "items": [
+    {
+      "q": "Carl\u2019s favorite food is cheese. He ate a sandwich every day this week for lunch and used 2 slices of cheese on each sandwich. He ate cheese and egg omelets for breakfast 3 days in the week using one more slice per omelet than he did per sandwich. He made a big dish of macaroni and cheese to last him several dinners for the week and used 8 slices of cheese in it. How many slices of cheese did he use?",
+      "gold": "31",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "Alex is getting ready to attend an event that she has hosted and wants to make sure that she has enough seats for everyone. She invites 100 people via email and each invited person says that they will also invite 2 of their friends. She then calls 10 of her friends to invite them too and 8 of them say they will be bringing their spouses. How many seats will Alex need?",
+      "gold": "319",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "Hunter counted 50 cars packed in their school parking lot when entering class one morning. During the first break, he counted 20 more cars in the parking lot. When he got out of class for the lunch break, he realized that 1/2 the number of cars in the parking lot had gone. What's the total number of cars he counted during lunch break?",
+      "gold": "35",
+      "kind": "gsm8k"
+    }
+  ],
+  "prompts": [
+    "Carl\u2019s favorite food is cheese. He ate a sandwich every day this week for lunch and used 2 slices of cheese on each sandwich. He ate cheese and egg omelets for breakfast 3 days in the week using one more slice per omelet than he did per sandwich. He made a big dish of macaroni and cheese to last him several dinners for the week and used 8 slices of cheese in it. How many slices of cheese did he use?\nGive the final numeric answer.",
+    "Alex is getting ready to attend an event that she has hosted and wants to make sure that she has enough seats for everyone. She invites 100 people via email and each invited person says that they will also invite 2 of their friends. She then calls 10 of her friends to invite them too and 8 of them say they will be bringing their spouses. How many seats will Alex need?\nGive the final numeric answer.",
+    "Hunter counted 50 cars packed in their school parking lot when entering class one morning. During the first break, he counted 20 more cars in the parking lot. When he got out of class for the lunch break, he realized that 1/2 the number of cars in the parking lot had gone. What's the total number of cars he counted during lunch break?\nGive the final numeric answer."
+  ]
+}

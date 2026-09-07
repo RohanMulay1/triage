@@ -11,6 +11,79 @@
 # =========================================================================
 
 models:
+  # Explicit research lanes: no default or legacy identity is remapped.
+  # NVIDIA trial endpoints; zero is the trial listed charge, not an invoice.
+  - id: nim-nemotron-lightning-30b
+    label: "Nemotron 3.5 Lightning 30B (NVIDIA research)"
+    family: nemotron
+    size_b: 30
+    role: research
+    provider: nvidia
+    provider_model: "nvidia/nemotron-3.5-lightning-30b-a3b"
+    supports_logprobs: false
+    request_options:
+      stream: false
+      chat_template_kwargs: {enable_thinking: false}
+    cost_in: 0.0
+    cost_out: 0.0
+    context: 131072
+
+  - id: nim-nemotron-super-120b
+    label: "Nemotron 3 Super 120B (NVIDIA research)"
+    family: nemotron
+    size_b: 120
+    role: research
+    provider: nvidia
+    provider_model: "nvidia/nemotron-3-super-120b-a12b"
+    supports_logprobs: false
+    request_options:
+      stream: false
+      reasoning_effort: none
+    cost_in: 0.0
+    cost_out: 0.0
+    context: 131072
+
+  - id: nim-nemotron-ultra-550b
+    label: "Nemotron 3 Ultra 550B (NVIDIA research)"
+    family: nemotron
+    size_b: 550
+    role: research
+    provider: nvidia
+    provider_model: "nvidia/nemotron-3-ultra-550b-a55b"
+    supports_logprobs: false
+    request_options: {stream: false, reasoning_effort: none}
+    cost_in: 0.0
+    cost_out: 0.0
+    context: 131072
+
+  # Groq fallback is a separate experiment, with its own measured-token prices.
+  # Source: https://console.groq.com/docs/models (2026-09-08).
+  - id: groq-gpt-oss-20b
+    label: "GPT OSS 20B (Groq research)"
+    family: gpt-oss
+    size_b: 20
+    role: research
+    provider: groq
+    provider_model: "openai/gpt-oss-20b"
+    supports_logprobs: false
+    request_options: {reasoning_effort: low}
+    cost_in: 0.075
+    cost_out: 0.30
+    context: 131072
+
+  - id: groq-gpt-oss-120b
+    label: "GPT OSS 120B (Groq research)"
+    family: gpt-oss
+    size_b: 120
+    role: research
+    provider: groq
+    provider_model: "openai/gpt-oss-120b"
+    supports_logprobs: false
+    request_options: {reasoning_effort: low}
+    cost_in: 0.15
+    cost_out: 0.60
+    context: 131072
+
   - id: gpt-4o-mini
     label: "GPT-4o mini (OpenAI)"
     family: gpt

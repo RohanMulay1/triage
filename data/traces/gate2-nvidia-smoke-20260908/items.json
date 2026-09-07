@@ -1,0 +1,25 @@
+{
+  "dataset": "gsm8k",
+  "items": [
+    {
+      "q": "Wendy wants to place 20 more than double the number of books in a shelving system with 6 rows and 6 columns. How many books will she need to carry to complete her task?",
+      "gold": "92",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "In Tate\u2019s garden pond, there are 4 male guppies, 7 female guppies, 3 male goldfishes, and 5 female goldfishes.  He buys 2 male guppies, 1 female guppy, 2 male goldfishes, and 3 female goldfishes.  How many more female fishes than male fishes does Tate have?",
+      "gold": "5",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "Grace weighs 125 pounds. Alex weighs 2 pounds less than 4 times what Grace weighs. What are their combined weights in pounds?",
+      "gold": "623",
+      "kind": "gsm8k"
+    }
+  ],
+  "prompts": [
+    "Wendy wants to place 20 more than double the number of books in a shelving system with 6 rows and 6 columns. How many books will she need to carry to complete her task?\nGive the final numeric answer.",
+    "In Tate\u2019s garden pond, there are 4 male guppies, 7 female guppies, 3 male goldfishes, and 5 female goldfishes.  He buys 2 male guppies, 1 female guppy, 2 male goldfishes, and 3 female goldfishes.  How many more female fishes than male fishes does Tate have?\nGive the final numeric answer.",
+    "Grace weighs 125 pounds. Alex weighs 2 pounds less than 4 times what Grace weighs. What are their combined weights in pounds?\nGive the final numeric answer."
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "run_id": "gate2-groq-smoke-json-20260908",
+  "schema_version": "1.3.0",
+  "created_ts": 1788808250.5805533,
+  "git_sha": "2c0e8d1558db57025e4d531c831394973259702c",
+  "router_config_hash": "d5ab00f2690eaf91",
+  "models_config_hash": "f0d1162f673a425a",
+  "model_snapshot": {
+    "nim-nemotron-lightning-30b": {
+      "live_provider": "nvidia",
+      "live_model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "cost_in": 0.0,
+      "cost_out": 0.0,
+      "request_options": {
+        "stream": false,
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        }
+      },
+      "supports_logprobs": false
+    },
+    "nim-nemotron-super-120b": {
+      "live_provider": "nvidia",
+      "live_model": "nvidia/nemotron-3-super-120b-a12b",
+      "cost_in": 0.0,
+      "cost_out": 0.0,
+      "request_options": {
+        "stream": false,
+        "reasoning_effort": "none"
+      },
+      "supports_logprobs": false
+    },
+    "nim-nemotron-ultra-550b": {
+      "live_provider": "nvidia",
+      "live_model": "nvidia/nemotron-3-ultra-550b-a55b",
+      "cost_in": 0.0,
+      "cost_out": 0.0,
+      "request_options": {
+        "stream": false,
+        "reasoning_effort": "none"
+      },
+      "supports_logprobs": false
+    },
+    "groq-gpt-oss-20b": {
+      "live_provider": "groq",
+      "live_model": "openai/gpt-oss-20b",
+      "cost_in": 0.075,
+      "cost_out": 0.3,
+      "request_options": {
+        "reasoning_effort": "low"
+      },
+      "supports_logprobs": false
+    },
+    "groq-gpt-oss-120b": {
+      "live_provider": "groq",
+      "live_model": "openai/gpt-oss-120b",
+      "cost_in": 0.15,
+      "cost_out": 0.6,
+      "request_options": {
+        "reasoning_effort": "low"
+      },
+      "supports_logprobs": false
+    },
+    "gpt-4o-mini": {
+      "live_provider": "mock",
+      "live_model": "gpt-4o-mini",
+      "cost_in": 0.15,
+      "cost_out": 0.6
+    },
+    "gpt-4o": {
+      "live_provider": "mock",
+      "live_model": "gpt-4o",
+      "cost_in": 2.5,
+      "cost_out": 10.0
+    },
+    "gpt-5-mini": {
+      "live_provider": "mock",
+      "live_model": "gpt-5-mini",
+      "cost_in": 0.25,
+      "cost_out": 2.0
+    },
+    "gpt-5": {
+      "live_provider": "mock",
+      "live_model": "gpt-5",
+      "cost_in": 1.25,
+      "cost_out": 10.0
+    },
+    "llama-3.1-8b": {
+      "live_provider": "nvidia",
+      "live_model": "meta/llama-3.1-8b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "llama-3.3-70b": {
+      "live_provider": "nvidia",
+      "live_model": "meta/llama-3.3-70b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "llama-3.1-70b": {
+      "live_provider": "nvidia",
+      "live_model": "meta/llama-3.1-70b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-super-49b": {
+      "live_provider": "nvidia",
+      "live_model": "nvidia/llama-3.3-nemotron-super-49b-v1",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-nano-9b": {
+      "live_provider": "nvidia",
+      "live_model": "nvidia/nvidia-nemotron-nano-9b-v2",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-ultra-550b-free": {
+      "live_provider": "mock",
+      "live_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    }
+  },
+  "seeds": [
+    0
+  ],
+  "force_mock": false,
+  "dataset": "gsm8k",
+  "split": "mixed",
+  "command": "scripts/run_gate2.py {\"big\": \"groq-gpt-oss-120b\", \"dataset\": \"gsm8k\", \"depth\": 2, \"diagnostic_scores\": false, \"live\": true, \"max_usd\": 0.75, \"n\": 3, \"policy\": \"balanced\", \"rps\": 0.6, \"run_id\": \"gate2-groq-smoke-json-20260908\", \"seed\": 0, \"small\": \"groq-gpt-oss-20b\"}",
+  "env": {
+    "python": "3.11.9",
+    "pydantic": "2.13.4"
+  },
+  "notes": "consolidated depth2; frozen seed corpus 488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc; diagnostic_scores=False; rps=0.6; max_attempts=3"
+}

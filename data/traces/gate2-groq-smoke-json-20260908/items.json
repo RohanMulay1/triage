@@ -1,0 +1,25 @@
+{
+  "dataset": "gsm8k",
+  "items": [
+    {
+      "q": "On Thursday, Joe caught 3 pounds of crawfish.  He caught 4 times that amount on Friday and half the amount of his Friday's catch on Saturday.  If 1 serving of crawfish is 3 pounds, how many servings does he have?",
+      "gold": "7",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "Andrew bakes 200 mini cinnamon rolls and 300 mini blueberry muffins. A normal cinnamon roll has 600 calories and a normal blueberry muffin has 450 calories. If a mini pastry has 1/3rd of the calories of a normal version, how many calories do the pastries he baked have?",
+      "gold": "85000",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "Nick is choosing between two jobs. Job A pays $15 an hour for 2000 hours a year, and is in a state with a 20% total tax rate. Job B pays $42,000 a year and is in a state that charges $6,000 in property tax and a 10% tax rate on net income after property tax. How much more money will Nick make at the job with a higher net pay rate, compared to the other job?",
+      "gold": "8400",
+      "kind": "gsm8k"
+    }
+  ],
+  "prompts": [
+    "On Thursday, Joe caught 3 pounds of crawfish.  He caught 4 times that amount on Friday and half the amount of his Friday's catch on Saturday.  If 1 serving of crawfish is 3 pounds, how many servings does he have?\nGive the final numeric answer.",
+    "Andrew bakes 200 mini cinnamon rolls and 300 mini blueberry muffins. A normal cinnamon roll has 600 calories and a normal blueberry muffin has 450 calories. If a mini pastry has 1/3rd of the calories of a normal version, how many calories do the pastries he baked have?\nGive the final numeric answer.",
+    "Nick is choosing between two jobs. Job A pays $15 an hour for 2000 hours a year, and is in a state with a 20% total tax rate. Job B pays $42,000 a year and is in a state that charges $6,000 in property tax and a 10% tax rate on net income after property tax. How much more money will Nick make at the job with a higher net pay rate, compared to the other job?\nGive the final numeric answer."
+  ]
+}

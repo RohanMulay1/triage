@@ -1,0 +1,74 @@
+{
+  "rps": 0.6,
+  "max_attempts": 3,
+  "wall_seconds": 9.702999999979511,
+  "throttle_seconds": 2.238333333400078,
+  "events": [
+    {
+      "model": "groq-gpt-oss-20b",
+      "provider": "groq",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 1077.999999979511,
+      "tokens_in": 197,
+      "tokens_out": 78,
+      "error": null,
+      "fallback_error": null
+    },
+    {
+      "model": "groq-gpt-oss-20b",
+      "provider": "groq",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 1438.0000000237487,
+      "tokens_in": 580,
+      "tokens_out": 300,
+      "error": null,
+      "fallback_error": null
+    },
+    {
+      "model": "groq-gpt-oss-20b",
+      "provider": "groq",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 1250.0,
+      "tokens_in": 184,
+      "tokens_out": 141,
+      "error": null,
+      "fallback_error": null
+    },
+    {
+      "model": "groq-gpt-oss-20b",
+      "provider": "groq",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 1391.0000000032596,
+      "tokens_in": 564,
+      "tokens_out": 300,
+      "error": null,
+      "fallback_error": null
+    },
+    {
+      "model": "groq-gpt-oss-20b",
+      "provider": "groq",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 922.0000000204891,
+      "tokens_in": 178,
+      "tokens_out": 65,
+      "error": null,
+      "fallback_error": null
+    },
+    {
+      "model": "groq-gpt-oss-20b",
+      "provider": "groq",
+      "attempt": 1,
+      "status": "returned",
+      "latency_ms": 1327.999999979511,
+      "tokens_in": 558,
+      "tokens_out": 300,
+      "error": null,
+      "fallback_error": null
+    }
+  ]
+}

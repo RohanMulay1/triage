@@ -1,0 +1,367 @@
+{
+  "run_id": "gate2-nvidia-smoke-20260908",
+  "analysis_grade": false,
+  "not_evidence": true,
+  "validation": {
+    "run_id": "gate2-nvidia-smoke-20260908",
+    "schema_version": "1.3.0",
+    "trajectories": 78,
+    "manifest_present": true,
+    "force_mock": false,
+    "synthetic_trajectories": 3,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "support": {
+    "trajectories": 78,
+    "decisions": 123,
+    "behavior_policies": {
+      "fanout_prefix": 6,
+      "balanced_exploration": 48,
+      "exhaustive_depth2": 69
+    },
+    "feasible_set_definitions": [
+      "executor_v1"
+    ],
+    "per_action": {
+      "abstain": {
+        "n_feasible": 24,
+        "n_taken": 3,
+        "n_observed": 3,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 2,
+          "chosen": 1
+        },
+        "provider_counts": {
+          "none": 3
+        },
+        "synthetic_outcomes": 0
+      },
+      "answer:nim-nemotron-lightning-30b:t=0.2": {
+        "n_feasible": 63,
+        "n_taken": 15,
+        "n_observed": 15,
+        "coverage": 0.2381,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 15.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 3,
+          "counterfactual": 12
+        },
+        "provider_counts": {
+          "nvidia": 15
+        },
+        "synthetic_outcomes": 0
+      },
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7": {
+        "n_feasible": 24,
+        "n_taken": 3,
+        "n_observed": 3,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 3
+        },
+        "provider_counts": {
+          "nvidia": 3
+        },
+        "synthetic_outcomes": 0
+      },
+      "retrieve:min_score=0.2,top_k=4": {
+        "n_feasible": 24,
+        "n_taken": 3,
+        "n_observed": 3,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 1,
+          "counterfactual": 2
+        },
+        "provider_counts": {
+          "retrieval": 3
+        },
+        "synthetic_outcomes": 0
+      },
+      "self_check:nim-nemotron-lightning-30b": {
+        "n_feasible": 24,
+        "n_taken": 3,
+        "n_observed": 3,
+        "coverage": 0.125,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 3
+        },
+        "provider_counts": {
+          "nvidia": 3
+        },
+        "synthetic_outcomes": 0
+      },
+      "self_check:nim-nemotron-lightning-30b:purpose=\"heuristic_gain_scoring\",version=1": {
+        "n_feasible": 3,
+        "n_taken": 3,
+        "n_observed": 3,
+        "coverage": 1.0,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 3
+        },
+        "provider_counts": {
+          "nvidia": 3
+        },
+        "synthetic_outcomes": 0
+      },
+      "specialist_model": {
+        "n_feasible": 0,
+        "n_taken": 0,
+        "n_observed": 0,
+        "coverage": 0.0,
+        "min_propensity": null,
+        "mean_propensity": null,
+        "effective_sample_size": 0.0,
+        "ess_ratio": 0.0,
+        "status_counts": {
+          "unavailable": 3
+        },
+        "provider_counts": {
+          "none": 3
+        },
+        "synthetic_outcomes": 0
+      },
+      "stop": {
+        "n_feasible": 102,
+        "n_taken": 54,
+        "n_observed": 54,
+        "coverage": 0.5294,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 54.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 52,
+          "chosen": 2
+        },
+        "provider_counts": {
+          "none": 54
+        },
+        "synthetic_outcomes": 0
+      },
+      "stronger_model:nim-nemotron-ultra-550b": {
+        "n_feasible": 60,
+        "n_taken": 12,
+        "n_observed": 9,
+        "coverage": 0.2,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 12.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 9,
+          "synthetic_fallback": 3
+        },
+        "provider_counts": {
+          "nvidia": 9,
+          "mock": 3
+        },
+        "synthetic_outcomes": 3
+      },
+      "tool:name=\"calculator\"": {
+        "n_feasible": 0,
+        "n_taken": 0,
+        "n_observed": 0,
+        "coverage": 0.0,
+        "min_propensity": null,
+        "mean_propensity": null,
+        "effective_sample_size": 0.0,
+        "ess_ratio": 0.0,
+        "status_counts": {
+          "unavailable": 12
+        },
+        "provider_counts": {
+          "none": 12
+        },
+        "synthetic_outcomes": 0
+      },
+      "verify:nim-nemotron-lightning-30b:max_rounds=1": {
+        "n_feasible": 60,
+        "n_taken": 12,
+        "n_observed": 12,
+        "coverage": 0.2,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 12.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 12
+        },
+        "provider_counts": {
+          "nvidia": 12
+        },
+        "synthetic_outcomes": 0
+      }
+    },
+    "unsupported_actions": [],
+    "actions_with_support": 9,
+    "off_policy_ready": true,
+    "mixed_feasible_set_definitions": false
+  },
+  "positivity": [
+    "stronger_model:nim-nemotron-ultra-550b: 3 mock-provider outcome(s); synthetic text is not evidence about model behaviour"
+  ],
+  "missingness": {
+    "chosen": 10,
+    "counterfactual": 95,
+    "unchosen": 0,
+    "attempted": 0,
+    "unavailable": 15,
+    "failed": 0,
+    "synthetic_fallback": 3
+  },
+  "evidence_support": {
+    "status": "REFUSED",
+    "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - stronger_model:nim-nemotron-ultra-550b: 3 mock-provider outcome(s); synthetic text is not evidence about model behaviour"
+  },
+  "preflight": {
+    "listed_price_planning_usd": 0.0,
+    "admission_estimate_usd": 0.0,
+    "max_calls": 54,
+    "n_items": 3,
+    "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call",
+    "not_invoice_guarantee": true
+  },
+  "budget": {
+    "max_usd": 0.1,
+    "max_llm_calls": null,
+    "max_wall_ms": null,
+    "max_compute_units": null,
+    "max_escalations": null,
+    "spent_usd": 0.0,
+    "spent_llm_calls": 54,
+    "spent_wall_ms": 32414.79149996303,
+    "spent_compute_units": 54188.0,
+    "escalations_used": 0
+  },
+  "collection_stopped": null,
+  "gate2": {
+    "run_id": "gate2-nvidia-smoke-20260908",
+    "analysis_grade": false,
+    "not_evidence": true,
+    "validation": {
+      "run_id": "gate2-nvidia-smoke-20260908",
+      "schema_version": "1.3.0",
+      "trajectories": 78,
+      "manifest_present": true,
+      "force_mock": false,
+      "synthetic_trajectories": 3,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": false,
+      "errors": []
+    },
+    "support_thresholds": {
+      "min_coverage": 0.0,
+      "min_observations": 1,
+      "min_propensity": 0.001,
+      "min_ess_ratio": 0.1,
+      "allow_synthetic": false
+    },
+    "calibration": {
+      "analysis_grade": false,
+      "not_evidence": true,
+      "status": "REFUSED",
+      "reason": "non-analysis-grade run",
+      "per_action": {}
+    },
+    "verdict": "REFUSED",
+    "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - stronger_model:nim-nemotron-ultra-550b: 3 mock-provider outcome(s); synthetic text is not evidence about model behaviour"
+  },
+  "calibration": {
+    "analysis_grade": false,
+    "not_evidence": true,
+    "status": "REFUSED",
+    "reason": "non-analysis-grade run",
+    "per_action": {}
+  },
+  "ablations": {
+    "C1": {
+      "not_evidence": true,
+      "established": false,
+      "design": "replace only gain; fixed recorded penalties and common feasible set",
+      "status": "REFUSED",
+      "reason": "non-analysis-grade run",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      }
+    },
+    "C2": {
+      "run_id": "gate2-nvidia-smoke-20260908",
+      "analysis_grade": false,
+      "not_evidence": true,
+      "validation": {
+        "run_id": "gate2-nvidia-smoke-20260908",
+        "schema_version": "1.3.0",
+        "trajectories": 78,
+        "manifest_present": true,
+        "force_mock": false,
+        "synthetic_trajectories": 3,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": false,
+        "errors": []
+      },
+      "continuation": "verify",
+      "continuation_selection": "fixed_not_oracle",
+      "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+      "support_thresholds": {
+        "min_coverage": 0.0,
+        "min_observations": 1,
+        "min_propensity": 0.001,
+        "min_ess_ratio": 0.1,
+        "allow_synthetic": false
+      },
+      "verdict": "REFUSED",
+      "reason": "non-analysis-grade input"
+    },
+    "C4": {
+      "not_evidence": true,
+      "analysis_grade": false,
+      "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+      "status": "REFUSED",
+      "reason": "non-analysis-grade run",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      },
+      "established": false
+    }
+  },
+  "gate1": "NARROW_PROVISIONAL",
+  "gate3": "UNRESOLVED",
+  "c2_real_data_status": "UNRESOLVED",
+  "live_boundary": false
+}

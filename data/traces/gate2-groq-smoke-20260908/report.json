@@ -1,0 +1,208 @@
+{
+  "run_id": "gate2-groq-smoke-20260908",
+  "analysis_grade": true,
+  "not_evidence": false,
+  "validation": {
+    "run_id": "gate2-groq-smoke-20260908",
+    "schema_version": "1.3.0",
+    "trajectories": 3,
+    "manifest_present": true,
+    "force_mock": false,
+    "synthetic_trajectories": 0,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": true,
+    "errors": []
+  },
+  "support": {
+    "trajectories": 3,
+    "decisions": 6,
+    "behavior_policies": {
+      "fanout_prefix": 6
+    },
+    "feasible_set_definitions": [
+      "executor_v1"
+    ],
+    "per_action": {
+      "answer:groq-gpt-oss-20b:t=0.2": {
+        "n_feasible": 3,
+        "n_taken": 3,
+        "n_observed": 3,
+        "coverage": 1.0,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 3
+        },
+        "provider_counts": {
+          "groq": 3
+        },
+        "synthetic_outcomes": 0
+      },
+      "self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1": {
+        "n_feasible": 3,
+        "n_taken": 3,
+        "n_observed": 0,
+        "coverage": 1.0,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 3.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "attempted": 3
+        },
+        "provider_counts": {
+          "groq": 3
+        },
+        "synthetic_outcomes": 0
+      }
+    },
+    "unsupported_actions": [
+      "self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1"
+    ],
+    "actions_with_support": 1,
+    "off_policy_ready": false,
+    "mixed_feasible_set_definitions": false
+  },
+  "positivity": [
+    "self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+  ],
+  "missingness": {
+    "chosen": 3,
+    "counterfactual": 0,
+    "unchosen": 0,
+    "attempted": 3,
+    "unavailable": 0,
+    "failed": 0,
+    "synthetic_fallback": 0
+  },
+  "evidence_support": {
+    "status": "REFUSED",
+    "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+  },
+  "preflight": {
+    "listed_price_planning_usd": 0.7339562999999999,
+    "admission_estimate_usd": 0.7339562999999999,
+    "max_calls": 54,
+    "n_items": 3,
+    "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call",
+    "not_invoice_guarantee": true
+  },
+  "budget": {
+    "max_usd": 0.75,
+    "max_llm_calls": null,
+    "max_wall_ms": null,
+    "max_compute_units": null,
+    "max_escalations": null,
+    "spent_usd": 0.0005247749999999999,
+    "spent_llm_calls": 6,
+    "spent_wall_ms": 4163.5690000257455,
+    "spent_compute_units": 14101.0,
+    "escalations_used": 0
+  },
+  "collection_stopped": null,
+  "gate2": {
+    "run_id": "gate2-groq-smoke-20260908",
+    "analysis_grade": true,
+    "not_evidence": false,
+    "validation": {
+      "run_id": "gate2-groq-smoke-20260908",
+      "schema_version": "1.3.0",
+      "trajectories": 3,
+      "manifest_present": true,
+      "force_mock": false,
+      "synthetic_trajectories": 0,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": true,
+      "errors": []
+    },
+    "support_thresholds": {
+      "min_coverage": 0.0,
+      "min_observations": 1,
+      "min_propensity": 0.001,
+      "min_ess_ratio": 0.1,
+      "allow_synthetic": false
+    },
+    "calibration": {
+      "analysis_grade": true,
+      "not_evidence": false,
+      "status": "REFUSED",
+      "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)",
+      "per_action": {}
+    },
+    "verdict": "REFUSED",
+    "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+  },
+  "calibration": {
+    "analysis_grade": true,
+    "not_evidence": false,
+    "status": "REFUSED",
+    "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)",
+    "per_action": {}
+  },
+  "ablations": {
+    "C1": {
+      "not_evidence": false,
+      "established": false,
+      "design": "replace only gain; fixed recorded penalties and common feasible set",
+      "status": "REFUSED",
+      "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      }
+    },
+    "C2": {
+      "run_id": "gate2-groq-smoke-20260908",
+      "analysis_grade": true,
+      "not_evidence": false,
+      "validation": {
+        "run_id": "gate2-groq-smoke-20260908",
+        "schema_version": "1.3.0",
+        "trajectories": 3,
+        "manifest_present": true,
+        "force_mock": false,
+        "synthetic_trajectories": 0,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": true,
+        "errors": []
+      },
+      "continuation": "verify",
+      "continuation_selection": "fixed_not_oracle",
+      "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+      "support_thresholds": {
+        "min_coverage": 0.0,
+        "min_observations": 1,
+        "min_propensity": 0.001,
+        "min_ess_ratio": 0.1,
+        "allow_synthetic": false
+      },
+      "verdict": "REFUSED",
+      "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+    },
+    "C4": {
+      "not_evidence": false,
+      "analysis_grade": true,
+      "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+      "status": "REFUSED",
+      "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      },
+      "established": false
+    }
+  },
+  "gate1": "NARROW_PROVISIONAL",
+  "gate3": "UNRESOLVED",
+  "c2_real_data_status": "UNRESOLVED",
+  "live_boundary": false
+}

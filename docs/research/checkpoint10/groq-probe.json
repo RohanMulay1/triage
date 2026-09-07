@@ -1,0 +1,120 @@
+{
+  "planning_usd": 0.00013769999999999999,
+  "max_usd": 0.01,
+  "responses": [
+    {
+      "model": "groq-gpt-oss-20b",
+      "provider": "groq",
+      "provider_model": "openai/gpt-oss-20b",
+      "error": null,
+      "tokens_in": 75,
+      "tokens_out": 23,
+      "text": "OK",
+      "latency_ms": 758.2284000236541,
+      "raw": {
+        "id": "chatcmpl-62b85f54-09ba-4461-a30f-9739348fc988",
+        "object": "chat.completion",
+        "created": 1788807706,
+        "model": "openai/gpt-oss-20b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "OK",
+              "reasoning": "User says \"Reply with OK.\" So respond \"OK\"."
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.315232533,
+          "prompt_tokens": 75,
+          "prompt_time": 0.004114664,
+          "completion_tokens": 23,
+          "completion_time": 0.024074068,
+          "total_tokens": 98,
+          "total_time": 0.028188732,
+          "completion_tokens_details": {
+            "reasoning_tokens": 13
+          }
+        },
+        "usage_breakdown": null,
+        "system_fingerprint": "fp_c9afb2bdb4",
+        "x_groq": {
+          "id": "req_01m1ykyxzheby9mtmahvprxr2g",
+          "seed": 519690552
+        },
+        "service_tier": "on_demand"
+      },
+      "model_snapshot": {
+        "live_provider": "groq",
+        "live_model": "openai/gpt-oss-20b",
+        "cost_in": 0.075,
+        "cost_out": 0.3,
+        "request_options": {
+          "reasoning_effort": "low"
+        },
+        "supports_logprobs": false
+      }
+    },
+    {
+      "model": "groq-gpt-oss-120b",
+      "provider": "groq",
+      "provider_model": "openai/gpt-oss-120b",
+      "error": null,
+      "tokens_in": 75,
+      "tokens_out": 20,
+      "text": "OK.",
+      "latency_ms": 1110.657099983655,
+      "raw": {
+        "id": "chatcmpl-4beb850b-f7fc-400b-b981-735b5c02d0fb",
+        "object": "chat.completion",
+        "created": 1788807709,
+        "model": "openai/gpt-oss-120b",
+        "choices": [
+          {
+            "index": 0,
+            "message": {
+              "role": "assistant",
+              "content": "OK.",
+              "reasoning": "User wants \"OK\". Just reply."
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+          }
+        ],
+        "usage": {
+          "queue_time": 0.354527147,
+          "prompt_tokens": 75,
+          "prompt_time": 0.002832672,
+          "completion_tokens": 20,
+          "completion_time": 0.042193907,
+          "total_tokens": 95,
+          "total_time": 0.045026579,
+          "completion_tokens_details": {
+            "reasoning_tokens": 9
+          }
+        },
+        "usage_breakdown": null,
+        "system_fingerprint": "fp_4200b3f836",
+        "x_groq": {
+          "id": "req_01m1ykz0myevf8fak2397t8qz3",
+          "seed": 1401690185
+        },
+        "service_tier": "on_demand"
+      },
+      "model_snapshot": {
+        "live_provider": "groq",
+        "live_model": "openai/gpt-oss-120b",
+        "cost_in": 0.15,
+        "cost_out": 0.6,
+        "request_options": {
+          "reasoning_effort": "low"
+        },
+        "supports_logprobs": false
+      }
+    }
+  ]
+}

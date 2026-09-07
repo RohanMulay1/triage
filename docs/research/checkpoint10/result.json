@@ -1,0 +1,651 @@
+{
+  "runs": [
+    {
+      "run_id": "gate2-nvidia-smoke-20260908",
+      "validation": {
+        "run_id": "gate2-nvidia-smoke-20260908",
+        "schema_version": "1.3.0",
+        "trajectories": 78,
+        "manifest_present": true,
+        "force_mock": false,
+        "synthetic_trajectories": 3,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": false,
+        "errors": []
+      },
+      "budget": {
+        "max_usd": 0.1,
+        "max_llm_calls": null,
+        "max_wall_ms": null,
+        "max_compute_units": null,
+        "max_escalations": null,
+        "spent_usd": 0.0,
+        "spent_llm_calls": 54,
+        "spent_wall_ms": 32414.79149996303,
+        "spent_compute_units": 54188.0,
+        "escalations_used": 0
+      },
+      "gate2": "REFUSED",
+      "calibration_n_fitted": 0,
+      "ablations": {
+        "C1": {
+          "not_evidence": true,
+          "established": false,
+          "design": "replace only gain; fixed recorded penalties and common feasible set",
+          "status": "REFUSED",
+          "reason": "non-analysis-grade run",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "C2": {
+          "run_id": "gate2-nvidia-smoke-20260908",
+          "analysis_grade": false,
+          "not_evidence": true,
+          "validation": {
+            "run_id": "gate2-nvidia-smoke-20260908",
+            "schema_version": "1.3.0",
+            "trajectories": 78,
+            "manifest_present": true,
+            "force_mock": false,
+            "synthetic_trajectories": 3,
+            "cost_conservation_ok": true,
+            "chain_ok": true,
+            "analysis_grade": false,
+            "errors": []
+          },
+          "continuation": "verify",
+          "continuation_selection": "fixed_not_oracle",
+          "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+          "support_thresholds": {
+            "min_coverage": 0.0,
+            "min_observations": 1,
+            "min_propensity": 0.001,
+            "min_ess_ratio": 0.1,
+            "allow_synthetic": false
+          },
+          "verdict": "REFUSED",
+          "reason": "non-analysis-grade input"
+        },
+        "C4": {
+          "not_evidence": true,
+          "analysis_grade": false,
+          "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+          "status": "REFUSED",
+          "reason": "non-analysis-grade run",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          },
+          "established": false
+        }
+      },
+      "wall_seconds": 337.4220000000205,
+      "wall_ci95": null,
+      "n_runs": 1,
+      "wall_ci_limitation": "one execution, not repeated performance trials",
+      "request_attempts": 54,
+      "real_tokens_in": 8135,
+      "real_tokens_out": 4581
+    },
+    {
+      "run_id": "gate2-groq-smoke-20260908",
+      "validation": {
+        "run_id": "gate2-groq-smoke-20260908",
+        "schema_version": "1.3.0",
+        "trajectories": 3,
+        "manifest_present": true,
+        "force_mock": false,
+        "synthetic_trajectories": 0,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": true,
+        "errors": []
+      },
+      "budget": {
+        "max_usd": 0.75,
+        "max_llm_calls": null,
+        "max_wall_ms": null,
+        "max_compute_units": null,
+        "max_escalations": null,
+        "spent_usd": 0.0005247749999999999,
+        "spent_llm_calls": 6,
+        "spent_wall_ms": 4163.5690000257455,
+        "spent_compute_units": 14101.0,
+        "escalations_used": 0
+      },
+      "gate2": "REFUSED",
+      "calibration_n_fitted": 0,
+      "ablations": {
+        "C1": {
+          "not_evidence": false,
+          "established": false,
+          "design": "replace only gain; fixed recorded penalties and common feasible set",
+          "status": "REFUSED",
+          "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "C2": {
+          "run_id": "gate2-groq-smoke-20260908",
+          "analysis_grade": true,
+          "not_evidence": false,
+          "validation": {
+            "run_id": "gate2-groq-smoke-20260908",
+            "schema_version": "1.3.0",
+            "trajectories": 3,
+            "manifest_present": true,
+            "force_mock": false,
+            "synthetic_trajectories": 0,
+            "cost_conservation_ok": true,
+            "chain_ok": true,
+            "analysis_grade": true,
+            "errors": []
+          },
+          "continuation": "verify",
+          "continuation_selection": "fixed_not_oracle",
+          "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+          "support_thresholds": {
+            "min_coverage": 0.0,
+            "min_observations": 1,
+            "min_propensity": 0.001,
+            "min_ess_ratio": 0.1,
+            "allow_synthetic": false
+          },
+          "verdict": "REFUSED",
+          "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)"
+        },
+        "C4": {
+          "not_evidence": false,
+          "analysis_grade": true,
+          "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+          "status": "REFUSED",
+          "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - self_check:groq-gpt-oss-20b:purpose=\"heuristic_gain_scoring\",version=1: 0 executed outcome(s) in 3 feasible occasions (need >= 1)",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          },
+          "established": false
+        }
+      },
+      "wall_seconds": 9.702999999979511,
+      "wall_ci95": null,
+      "n_runs": 1,
+      "wall_ci_limitation": "one execution, not repeated performance trials",
+      "request_attempts": 6,
+      "real_tokens_in": 2261,
+      "real_tokens_out": 1184
+    },
+    {
+      "run_id": "gate2-groq-smoke-json-20260908",
+      "validation": {
+        "run_id": "gate2-groq-smoke-json-20260908",
+        "schema_version": "1.3.0",
+        "trajectories": 53,
+        "manifest_present": true,
+        "force_mock": false,
+        "synthetic_trajectories": 0,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": true,
+        "errors": []
+      },
+      "budget": {
+        "max_usd": 0.75,
+        "max_llm_calls": null,
+        "max_wall_ms": null,
+        "max_compute_units": null,
+        "max_escalations": null,
+        "spent_usd": 0.0021355499999999995,
+        "spent_llm_calls": 37,
+        "spent_wall_ms": 2526.8863999517635,
+        "spent_compute_units": 47600.0,
+        "escalations_used": 0
+      },
+      "gate2": "INCONCLUSIVE",
+      "calibration_n_fitted": 0,
+      "ablations": {
+        "C1": {
+          "not_evidence": false,
+          "established": false,
+          "design": "replace only gain; fixed recorded penalties and common feasible set",
+          "status": "REFUSED",
+          "reason": "gain estimator refused for feasible action",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          },
+          "n_complete": 0
+        },
+        "C2": {
+          "run_id": "gate2-groq-smoke-json-20260908",
+          "analysis_grade": true,
+          "not_evidence": false,
+          "validation": {
+            "run_id": "gate2-groq-smoke-json-20260908",
+            "schema_version": "1.3.0",
+            "trajectories": 53,
+            "manifest_present": true,
+            "force_mock": false,
+            "synthetic_trajectories": 0,
+            "cost_conservation_ok": true,
+            "chain_ok": true,
+            "analysis_grade": true,
+            "errors": []
+          },
+          "continuation": "verify",
+          "continuation_selection": "fixed_not_oracle",
+          "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+          "support_thresholds": {
+            "min_coverage": 0.0,
+            "min_observations": 1,
+            "min_propensity": 0.001,
+            "min_ess_ratio": 0.1,
+            "allow_synthetic": false
+          },
+          "verdict": "C2_NOT_ESTABLISHED",
+          "per_action": {
+            "resample": {
+              "status": "INSUFFICIENT_ROWS",
+              "not_evidence": false,
+              "n": 1,
+              "depth1": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "depth2": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "paired_depth2_minus_depth1_ci95": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "matched_information_ci95": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "matched_selection_interval": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "extra_continuation_usd": {
+                "point": 0.0001,
+                "lo": 0.0001,
+                "hi": 0.0001,
+                "n": 1
+              },
+              "extra_continuation_calls": {
+                "point": 1.0,
+                "lo": 1.0,
+                "hi": 1.0,
+                "n": 1
+              },
+              "information_usd": {
+                "point": 0.0001,
+                "lo": 0.0001,
+                "hi": 0.0001,
+                "n": 1
+              },
+              "pairs": [
+                {
+                  "item_id": "gsm8k-0002",
+                  "depth1": 0.0,
+                  "depth2": 0.0,
+                  "direct": 0.0,
+                  "extra_usd": 6.405e-05,
+                  "extra_calls": 1,
+                  "information_usd": 0.000138
+                }
+              ]
+            },
+            "self_check": {
+              "status": "INSUFFICIENT_ROWS",
+              "not_evidence": false,
+              "n": 1,
+              "depth1": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "depth2": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "paired_depth2_minus_depth1_ci95": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "matched_information_ci95": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "matched_selection_interval": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "extra_continuation_usd": {
+                "point": 0.0001,
+                "lo": 0.0001,
+                "hi": 0.0001,
+                "n": 1
+              },
+              "extra_continuation_calls": {
+                "point": 1.0,
+                "lo": 1.0,
+                "hi": 1.0,
+                "n": 1
+              },
+              "information_usd": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "pairs": [
+                {
+                  "item_id": "gsm8k-0002",
+                  "depth1": 0.0,
+                  "depth2": 0.0,
+                  "direct": 0.0,
+                  "extra_usd": 6.405e-05,
+                  "extra_calls": 1,
+                  "information_usd": 4.215e-05
+                }
+              ]
+            },
+            "retrieve": {
+              "status": "INSUFFICIENT_ROWS",
+              "not_evidence": false,
+              "n": 1,
+              "depth1": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "depth2": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "paired_depth2_minus_depth1_ci95": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "matched_information_ci95": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "matched_selection_interval": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1,
+                "excludes_zero": false
+              },
+              "extra_continuation_usd": {
+                "point": 0.0001,
+                "lo": 0.0001,
+                "hi": 0.0001,
+                "n": 1
+              },
+              "extra_continuation_calls": {
+                "point": 1.0,
+                "lo": 1.0,
+                "hi": 1.0,
+                "n": 1
+              },
+              "information_usd": {
+                "point": 0.0,
+                "lo": 0.0,
+                "hi": 0.0,
+                "n": 1
+              },
+              "pairs": [
+                {
+                  "item_id": "gsm8k-0002",
+                  "depth1": 0.0,
+                  "depth2": 0.0,
+                  "direct": 0.0,
+                  "extra_usd": 6.405e-05,
+                  "extra_calls": 1,
+                  "information_usd": 0.0
+                }
+              ]
+            }
+          },
+          "next_candidate": "C4",
+          "c4": {
+            "not_evidence": true,
+            "fitting_status": "NOT_RUN",
+            "reason": "support check only; held-out policy experiment remains required",
+            "counterfactual": {
+              "status": "SUPPORTED",
+              "trajectories": 53,
+              "actions_with_support": 9
+            },
+            "served_projection": {
+              "status": "REFUSED",
+              "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - abstain: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - resample:groq-gpt-oss-20b:n=3,t=0.7: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - retrieve:min_score=0.2,top_k=4: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - self_check:groq-gpt-oss-20b: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - verify:groq-gpt-oss-20b:max_rounds=1: 0 executed outcome(s) in 2 feasible occasions (need >= 1)"
+            }
+          },
+          "limitations": [
+            "mock contrasts are harness diagnostics only",
+            "one stochastic execution per branch; no equal-cost policy comparison",
+            "response state and continuation mechanisms differ; no novelty demonstrated"
+          ]
+        },
+        "C4": {
+          "not_evidence": false,
+          "analysis_grade": true,
+          "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+          "status": "REFUSED",
+          "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - abstain: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - resample:groq-gpt-oss-20b:n=3,t=0.7: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - retrieve:min_score=0.2,top_k=4: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - self_check:groq-gpt-oss-20b: 0 executed outcome(s) in 2 feasible occasions (need >= 1)\n  - verify:groq-gpt-oss-20b:max_rounds=1: 0 executed outcome(s) in 2 feasible occasions (need >= 1)",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          },
+          "per_action": {
+            "abstain": {
+              "status": "REFUSED",
+              "reason": "served action support failed",
+              "ci95": {
+                "point": null,
+                "lo": null,
+                "hi": null,
+                "n": 0
+              }
+            },
+            "answer:groq-gpt-oss-20b:t=0.2": {
+              "status": "REFUSED",
+              "reason": "served action support failed",
+              "ci95": {
+                "point": null,
+                "lo": null,
+                "hi": null,
+                "n": 0
+              }
+            },
+            "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+              "status": "REFUSED",
+              "reason": "served action support failed",
+              "ci95": {
+                "point": null,
+                "lo": null,
+                "hi": null,
+                "n": 0
+              }
+            },
+            "retrieve:min_score=0.2,top_k=4": {
+              "status": "REFUSED",
+              "reason": "served action support failed",
+              "ci95": {
+                "point": null,
+                "lo": null,
+                "hi": null,
+                "n": 0
+              }
+            },
+            "self_check:groq-gpt-oss-20b": {
+              "status": "REFUSED",
+              "reason": "served action support failed",
+              "ci95": {
+                "point": null,
+                "lo": null,
+                "hi": null,
+                "n": 0
+              }
+            },
+            "stronger_model:groq-gpt-oss-120b": {
+              "status": "REFUSED",
+              "reason": "served action support failed",
+              "ci95": {
+                "point": null,
+                "lo": null,
+                "hi": null,
+                "n": 0
+              }
+            },
+            "verify:groq-gpt-oss-20b:max_rounds=1": {
+              "status": "REFUSED",
+              "reason": "served action support failed",
+              "ci95": {
+                "point": null,
+                "lo": null,
+                "hi": null,
+                "n": 0
+              }
+            }
+          },
+          "established": false,
+          "full_fits": {
+            "abstain": {
+              "status": "REFUSED_SPLIT_COVERAGE",
+              "counts": {
+                "train": 0,
+                "calib": 1,
+                "test": 1
+              }
+            },
+            "answer:groq-gpt-oss-20b:t=0.2": {
+              "status": "REFUSED_SPLIT_COVERAGE",
+              "counts": {
+                "train": 0,
+                "calib": 1,
+                "test": 1
+              }
+            },
+            "resample:groq-gpt-oss-20b:n=3,t=0.7": {
+              "status": "REFUSED_SPLIT_COVERAGE",
+              "counts": {
+                "train": 0,
+                "calib": 1,
+                "test": 1
+              }
+            },
+            "retrieve:min_score=0.2,top_k=4": {
+              "status": "REFUSED_SPLIT_COVERAGE",
+              "counts": {
+                "train": 0,
+                "calib": 1,
+                "test": 1
+              }
+            },
+            "self_check:groq-gpt-oss-20b": {
+              "status": "REFUSED_SPLIT_COVERAGE",
+              "counts": {
+                "train": 0,
+                "calib": 1,
+                "test": 1
+              }
+            },
+            "stronger_model:groq-gpt-oss-120b": {
+              "status": "REFUSED_SPLIT_COVERAGE",
+              "counts": {
+                "train": 0,
+                "calib": 1,
+                "test": 1
+              }
+            },
+            "verify:groq-gpt-oss-20b:max_rounds=1": {
+              "status": "REFUSED_SPLIT_COVERAGE",
+              "counts": {
+                "train": 0,
+                "calib": 1,
+                "test": 1
+              }
+            }
+          },
+          "served_fits": {},
+          "limitation": "legacy served trajectories cannot identify unchosen action values"
+        }
+      },
+      "wall_seconds": 62.01600000000326,
+      "wall_ci95": null,
+      "n_runs": 1,
+      "wall_ci_limitation": "one execution, not repeated performance trials",
+      "request_attempts": 37,
+      "real_tokens_in": 8170,
+      "real_tokens_out": 3943
+    }
+  ],
+  "listed_price_usd_total": 0.0026960999999999995,
+  "approved_cap_usd": 2,
+  "remaining_listed_cap_usd": 1.9973039,
+  "billed_api": "not invoice verified",
+  "full_run": "refused by unchanged conservative planning estimate",
+  "gate1": "NARROW provisional; Yin and Zhang unread",
+  "gate2": "INCONCLUSIVE on live smoke; full sample not collected",
+  "gate3": "unresolved",
+  "controller_built": false,
+  "performance_claim": false
+}

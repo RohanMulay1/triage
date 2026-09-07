@@ -1,0 +1,52 @@
+{
+  "planning_usd": 0.0,
+  "max_usd": 0.01,
+  "responses": [
+    {
+      "model": "nim-nemotron-nano-30b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-nano-3-30b-a3b",
+      "error": "HTTP 404: {\"status\":404,\"title\":\"Not Found\",\"detail\":\"Function '2b2dcd47-c858-425a-9c04-4cacf2eac993': Not found for account 'PrOnNICiD9oKMyLOcB7fTibBcJkpH73B0C2QgWweqHg'\"}",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "text": "",
+      "latency_ms": 598.7571000005119,
+      "raw": {},
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-nano-3-30b-a3b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          }
+        },
+        "supports_logprobs": false
+      }
+    },
+    {
+      "model": "nim-nemotron-super-120b",
+      "provider": "nvidia",
+      "provider_model": "nvidia/nemotron-3-super-120b-a12b",
+      "error": "HTTP 503: {\"error\":{\"message\":\"Service temporarily overloaded\",\"type\":\"Service Unavailable\",\"code\":503}}",
+      "tokens_in": 0,
+      "tokens_out": 0,
+      "text": "",
+      "latency_ms": 1128.9836000069045,
+      "raw": {},
+      "model_snapshot": {
+        "live_provider": "nvidia",
+        "live_model": "nvidia/nemotron-3-super-120b-a12b",
+        "cost_in": 0.0,
+        "cost_out": 0.0,
+        "request_options": {
+          "chat_template_kwargs": {
+            "enable_thinking": false
+          }
+        },
+        "supports_logprobs": false
+      }
+    }
+  ]
+}

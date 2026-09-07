@@ -1,0 +1,60 @@
+{
+  "run_id": "gate2-nvidia-smoke-20260908",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788807899.430684,
+  "group_count": 3,
+  "counts": {
+    "calib": 1,
+    "train": 2
+  },
+  "groups": {
+    "2fad0bc29818b897613b697d23f0d5ea6dd84998bbbabd224d5f1721f710b5fa": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "wendy wants to place 20 more than double the number of books"
+      },
+      "items": [
+        "gsm8k-0000"
+      ]
+    },
+    "589cfb0904f94fe606151d484473492c9918fd299d7ef52d9d79f6056842f645": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "in tate s garden pond there are 4 male guppies 7 female"
+      },
+      "items": [
+        "gsm8k-0001"
+      ]
+    },
+    "c0ec0adc9bf275580d7a4a51482bc3a0eade92e749856df7c74e6dc47e82389d": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "grace weighs 125 pounds alex weighs 2 pounds less than 4 times"
+      },
+      "items": [
+        "gsm8k-0002"
+      ]
+    }
+  }
+}

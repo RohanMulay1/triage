@@ -1,7 +1,7 @@
 """OpenAI-compatible chat-completions adapter (NVIDIA NIM + Groq).
 
 NVIDIA NIM's `integrate.api.nvidia.com/v1` and Groq's `api.groq.com/openai/v1`
-both speak the OpenAI /chat/completions dialect, including `logprobs`.
+both speak the OpenAI /chat/completions dialect; capabilities vary by provider.
 """
 from __future__ import annotations
 
@@ -36,10 +36,12 @@ class OpenAICompatAdapter(ProviderAdapter):
                 return user_key
         return self.api_key
 
-    def __init__(self, name: str, api_key: str, base_url: str, supports_logprobs: bool = True) -> None:
+    def __init__(self, name: str, api_key: str, base_url: str, supports_logprobs: bool = True,
+                 request_options: dict | None = None) -> None:
         super().__init__(api_key, base_url)
         self.name = name
         self.supports_logprobs = supports_logprobs
+        self.request_options = request_options or {}
 
     async def generate(
         self,
@@ -55,6 +57,14 @@ class OpenAICompatAdapter(ProviderAdapter):
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+        # Explicit model settings, snapshotted by research manifests. Never let
+        # extension fields replace the prompt, identity, or completion cap.
+        allowed = {"chat_template_kwargs", "reasoning_effort", "stream"}
+        if self.request_options.keys() - allowed:
+            raise ValueError("unsupported model request option")
+        if self.request_options.get("stream", False) is not False:
+            raise ValueError("this adapter requires non-streaming responses")
+        payload.update(self.request_options)
         # gpt-5-family reasoning burns the whole completion budget thinking and
         # returns empty content at chat-sized max_tokens; keep effort low so the
         # budget goes to the visible answer.

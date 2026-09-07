@@ -1,0 +1,60 @@
+{
+  "run_id": "gate2-groq-smoke-20260908",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788808092.8496182,
+  "group_count": 3,
+  "counts": {
+    "test": 1,
+    "calib": 2
+  },
+  "groups": {
+    "8d580d669c7b2fcc5377a9688e47296bdd90526797f05b9906156ae8af75c720": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "groq-gpt-oss-20b->groq-gpt-oss-120b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "carl s favorite food is cheese he ate a sandwich every day"
+      },
+      "items": [
+        "gsm8k-0000"
+      ]
+    },
+    "efdddb5c86c927e7792ddaee408bcdfcc20733b846a59603ae24b672a6c1c73a": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "groq-gpt-oss-20b->groq-gpt-oss-120b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "alex is getting ready to attend an event that she has hosted"
+      },
+      "items": [
+        "gsm8k-0001"
+      ]
+    },
+    "dadc8099400a448e3462066384cf056d71e6a27cd19240862849ed8336d1864f": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "groq-gpt-oss-20b->groq-gpt-oss-120b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "hunter counted 50 cars packed in their school parking lot when entering"
+      },
+      "items": [
+        "gsm8k-0002"
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "run_id": "gate2-groq-smoke-json-20260908",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788808250.6638145,
+  "group_count": 3,
+  "counts": {
+    "calib": 2,
+    "test": 1
+  },
+  "groups": {
+    "0b5af4a392acc5a69e89ed757430c77025246415047787e8bf4409ce80265e01": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "groq-gpt-oss-20b->groq-gpt-oss-120b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "on thursday joe caught 3 pounds of crawfish he caught 4 times"
+      },
+      "items": [
+        "gsm8k-0000"
+      ]
+    },
+    "bd65885d3a650a76a88c6de17f0474cc191b04b0796fb5e8f7b692e3045f1bfd": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "groq-gpt-oss-20b->groq-gpt-oss-120b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "andrew bakes 200 mini cinnamon rolls and 300 mini blueberry muffins a"
+      },
+      "items": [
+        "gsm8k-0001"
+      ]
+    },
+    "eed10a92160b303fe09c07fa6b5c23698b2f3c2d49f02b0b7f19d834f870012b": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "groq-gpt-oss-20b->groq-gpt-oss-120b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "nick is choosing between two jobs job a pays 15 an hour"
+      },
+      "items": [
+        "gsm8k-0002"
+      ]
+    }
+  }
+}

@@ -16,7 +16,78 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-08, Checkpoint 9; requested live lane retired)
+### Current state (2026-09-08, Checkpoint 10: usable live fallback)
+
+NVIDIA and Groq credentials are configured locally and excluded from Git.
+NVIDIA Lightning and Ultra both generated real responses, but the depth-2 smoke
+hit Ultra HTTP 503 failures and is non-analysis-grade. The repaired Groq fallback
+smoke is analysis-grade, with Gate 2 **INCONCLUSIVE** at this sample size.
+No scientific negative or positive result follows. Gate 1 stays provisionally
+NARROW with Yin & Zhang unread; C1/calibration/C4 lack adequate fitted support,
+C2 remains unresolved, Gate 3 is unestablished, and no controller was built.
+
+**Checkpoint 10 ? documentation-driven provider recovery (complete).**
+
+- Reviewed the relevant NVIDIA hosted text-generation, request-format, reasoning
+  and model documentation plus Groq compatibility, deprecations, pricing and rate
+  limits. Source links, failed access paths and conclusions are in
+  `docs/research/checkpoint10/provider-notes.md`. This does not claim exhaustive
+  coverage of unrelated NVIDIA developer products.
+- Fixed Groq's unsupported logprob flag. Added explicit research-only model IDs,
+  bounded request options and snapshot provenance, preserving historical model
+  identities and the legacy router default. Set NVIDIA non-streaming and
+  reasoning options explicitly; Groq uses low reasoning effort. Keys were never
+  committed. Fallback is a new explicitly identified run, not a hidden provider
+  substitution during collection.
+- Preserved failed catalog-alias, retired canonical-model and overloaded NVIDIA
+  endpoint probes. Current Lightning/Ultra and Groq GPT-OSS probes produced real
+  completions. NVIDIA smoke `gate2-nvidia-smoke-20260908` has three items and
+  three synthetic-fallback trajectories caused by Ultra 503s; validation refuses
+  analysis-grade status. Connectivity is repaired; NVIDIA service availability
+  is not under this repository's control.
+- Groq smoke `gate2-groq-smoke-20260908` exposed fenced score JSON, which version
+  1 correctly refused. Comparator version 2 now accepts a whole JSON fence while
+  retaining strict malformed, missing-key and finite-range refusals. Scores and
+  prompts are not repaired or defaulted. The version-1 run remains immutable.
+- Fresh `gate2-groq-smoke-json-20260908` completed on Groq with intact chains,
+  conserved costs, zero validation errors and `analysis_grade=true`. Of three
+  items, two reached complete fan-out; the other had an empty initial completion.
+  There is no fitted calibration map and insufficient train/calib/test evidence.
+  Gate 2 is INCONCLUSIVE; the C2_NOT_ESTABLISHED smoke status is insufficient
+  evidence, not refutation of C2. C1/C4 refuse. No performance claim is supported.
+- Validation: **318 tests pass**, pyflakes clean, including provider payload,
+  protected budget/model fields, JSON-envelope refusals, out-of-range fenced
+  scores, and legacy-router equivalence. All old fixtures and `data/*.json`
+  receipts are unchanged. New logs, raw probe responses, traces and consolidated
+  reports are preserved under fresh IDs; `checkpoint10/result.json` records the
+  complete validation and accounting.
+- Total observed listed-price spend across these probes and smokes is
+  **$0.0026961** (token accounting, not an invoice or statistical estimate),
+  within the approved $2 cap. NVIDIA trial pricing remains recorded as zero.
+  The full 120-item Groq command refused before creating a run or generating:
+  its unchanged conservative planning envelope is about $29.33, exceeding the
+  remaining cap. That is an admission bound, not a forecast of realized spend;
+  it was not weakened to force a live run. Wall-clock samples are single
+  executions with no repeat-run CIs; they are not model performance estimates.
+- Limits: GSM8K only; changed model family/size and reasoning settings; no
+  verified logprob signal on the new pairs; small and incomplete outcome sample;
+  asymmetric provider availability; no invoice verification. A larger escalation
+  target does not itself establish a quality gap. An adequate, prespecified
+  held-out experiment and justified budget admission remain necessary.
+- Remaining: recover a stable all-NVIDIA lane or justify a tighter conservative
+  Groq planning bound (or obtain a larger cap) before the full sample. Do not
+  bypass support, calibration sample-size, spending, or provenance gates.
+
+**One exact next command** (re-read the preserved live-smoke analysis):
+
+```powershell
+python -m app.trace.analysis --run gate2-groq-smoke-json-20260908
+```
+
+The following Checkpoint 9 state is retained as historical evidence and is
+superseded by Checkpoint 10 above.
+
+### Historical state (2026-09-08, Checkpoint 9; requested live lane retired)
 
 | | |
 |---|---|

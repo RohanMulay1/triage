@@ -88,6 +88,10 @@ def model_snapshot() -> dict[str, Any]:
             "cost_in": m.get("cost_in", 0.0),
             "cost_out": m.get("cost_out", 0.0),
         }
+        if "request_options" in m:
+            snap[m["id"]]["request_options"] = m["request_options"]
+        if "supports_logprobs" in m:
+            snap[m["id"]]["supports_logprobs"] = m["supports_logprobs"]
     return snap
 
 
