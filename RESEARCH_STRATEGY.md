@@ -16,12 +16,12 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-07, Checkpoint 7 complete)
+### Current state (2026-09-07, Checkpoint 8 complete; live boundary)
 
 | | |
 |---|---|
-| **Checkpoints complete** | 0–5 as recorded below; 6 repairs complete; 7 comparator and mock C2/C4 diagnostics complete |
-| **Tests** | 272 passing (`python -m pytest -q`); see Checkpoint 7 validation |
+| **Checkpoints complete** | 0–5 as recorded below; 6 repairs complete; 7 complete; 8 assembled pipeline verified, live deferred |
+| **Tests** | 294 passing (`python -m pytest -q`); includes cold-start assembled pipeline |
 | **Trace schema** | 1.3.0; reads 1.0.0, 1.1.0 and 1.2.0 |
 | **Gate 1 (novelty)** | **NARROW: investigate deltas against readable bases**; candidates unproven; Yin & Zhang is a disclosed risk, not a gate |
 | **Gate 2 (signal)** | **REFUSED on mock input** by repaired gates; historical pilot was INCONCLUSIVE |
@@ -29,11 +29,13 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | **Total spend to date** | **$0.** Every run has been on the mock provider |
 | **Paper status** | no claim is supported; comparator behavior policy implemented; no learned or production controller |
 
-**What is true right now.** The heuristic-gain comparator and fixed-continuation
-C2 ablation are implemented. The ordinary mock scorer refuses malformed JSON;
-scripted tests cover successful selection. C2's mock paired intervals include
-zero, so C2 is not established and the program moves to C4. Both new runs validate
-structurally and remain non-analysis-grade. See Checkpoint 7 below.
+**What is true right now.** The single-command pipeline now collects a balanced
+fan-out with budgeted heuristic scoring, validates, checks support, attempts
+calibrated analysis and C1/C2/C4, and writes a consolidated report. An explicit
+seeded diagnostic provider exercises comparator selections through its real client.
+The final cold-start test passes. No live cap was supplied: the live phase did not
+run. Calibration/C1 and C4 numerical comparisons refuse on the small mock fixture;
+C2 remains unresolved on real data, not refuted by its mock null.
 
 **What is not true.** No real-model repairability or candidate contribution has
 been established. The prompt-only comparison was retracted in `7479ff2`. Several
@@ -42,20 +44,20 @@ provider. The [current strategy](docs/research/novelty-delta-strategy.md) treats
 C1–C4 as falsifiable changes to readable prior work. An unread related paper is
 an overlap risk to disclose; it no longer prevents progressing through repairs.
 
-**Things blocking progress, in order.**
+**Live boundary and remaining scientific blocks.**
 
-1. **Repairs D1-D11.** The committed [defect spec](docs/research/pre-live-defect-spec.md)
-   is authoritative. All eleven repairs and fresh mock validation are complete. No live collection is authorized.
-2. **C4 protocol experiment.** Comparator implementation and C2 mock diagnostics
-   are complete. The served-projection support refusal is a diagnostic, not a
-   fitted-policy result; design a supported held-out artifact evaluation next.
-3. **Explicit finite live budget approval** after the preceding work. No budget
-   is approved; admission estimates are not invoice guarantees.
+1. No finite dollar cap was supplied. A real provider and an operator-approved cap
+   are required. The full-run planning estimate must fit that cap before any call.
+2. The mock fixture has too few train/calib/test rows to fit calibration maps;
+   served TOOL outcomes also lack support. Numeric C1/C4 intervals are unavailable,
+   not zero. Larger supported data and held-out replication are required.
+3. Gate 1 remains provisionally NARROW with unread Yin & Zhang disclosed. Gate 2,
+   C2 on real data, and Gate 3 remain unresolved. No learned controller is justified.
 
-**Single next command** (reproduce C2 and C4 diagnostics):
+**Single next command** (replace `<CAP>` only with the operator-approved value):
 
 ```
-python -m app.trace.information_value --run checkpoint7-c2-mock --diagnostic-mock --continuation verify
+python scripts/run_gate2.py --n 120 --dataset gsm8k --depth 2 --policy balanced --live --max-usd <CAP> --run-id gate2-live-20260907
 ```
 
 The committed defect spec is now available. Manuscript access can continue
@@ -322,6 +324,69 @@ the Checkpoint 5 access work and are recorded here rather than edited away.
 - **Remaining:** design C4's supported, held-out protocol experiment and comparator
   fidelity evaluation. No paid calls were made; no live budget is approved.
 - **Exact next command:** `python -m app.trace.information_value --run checkpoint7-c2-mock --diagnostic-mock --continuation verify`.
+
+**Checkpoint 8 - assembled pipeline, single final verification, live boundary.**
+
+Live phase did not run: no finite positive dollar cap was supplied. The exact
+operator command, after supplying the approved value, is:
+`python scripts/run_gate2.py --n 120 --dataset gsm8k --depth 2 --policy balanced --live --max-usd <CAP> --run-id gate2-live-20260907`.
+
+- **Built:** an explicitly selected seeded diagnostic scoring provider, forbidden
+  live, now exercises the heuristic comparator through LLMClient. Eight mock
+  items have actual comparator choices and per-action utilities in rationale.
+  Malformed, missing, nonfinite and now out-of-range scores refuse rather than
+  clipping/defaulting. This is a deliberate stricter adaptation of the source.
+- **Calibration:** per-action ridge gain fits use train, isotonic maps use calib,
+  and ECE/reliability bins use test. Maps, coefficients, role IDs and intervals
+  serialize in `calibration.json` when estimable. ECE uses normalized marginal
+  quality gain (delta+1)/2, not correctness probability. Tests show different ECE
+  before and after calibration on the same held-out synthetic numeric fixture.
+  Empty splits, leakage and no train variation refuse. Gate 2 carries a calibration
+  block, even when evidence gates refuse the run.
+- **C1/C4:** C1 changes only gain in recorded utility scores. C4 fits the same
+  calibrated estimator on chosen-treatment and counterfactual data, comparing
+  paired action values, rankings, choices and quality on common held-out items.
+  Its served source is a matched projection, not a claim that the legacy router's
+  multi-step terminal labels identify individual interventions. Both entry points
+  enforce support and provenance. Unsupported values are never imputed.
+- **One pipeline:** `scripts/run_gate2.py` collects balanced depth-2 fan-out plus
+  budgeted scoring, freezes the seed corpus, validates, computes support/positivity/
+  missingness, calls the refusal gate, runs calibration and all three ablations,
+  and writes `report.json` with the raw run artifacts. Model fitting and analysis
+  are local and add no provider calls. The planning estimate prints before
+  generation and refuses above the cap; per-action admission still uses the same
+  run-wide accumulator. Estimation is conservative, not an invoice guarantee.
+- **Final evidence:** `checkpoint8-comparator-mock` and `checkpoint8-pipeline-mock`
+  are fresh immutable runs. Both validate with intact chains, conserved costs,
+  zero errors and analysis_grade=false. The consolidated run records 144 mock
+  calls and zero dollars. Test/log counts are structural facts, not effect claims.
+  Verification logs and artifact checks are in `docs/research/checkpoint8/`.
+  One final full suite: **294 passed**; full-tree pyflakes clean. The cold-start
+  end-to-end test checks the assembled pipeline, interval/refusal consistency,
+  fixture/receipt hashes, and legacy-router equivalence. No prior artifact changed.
+- **Observed limitations:** the eight-item consolidated fixture has train=5,
+  calib=2, test=1, so **no calibration model can be fit on this run**. C1 refuses;
+  C4 refuses because the served projection never observes TOOL. Their CI fields
+  have null endpoints and n=0: the requested numerical disagreement is not
+  identifiable from these data. Neither is an empirical negative result.
+  Implemented head-to-head calculations are additionally tested on supported
+  controlled numeric fixtures, which are not evidence about real models.
+- **C2:** each information action's mock paired depth contrast is 0.000,
+  95% CI [0.000, 0.000], n=8; matched continuation contrasts also equal 0.000,
+  95% CI [0.000, 0.000], n=8 each. Intervals include zero. This tests machinery;
+  C2 is **unresolved on real data**, not retired or refuted.
+- **Scientific status:** Gate 1 provisionally NARROW; Yin & Zhang remains an
+  unread disclosed limitation. Gate 2 refuses synthetic evidence and is undecided
+  on real data. C1/C4 unestablished; Gate 3 unresolved; no learned/production
+  controller added. Quality contrasts do not establish equal-budget superiority.
+  No performance or novelty claim is supported. The README now states this status
+  and preserves the charter's text/API/black-box scope.
+- **Remaining:** supply a finite live cap and real provider configuration; collect
+  adequately supported train/calib/test data, then decide Gate 2 and re-test C2.
+  The 120-item command may still be too small for per-action served calibration.
+  Add a controlled non-maths domain only within an approved shared budget; no
+  two-domain or sequential robustness result exists. Confidence intervals condition
+  on fitted models/maps and do not include their training uncertainty.
 
 ## Executive research thesis
 

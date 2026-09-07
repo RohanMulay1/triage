@@ -1,0 +1,2 @@
+Preflight estimate (before any generation): {"listed_price_planning_usd": 11.832840000000001, "admission_estimate_usd": 0.0, "max_calls": 144, "n_items": 8, "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call", "not_invoice_guarantee": true}
+{"run_id": "checkpoint8-pipeline-mock", "gate2": "REFUSED", "analysis_grade": false, "report": "report.json"}

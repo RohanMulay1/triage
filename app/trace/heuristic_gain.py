@@ -22,13 +22,14 @@ class HeuristicGainPolicy:
     policy_version = "1"
 
     def __init__(self, lambda_cost=0.3, lambda_uncertainty=0.2,
-                 lambda_redundancy=0.2, max_steps=3):
+                 lambda_redundancy=0.2, max_steps=3, diagnostic_seed=None):
         self.weights = [lambda_cost, lambda_uncertainty, lambda_redundancy]
         if any(not math.isfinite(x) or x < 0 for x in self.weights):
             raise ValueError("utility weights must be finite and nonnegative")
         if not isinstance(max_steps, int) or isinstance(max_steps, bool) or max_steps <= 0:
             raise ValueError("max_steps must be a positive integer")
         self.max_steps = max_steps
+        self.diagnostic_seed = diagnostic_seed
         self._prepared = None
 
     def _request(self, ctx, executor, taken):
@@ -52,6 +53,8 @@ class HeuristicGainPolicy:
         gets a default gain; actual reported cost remains visible on failure.
         """
         self._prepared = None
+        if self.diagnostic_seed is not None and not get_settings().force_mock:
+            raise ValueError("diagnostic scores require forced mock; forbidden live")
         actions, system, prompt = self._request(ctx, executor, taken)
         action = Action(kind=ActionKind.SELF_CHECK, model_id=ctx.small_id,
                         params={"purpose": "heuristic_gain_scoring", "version": 1})
@@ -60,6 +63,12 @@ class HeuristicGainPolicy:
         estimate_action = Action(kind=ActionKind.ANSWER, model_id=ctx.small_id)
         budget.admit(estimate_action_cost(estimate_action, estimate_ctx, budget.model_prices))
         client = LLMClient(ctx.small_id)
+        if self.diagnostic_seed is not None:
+            from types import SimpleNamespace
+            from ..providers.diagnostic_scoring import DiagnosticScoringProvider
+            provider = DiagnosticScoringProvider(self.diagnostic_seed)
+            client.registry = SimpleNamespace(resolve=lambda model: (provider, model, "mock"),
+                                              mock=provider)
         before = snapshot_cost(client)
         payload, error, latency = None, None, 0.0
         raw_text = None
@@ -82,8 +91,8 @@ class HeuristicGainPolicy:
             for a in actions:
                 values = [payload[a.key][k] for k in ("expected_gain", "uncertainty")]
                 if any(isinstance(v, bool) or not isinstance(v, (int, float))
-                       or not math.isfinite(v) for v in values):
-                    raise ValueError("nonfinite or nonnumeric self-estimate")
+                       or not math.isfinite(v) or not 0 <= v <= 1 for v in values):
+                    raise ValueError("nonfinite, out-of-range or nonnumeric self-estimate")
                 scores[a.key] = [min(1.0, max(0.0, v)) for v in values]
             self._prepared = (prompt, scores)
         except Exception as exc:

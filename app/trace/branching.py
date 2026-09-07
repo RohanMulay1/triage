@@ -200,6 +200,7 @@ async def collect_fanout(
     budget: Optional[Budget | RunBudget] = None,
     prompt_features: Optional[dict] = None,
     depth: int = 1,
+    scoring_policy=None,
 ) -> list[Trajectory]:
     """One shared ANSWER prefix, then every available action once from that state.
 
@@ -239,14 +240,18 @@ async def collect_fanout(
                     exploration_seed=seed)
     # Policy scoring is a paid assessment, recorded once in the shared prefix.
     # Failure leaves an unlabelled prefix and cannot designate a served branch.
-    if result.status == OutcomeStatus.CHOSEN and hasattr(served_policy, "prepare"):
+    assessor = scoring_policy or served_policy
+    if result.status == OutcomeStatus.CHOSEN and hasattr(assessor, "prepare"):
         try:
-            scoring_action, scoring = await served_policy.prepare(
+            scoring_action, scoring = await assessor.prepare(
                 result.next_context(ctx), executor, [answer.key], run_budget)
         except BudgetExceeded as exc:
             exc.trajectories = [prefix.build(status="prefix", abstained=False, label=None,
                                             label_source=None, budget=run_budget.state)]
             raise
+        if scoring.status == OutcomeStatus.CHOSEN:
+            evaluation = assessor.choose(result.next_context(ctx), executor, [answer.key], rng)
+            scoring.detail["utility_choice"] = evaluation.rationale
         s1 = prefix.add(scoring_action, scoring, feasible=[scoring_action], propensity=1.0,
                         status=scoring.status, rationale={"forced": True, "policy_overhead": True},
                         exploration_seed=seed)

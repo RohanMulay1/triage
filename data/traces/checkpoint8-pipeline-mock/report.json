@@ -1,0 +1,1264 @@
+{
+  "run_id": "checkpoint8-pipeline-mock",
+  "analysis_grade": false,
+  "not_evidence": true,
+  "validation": {
+    "run_id": "checkpoint8-pipeline-mock",
+    "schema_version": "1.3.0",
+    "trajectories": 208,
+    "manifest_present": true,
+    "force_mock": true,
+    "synthetic_trajectories": 120,
+    "cost_conservation_ok": true,
+    "chain_ok": true,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "support": {
+    "trajectories": 208,
+    "decisions": 344,
+    "behavior_policies": {
+      "fanout_prefix": 16,
+      "balanced_exploration": 130,
+      "exhaustive_depth2": 198
+    },
+    "feasible_set_definitions": [
+      "executor_v1"
+    ],
+    "per_action": {
+      "abstain": {
+        "n_feasible": 66,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 0.1212,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 7,
+          "chosen": 1
+        },
+        "provider_counts": {
+          "none": 8
+        },
+        "synthetic_outcomes": 0
+      },
+      "answer:llama-3.1-8b:t=0.2": {
+        "n_feasible": 176,
+        "n_taken": 40,
+        "n_observed": 40,
+        "coverage": 0.2273,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 40.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 9,
+          "counterfactual": 31
+        },
+        "provider_counts": {
+          "mock": 40
+        },
+        "synthetic_outcomes": 40
+      },
+      "resample:llama-3.1-8b:n=3,t=0.7": {
+        "n_feasible": 66,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 0.1212,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 7,
+          "chosen": 1
+        },
+        "provider_counts": {
+          "mock": 8
+        },
+        "synthetic_outcomes": 8
+      },
+      "retrieve:min_score=0.2,top_k=4": {
+        "n_feasible": 66,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 0.1212,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 7,
+          "chosen": 1
+        },
+        "provider_counts": {
+          "retrieval": 8
+        },
+        "synthetic_outcomes": 0
+      },
+      "self_check:llama-3.1-8b": {
+        "n_feasible": 66,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 0.1212,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 7,
+          "chosen": 1
+        },
+        "provider_counts": {
+          "mock": 8
+        },
+        "synthetic_outcomes": 8
+      },
+      "self_check:llama-3.1-8b:purpose=\"heuristic_gain_scoring\",version=1": {
+        "n_feasible": 8,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 1.0,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 8
+        },
+        "provider_counts": {
+          "mock": 8
+        },
+        "synthetic_outcomes": 8
+      },
+      "specialist_model": {
+        "n_feasible": 0,
+        "n_taken": 0,
+        "n_observed": 0,
+        "coverage": 0.0,
+        "min_propensity": null,
+        "mean_propensity": null,
+        "effective_sample_size": 0.0,
+        "ess_ratio": 0.0,
+        "status_counts": {
+          "unavailable": 8
+        },
+        "provider_counts": {
+          "none": 8
+        },
+        "synthetic_outcomes": 0
+      },
+      "stop": {
+        "n_feasible": 296,
+        "n_taken": 160,
+        "n_observed": 160,
+        "coverage": 0.5405,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 160.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 153,
+          "chosen": 7
+        },
+        "provider_counts": {
+          "none": 160
+        },
+        "synthetic_outcomes": 0
+      },
+      "stronger_model:gpt-4o": {
+        "n_feasible": 168,
+        "n_taken": 32,
+        "n_observed": 32,
+        "coverage": 0.1905,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 32.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 31,
+          "chosen": 1
+        },
+        "provider_counts": {
+          "mock": 32
+        },
+        "synthetic_outcomes": 32
+      },
+      "tool:name=\"calculator\"": {
+        "n_feasible": 48,
+        "n_taken": 8,
+        "n_observed": 8,
+        "coverage": 0.1667,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 8.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "counterfactual": 8,
+          "unavailable": 24
+        },
+        "provider_counts": {
+          "tool": 8,
+          "none": 24
+        },
+        "synthetic_outcomes": 0
+      },
+      "verify:llama-3.1-8b:max_rounds=1": {
+        "n_feasible": 168,
+        "n_taken": 32,
+        "n_observed": 32,
+        "coverage": 0.1905,
+        "min_propensity": 1.0,
+        "mean_propensity": 1.0,
+        "effective_sample_size": 32.0,
+        "ess_ratio": 1.0,
+        "status_counts": {
+          "chosen": 1,
+          "counterfactual": 31
+        },
+        "provider_counts": {
+          "mock": 32
+        },
+        "synthetic_outcomes": 32
+      }
+    },
+    "unsupported_actions": [],
+    "actions_with_support": 10,
+    "off_policy_ready": true,
+    "mixed_feasible_set_definitions": false
+  },
+  "positivity": [
+    "answer:llama-3.1-8b:t=0.2: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour",
+    "resample:llama-3.1-8b:n=3,t=0.7: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour",
+    "self_check:llama-3.1-8b: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour",
+    "self_check:llama-3.1-8b:purpose=\"heuristic_gain_scoring\",version=1: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour",
+    "stronger_model:gpt-4o: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour",
+    "verify:llama-3.1-8b:max_rounds=1: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour"
+  ],
+  "missingness": {
+    "chosen": 30,
+    "counterfactual": 282,
+    "unchosen": 0,
+    "attempted": 0,
+    "unavailable": 32,
+    "failed": 0,
+    "synthetic_fallback": 0
+  },
+  "evidence_support": {
+    "status": "REFUSED",
+    "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - answer:llama-3.1-8b:t=0.2: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - resample:llama-3.1-8b:n=3,t=0.7: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - self_check:llama-3.1-8b: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - self_check:llama-3.1-8b:purpose=\"heuristic_gain_scoring\",version=1: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - stronger_model:gpt-4o: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - verify:llama-3.1-8b:max_rounds=1: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour"
+  },
+  "preflight": {
+    "listed_price_planning_usd": 11.832840000000001,
+    "admission_estimate_usd": 0.0,
+    "max_calls": 144,
+    "n_items": 8,
+    "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call",
+    "not_invoice_guarantee": true
+  },
+  "budget": {
+    "max_usd": null,
+    "max_llm_calls": null,
+    "max_wall_ms": null,
+    "max_compute_units": null,
+    "max_escalations": null,
+    "spent_usd": 0.0,
+    "spent_llm_calls": 144,
+    "spent_wall_ms": 0.0,
+    "spent_compute_units": 41634.0,
+    "escalations_used": 0
+  },
+  "collection_stopped": null,
+  "gate2": {
+    "run_id": "checkpoint8-pipeline-mock",
+    "analysis_grade": false,
+    "not_evidence": true,
+    "validation": {
+      "run_id": "checkpoint8-pipeline-mock",
+      "schema_version": "1.3.0",
+      "trajectories": 208,
+      "manifest_present": true,
+      "force_mock": true,
+      "synthetic_trajectories": 120,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": false,
+      "errors": []
+    },
+    "support_thresholds": {
+      "min_coverage": 0.0,
+      "min_observations": 1,
+      "min_propensity": 0.001,
+      "min_ess_ratio": 0.1,
+      "allow_synthetic": false
+    },
+    "calibration": {
+      "analysis_grade": false,
+      "not_evidence": true,
+      "status": "COMPLETE",
+      "n_fitted": 0,
+      "target": "normalized marginal quality gain (delta+1)/2",
+      "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+      "per_action": {
+        "abstain": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "answer:llama-3.1-8b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "resample:llama-3.1-8b:n=3,t=0.7": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "resample:llama-3.1-8b:n=3,t=0.7 -> answer:llama-3.1-8b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "resample:llama-3.1-8b:n=3,t=0.7 -> stronger_model:gpt-4o": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "resample:llama-3.1-8b:n=3,t=0.7 -> tool:name=\"calculator\"": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 2,
+            "calib": 0,
+            "test": 0
+          }
+        },
+        "resample:llama-3.1-8b:n=3,t=0.7 -> verify:llama-3.1-8b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4 -> answer:llama-3.1-8b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4 -> stronger_model:gpt-4o": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4 -> tool:name=\"calculator\"": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 2,
+            "calib": 0,
+            "test": 0
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4 -> verify:llama-3.1-8b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "self_check:llama-3.1-8b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "self_check:llama-3.1-8b -> answer:llama-3.1-8b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "self_check:llama-3.1-8b -> stronger_model:gpt-4o": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "self_check:llama-3.1-8b -> tool:name=\"calculator\"": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 2,
+            "calib": 0,
+            "test": 0
+          }
+        },
+        "self_check:llama-3.1-8b -> verify:llama-3.1-8b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "stronger_model:gpt-4o": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "tool:name=\"calculator\"": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 2,
+            "calib": 0,
+            "test": 0
+          }
+        },
+        "verify:llama-3.1-8b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        }
+      }
+    },
+    "verdict": "REFUSED",
+    "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - answer:llama-3.1-8b:t=0.2: 40 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - resample:llama-3.1-8b:n=3,t=0.7: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - self_check:llama-3.1-8b: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - self_check:llama-3.1-8b:purpose=\"heuristic_gain_scoring\",version=1: 8 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - stronger_model:gpt-4o: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour\n  - verify:llama-3.1-8b:max_rounds=1: 32 mock-provider outcome(s); synthetic text is not evidence about model behaviour"
+  },
+  "calibration": {
+    "analysis_grade": false,
+    "not_evidence": true,
+    "status": "COMPLETE",
+    "n_fitted": 0,
+    "target": "normalized marginal quality gain (delta+1)/2",
+    "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+    "per_action": {
+      "abstain": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "answer:llama-3.1-8b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "resample:llama-3.1-8b:n=3,t=0.7": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "resample:llama-3.1-8b:n=3,t=0.7 -> answer:llama-3.1-8b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "resample:llama-3.1-8b:n=3,t=0.7 -> stronger_model:gpt-4o": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "resample:llama-3.1-8b:n=3,t=0.7 -> tool:name=\"calculator\"": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 2,
+          "calib": 0,
+          "test": 0
+        }
+      },
+      "resample:llama-3.1-8b:n=3,t=0.7 -> verify:llama-3.1-8b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4 -> answer:llama-3.1-8b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4 -> stronger_model:gpt-4o": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4 -> tool:name=\"calculator\"": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 2,
+          "calib": 0,
+          "test": 0
+        }
+      },
+      "retrieve:min_score=0.2,top_k=4 -> verify:llama-3.1-8b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "self_check:llama-3.1-8b": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "self_check:llama-3.1-8b -> answer:llama-3.1-8b:t=0.2": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "self_check:llama-3.1-8b -> stronger_model:gpt-4o": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "self_check:llama-3.1-8b -> tool:name=\"calculator\"": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 2,
+          "calib": 0,
+          "test": 0
+        }
+      },
+      "self_check:llama-3.1-8b -> verify:llama-3.1-8b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "stronger_model:gpt-4o": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      },
+      "tool:name=\"calculator\"": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 2,
+          "calib": 0,
+          "test": 0
+        }
+      },
+      "verify:llama-3.1-8b:max_rounds=1": {
+        "status": "REFUSED_SPLIT_COVERAGE",
+        "counts": {
+          "train": 5,
+          "calib": 2,
+          "test": 1
+        }
+      }
+    }
+  },
+  "ablations": {
+    "C1": {
+      "not_evidence": true,
+      "established": false,
+      "design": "replace only gain; fixed recorded penalties and common feasible set",
+      "status": "REFUSED",
+      "reason": "gain estimator refused for feasible action",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      },
+      "n_complete": 0
+    },
+    "C2": {
+      "run_id": "checkpoint8-pipeline-mock",
+      "analysis_grade": false,
+      "not_evidence": true,
+      "validation": {
+        "run_id": "checkpoint8-pipeline-mock",
+        "schema_version": "1.3.0",
+        "trajectories": 208,
+        "manifest_present": true,
+        "force_mock": true,
+        "synthetic_trajectories": 120,
+        "cost_conservation_ok": true,
+        "chain_ok": true,
+        "analysis_grade": false,
+        "errors": []
+      },
+      "continuation": "verify",
+      "continuation_selection": "fixed_not_oracle",
+      "estimand": "quality_only; costs reported separately, not equal-budget superiority",
+      "support_thresholds": {
+        "min_coverage": 0.0,
+        "min_observations": 1,
+        "min_propensity": 0.001,
+        "min_ess_ratio": 0.1,
+        "allow_synthetic": true
+      },
+      "verdict": "C2_NOT_ESTABLISHED",
+      "per_action": {
+        "resample": {
+          "status": "DIAGNOSTIC",
+          "not_evidence": true,
+          "n": 8,
+          "depth1": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "depth2": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "paired_depth2_minus_depth1_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "matched_information_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "matched_selection_interval": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "extra_continuation_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "extra_continuation_calls": {
+            "point": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "n": 8
+          },
+          "information_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "pairs": [
+            {
+              "item_id": "mixed-0000",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0001",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0002",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0003",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0004",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0005",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0006",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0007",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            }
+          ]
+        },
+        "self_check": {
+          "status": "DIAGNOSTIC",
+          "not_evidence": true,
+          "n": 8,
+          "depth1": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "depth2": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "paired_depth2_minus_depth1_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "matched_information_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "matched_selection_interval": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "extra_continuation_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "extra_continuation_calls": {
+            "point": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "n": 8
+          },
+          "information_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "pairs": [
+            {
+              "item_id": "mixed-0000",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0001",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0002",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0003",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0004",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0005",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0006",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0007",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            }
+          ]
+        },
+        "retrieve": {
+          "status": "DIAGNOSTIC",
+          "not_evidence": true,
+          "n": 8,
+          "depth1": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "depth2": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "paired_depth2_minus_depth1_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "matched_information_ci95": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "matched_selection_interval": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8,
+            "excludes_zero": false
+          },
+          "extra_continuation_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "extra_continuation_calls": {
+            "point": 1.0,
+            "lo": 1.0,
+            "hi": 1.0,
+            "n": 8
+          },
+          "information_usd": {
+            "point": 0.0,
+            "lo": 0.0,
+            "hi": 0.0,
+            "n": 8
+          },
+          "pairs": [
+            {
+              "item_id": "mixed-0000",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0001",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0002",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0003",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0004",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0005",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0006",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            },
+            {
+              "item_id": "mixed-0007",
+              "depth1": 0.0,
+              "depth2": 0.0,
+              "direct": 0.0,
+              "extra_usd": 0.0,
+              "extra_calls": 1,
+              "information_usd": 0.0
+            }
+          ]
+        }
+      },
+      "next_candidate": "C4",
+      "c4": {
+        "not_evidence": true,
+        "fitting_status": "NOT_RUN",
+        "reason": "support check only; held-out policy experiment remains required",
+        "counterfactual": {
+          "status": "SUPPORTED",
+          "trajectories": 208,
+          "actions_with_support": 10
+        },
+        "served_projection": {
+          "status": "REFUSED",
+          "support_error": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - tool:name=\"calculator\": 0 executed outcome(s) in 2 feasible occasions (need >= 1)"
+        }
+      },
+      "limitations": [
+        "mock contrasts are harness diagnostics only",
+        "one stochastic execution per branch; no equal-cost policy comparison",
+        "response state and continuation mechanisms differ; no novelty demonstrated"
+      ]
+    },
+    "C4": {
+      "not_evidence": true,
+      "analysis_grade": false,
+      "design": "matched served projection: observed draft baseline, chosen treatment only; common held-out fanout evaluation",
+      "status": "REFUSED",
+      "reason": "support diagnostics failed; refusing to produce an off-policy estimate:\n  - tool:name=\"calculator\": 0 executed outcome(s) in 2 feasible occasions (need >= 1)",
+      "ci95": {
+        "point": null,
+        "lo": null,
+        "hi": null,
+        "n": 0
+      },
+      "per_action": {
+        "abstain": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "answer:llama-3.1-8b:t=0.2": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "resample:llama-3.1-8b:n=3,t=0.7": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "self_check:llama-3.1-8b": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "stronger_model:gpt-4o": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "tool:name=\"calculator\"": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        },
+        "verify:llama-3.1-8b:max_rounds=1": {
+          "status": "REFUSED",
+          "reason": "served action support failed",
+          "ci95": {
+            "point": null,
+            "lo": null,
+            "hi": null,
+            "n": 0
+          }
+        }
+      },
+      "established": false,
+      "full_fits": {
+        "abstain": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "answer:llama-3.1-8b:t=0.2": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "resample:llama-3.1-8b:n=3,t=0.7": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "retrieve:min_score=0.2,top_k=4": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "self_check:llama-3.1-8b": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "stronger_model:gpt-4o": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        },
+        "tool:name=\"calculator\"": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 2,
+            "calib": 0,
+            "test": 0
+          }
+        },
+        "verify:llama-3.1-8b:max_rounds=1": {
+          "status": "REFUSED_SPLIT_COVERAGE",
+          "counts": {
+            "train": 5,
+            "calib": 2,
+            "test": 1
+          }
+        }
+      },
+      "served_fits": {},
+      "limitation": "legacy served trajectories cannot identify unchosen action values"
+    }
+  },
+  "gate1": "NARROW_PROVISIONAL",
+  "gate3": "UNRESOLVED",
+  "c2_real_data_status": "UNRESOLVED",
+  "live_boundary": true
+}

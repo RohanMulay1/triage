@@ -336,7 +336,8 @@ def gate2_report(run_id: str, seed: int = 0,
     validation = validate_run(run_id)
     meta = {"run_id": run_id, "analysis_grade": validation["analysis_grade"],
             "not_evidence": not validation["analysis_grade"], "validation": validation,
-            "support_thresholds": asdict(thresholds or SupportThresholds())}
+            "support_thresholds": asdict(thresholds or SupportThresholds()),
+            "calibration": {"status": "REFUSED", "reason": "evidence gates not cleared", "per_action": {}}}
     try:
         trajectories = read_run(run_id)
         assert_estimable(trajectories, thresholds)
@@ -351,6 +352,8 @@ def gate2_report(run_id: str, seed: int = 0,
         rows = assemble(run_id, thresholds)
     except SupportError as exc:
         return {**meta, "verdict": "REFUSED", "support_error": str(exc)}
+    from .calibration import calibration_block
+    meta["calibration"] = calibration_block(rows)
     if not rows:
         return {**meta, "status": "no_labelled_fanout_rows",
                 "verdict": "INCONCLUSIVE"}

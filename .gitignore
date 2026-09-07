@@ -52,3 +52,8 @@ CLAUDE_MEMORY.md
 !data/traces/checkpoint7-comparator-mock/collect.log
 !data/traces/checkpoint7-c2-mock/
 !data/traces/checkpoint7-c2-mock/collect.log
+
+!data/traces/checkpoint8-comparator-mock/
+!data/traces/checkpoint8-comparator-mock/collect.log
+!data/traces/checkpoint8-pipeline-mock/
+!data/traces/checkpoint8-pipeline-mock/collect.log

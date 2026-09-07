@@ -1,0 +1,82 @@
+{
+  "run_id": "checkpoint8-comparator-mock",
+  "schema_version": "1.3.0",
+  "created_ts": 1788790142.0255568,
+  "git_sha": "95ff8b40e33d99bcccab2214731327be71587e5b",
+  "router_config_hash": "d5ab00f2690eaf91",
+  "models_config_hash": "8cc5d9f73ad1062a",
+  "model_snapshot": {
+    "gpt-4o-mini": {
+      "live_provider": "mock",
+      "live_model": "gpt-4o-mini",
+      "cost_in": 0.15,
+      "cost_out": 0.6
+    },
+    "gpt-4o": {
+      "live_provider": "mock",
+      "live_model": "gpt-4o",
+      "cost_in": 2.5,
+      "cost_out": 10.0
+    },
+    "gpt-5-mini": {
+      "live_provider": "mock",
+      "live_model": "gpt-5-mini",
+      "cost_in": 0.25,
+      "cost_out": 2.0
+    },
+    "gpt-5": {
+      "live_provider": "mock",
+      "live_model": "gpt-5",
+      "cost_in": 1.25,
+      "cost_out": 10.0
+    },
+    "llama-3.1-8b": {
+      "live_provider": "mock",
+      "live_model": "meta/llama-3.1-8b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "llama-3.3-70b": {
+      "live_provider": "mock",
+      "live_model": "meta/llama-3.3-70b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "llama-3.1-70b": {
+      "live_provider": "mock",
+      "live_model": "meta/llama-3.1-70b-instruct",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-super-49b": {
+      "live_provider": "mock",
+      "live_model": "nvidia/llama-3.3-nemotron-super-49b-v1",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-nano-9b": {
+      "live_provider": "mock",
+      "live_model": "nvidia/nvidia-nemotron-nano-9b-v2",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    },
+    "nemotron-ultra-550b-free": {
+      "live_provider": "mock",
+      "live_model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "cost_in": 0.0,
+      "cost_out": 0.0
+    }
+  },
+  "seeds": [
+    0
+  ],
+  "force_mock": true,
+  "dataset": "mixed",
+  "split": "mixed",
+  "command": "scripts/collect_traces.py --n 8 --dataset mixed --mode fanout --depth 2 --policy heuristic_gain --diagnostic-scores --run-id checkpoint8-comparator-mock",
+  "env": {
+    "python": "3.11.9",
+    "pydantic": "2.13.4"
+  },
+  "notes": " | mode=fanout policy=heuristic_gain small=llama-3.1-8b big=gpt-4o depth=2 prompt_features=cold_memory diagnostic_scores=True"
+}

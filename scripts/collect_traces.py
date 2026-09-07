@@ -54,6 +54,7 @@ def _parse_args() -> argparse.Namespace:
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--run-id", default=None)
     ap.add_argument("--notes", default="")
+    ap.add_argument("--diagnostic-scores", action="store_true", help="explicit synthetic scoring JSON; mock only")
     ap.add_argument("--live", action="store_true",
                     help="allow live providers and real spend (requires --max-usd)")
     ap.add_argument("--max-usd", type=float, default=None,
@@ -62,6 +63,8 @@ def _parse_args() -> argparse.Namespace:
     if (args.live and args.max_usd is None) or (args.max_usd is not None and (
             not math.isfinite(args.max_usd) or args.max_usd <= 0)):
         ap.error("--live requires an explicit positive --max-usd cap that is finite")
+    if args.live and args.diagnostic_scores:
+        ap.error("diagnostic scores are forbidden with --live")
     if args.n <= 0:
         ap.error("--n must be a strictly positive integer")
     if args.live and args.mode == "served":
@@ -71,9 +74,9 @@ def _parse_args() -> argparse.Namespace:
     return args
 
 
-ARGS = _parse_args()
+ARGS = _parse_args() if __name__ == "__main__" else None
 # Must be set before importing app.config, whose Settings are lru_cached.
-if not ARGS.live:
+if ARGS is not None and not ARGS.live:
     os.environ["TRIAGE_FORCE_MOCK"] = "1"
 
 from app.benchmark import rigor  # noqa: E402
@@ -181,13 +184,17 @@ async def collect(args: argparse.Namespace) -> str:
         command=" ".join(sys.argv),
         notes=(args.notes or "") + f" | mode={args.mode} policy={args.policy} "
                                    f"small={small_id} big={big_id} depth={args.depth} "
-                                   "prompt_features=cold_memory",
+                                   f"prompt_features=cold_memory diagnostic_scores={getattr(args, 'diagnostic_scores', False)}",
     )
     store.create_run(manifest)
 
     splits = SplitManifest(run_id=run_id, salt=args.split_salt)
     items = load_items(args.dataset, args.n)
     policy = build_policy(args.policy, cfg)
+    if getattr(args, "diagnostic_scores", False):
+        if args.policy != "heuristic_gain":
+            raise ValueError("diagnostic scores require heuristic_gain policy")
+        policy.diagnostic_seed = args.seed
     budget = RunBudget(Budget(max_usd=args.max_usd), manifest.model_snapshot)
     n_written = 0
 
