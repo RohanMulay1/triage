@@ -229,8 +229,9 @@ def test_missingness_separates_unavailable_from_executed():
 def test_support_gate_refuses_when_an_action_has_no_observation():
     """The refusal is the feature; an advisory diagnostic gets ignored."""
     with pytest.raises(SupportError) as excinfo:
-        assert_estimable(_fanout(), SupportThresholds(allow_synthetic=True))
-    assert "specialist_model" in str(excinfo.value)
+        assert_estimable([t for t in _fanout() if not t.branch_id.startswith("verify")],
+                         SupportThresholds(allow_synthetic=True))
+    assert "verify" in str(excinfo.value)
 
 
 def test_support_gate_refuses_mock_outcomes_by_default():
@@ -253,7 +254,8 @@ def test_support_gate_refuses_a_run_mixing_action_space_definitions():
 # Marginal value
 # --------------------------------------------------------------------------- #
 def test_marginal_value_differences_each_branch_against_the_stop_branch():
-    table = marginal_value_table(_fanout())
+    table = marginal_value_table(_fanout(), SupportThresholds(
+        allow_synthetic=True, min_observations=0))
     assert table["items_with_baseline"] == 1
     assert "stop" not in table["per_action"], "STOP is the baseline, not a treatment"
     abstain = table["per_action"]["abstain"]
@@ -263,6 +265,7 @@ def test_marginal_value_differences_each_branch_against_the_stop_branch():
 
 def test_items_without_a_stop_branch_are_reported_not_silently_dropped():
     trajectories = [t for t in _fanout() if t.branch_id != "stop"]
-    table = marginal_value_table(trajectories)
+    table = marginal_value_table(trajectories, SupportThresholds(
+        allow_synthetic=True, min_observations=0))
     assert table["items_skipped_no_stop_branch"] == 1
     assert table["items_with_baseline"] == 0

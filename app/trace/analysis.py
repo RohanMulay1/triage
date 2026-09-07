@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+from dataclasses import asdict
 from typing import Any, Callable, Optional, Sequence
 
 import numpy as np
@@ -28,7 +29,8 @@ import numpy as np
 from ..router.abstain import abstain_risk
 from ..config import load_router_config
 from .contract import OutcomeStatus, Trajectory
-from .store import read_run
+from .store import read_run, validate_run
+from .support import SupportError, SupportThresholds, assert_estimable
 
 STOP_BRANCH = "stop"
 
@@ -71,8 +73,11 @@ def bootstrap_ci(
     statistic: Callable[[Sequence[float]], Optional[float]] = None,
     n_boot: int = 2000,
     seed: int = 0,
+    confidence: float = 0.95,
 ) -> dict[str, Optional[float]]:
     """Percentile bootstrap. Returns nulls rather than a point estimate on no data."""
+    if not 0 < confidence < 1:
+        raise ValueError("confidence must be in (0, 1)")
     values = list(values)
     if not values:
         return {"point": None, "lo": None, "hi": None, "n": 0}
@@ -88,22 +93,41 @@ def bootstrap_ci(
     draws.sort()
     if not draws:
         return {"point": point, "lo": None, "hi": None, "n": len(values)}
-    lo = draws[int(0.025 * len(draws))]
-    hi = draws[min(len(draws) - 1, int(0.975 * len(draws)))]
+    tail = (1 - confidence) / 2
+    lo = draws[int(tail * len(draws))]
+    hi = draws[min(len(draws) - 1, int((1 - tail) * len(draws)))]
     return {"point": round(point, 4) if point is not None else None,
             "lo": round(lo, 4), "hi": round(hi, 4), "n": len(values)}
 
 
-def paired_bootstrap_diff(a: Sequence[float], b: Sequence[float],
-                          n_boot: int = 2000, seed: int = 0) -> dict[str, Any]:
-    """CI on the paired difference a - b, which is what a fair comparison needs."""
-    if len(a) != len(b) or not a:
-        return {"point": None, "lo": None, "hi": None, "n": 0}
-    diffs = [x - y for x, y in zip(a, b)]
-    out = bootstrap_ci(diffs, n_boot=n_boot, seed=seed)
+def paired_bootstrap_diff(a: Sequence, b: Sequence,
+                          n_boot: int = 2000, seed: int = 0,
+                          statistic: Optional[Callable] = None,
+                          confidence: float = 0.95) -> dict[str, Any]:
+    """Paired resampling of the statistic difference, not independent intervals.
+
+    Default is a mean difference. For AUC, pass (score, label) pairs and an AUC
+    statistic: averaging raw score differences does not test ranking quality.
+    """
+    if len(a) != len(b) or not len(a):
+        return {"point": None, "lo": None, "hi": None, "n": 0,
+                "excludes_zero": False}
+    statistic = statistic or (lambda values: sum(values) / len(values))
+
+    def difference(indices):
+        left = statistic([a[i] for i in indices])
+        right = statistic([b[i] for i in indices])
+        return None if left is None or right is None else left - right
+
+    out = bootstrap_ci(list(range(len(a))), statistic=difference,
+                       n_boot=n_boot, seed=seed, confidence=confidence)
     out["excludes_zero"] = (out["lo"] is not None and
                             (out["lo"] > 0 or out["hi"] < 0))
     return out
+
+
+def _auc_pairs(pairs):
+    return auc([p[0] for p in pairs], [p[1] for p in pairs])
 
 
 class LogisticProbe:
@@ -163,10 +187,11 @@ def branch_features(prefix: Trajectory, cfg: dict) -> dict[str, float]:
     }
 
 
-def assemble(run_id: str) -> list[dict[str, Any]]:
+def assemble(run_id: str, thresholds: Optional[SupportThresholds] = None) -> list[dict[str, Any]]:
     """One row per item: branch-point features, per-action labels and deltas."""
     cfg = load_router_config()
     trajectories = read_run(run_id)
+    assert_estimable(trajectories, thresholds)
     prefixes = {t.item_id: t for t in trajectories if t.branch_id == "prefix"}
     rows: list[dict[str, Any]] = []
 
@@ -261,16 +286,11 @@ def predict_repair(
         return {"status": "no_variation_in_target",
                 "n": len(usable), "n_positive": sum(targets)}
 
-    train = [i for i, r in enumerate(usable) if r["split"] in ("train", "pilot")]
-    test = [i for i, r in enumerate(usable) if r["split"] in ("test", "calib")]
+    train = [i for i, r in enumerate(usable) if r["split"] == "train"]
+    test = [i for i, r in enumerate(usable) if r["split"] == "test"]
     if not train or not test:
-        # Fall back to a deterministic half split so the refusal is about data
-        # volume rather than about how the run happened to be labelled.
-        order = sorted(range(len(usable)), key=lambda i: usable[i]["item_id"])
-        half = len(order) // 2
-        train, test = order[:half], order[half:]
-    if not train or not test:
-        return {"status": "insufficient_rows", "n": len(usable)}
+        return {"status": "insufficient_split_coverage", "n": len(usable),
+                "n_train": len(train), "n_test": len(test)}
     if len({targets[i] for i in train}) < 2 or len({targets[i] for i in test}) < 2:
         return {"status": "split_lacks_both_classes",
                 "n_train": len(train), "n_test": len(test)}
@@ -288,15 +308,38 @@ def predict_repair(
     probe = LogisticProbe().fit(X[train], y[train])
     scores = probe.score(X[test])
     value = auc(list(scores), [targets[i] for i in test])
+    pairs = [(float(score), targets[i]) for score, i in zip(scores, test)]
     return {"status": "ok", "feature_set": feature_set, "auc": value,
+            "auc_ci95": bootstrap_ci(list(range(len(pairs))),
+                statistic=lambda indices: _auc_pairs([pairs[i] for i in indices]), seed=seed),
             "n_train": len(train), "n_test": len(test),
-            "base_rate": round(sum(targets) / len(targets), 4)}
+            "test_indices": test,
+            "test_item_ids": [usable[i]["item_id"] for i in test],
+            "test_scores": [float(v) for v in scores],
+            "test_labels": [targets[i] for i in test],
+            "calibration": "not_implemented_calib_rows_unused",
+            "base_rate": round(sum(targets[i] for i in test) / len(test), 4)}
 
 
-def gate2_report(run_id: str, seed: int = 0) -> dict[str, Any]:
-    rows = assemble(run_id)
+def gate2_report(run_id: str, seed: int = 0,
+                 thresholds: Optional[SupportThresholds] = None) -> dict[str, Any]:
+    validation = validate_run(run_id)
+    meta = {"run_id": run_id, "analysis_grade": validation["analysis_grade"],
+            "not_evidence": not validation["analysis_grade"], "validation": validation,
+            "support_thresholds": asdict(thresholds or SupportThresholds())}
+    try:
+        trajectories = read_run(run_id)
+        assert_estimable(trajectories, thresholds)
+    except SupportError as exc:
+        return {**meta, "verdict": "REFUSED", "support_error": str(exc)}
+    except ValueError as exc:
+        return {**meta, "verdict": "REFUSED", "data_error": str(exc)}
+    if not validation["analysis_grade"]:
+        return {**meta, "verdict": "REFUSED",
+                "reason": "non-analysis-grade run cannot supply scientific estimates"}
+    rows = assemble(run_id, thresholds)
     if not rows:
-        return {"run_id": run_id, "status": "no_labelled_fanout_rows",
+        return {**meta, "status": "no_labelled_fanout_rows",
                 "verdict": "INCONCLUSIVE"}
 
     repair = repairability(rows)
@@ -330,23 +373,38 @@ def gate2_report(run_id: str, seed: int = 0) -> dict[str, Any]:
                 f"(>= {MIN_TEST_ROWS} test rows, >= {MIN_TEST_PER_CLASS} per class)"
             )
         else:
-            beats = [c for c in usable
-                     if (c["response_only"]["auc"] or 0) > (c["prompt_only"]["auc"] or 0)]
+            for comparison in usable:
+                response, prompt = comparison["response_only"], comparison["prompt_only"]
+                if (response["test_item_ids"] != prompt["test_item_ids"] or
+                        response["test_labels"] != prompt["test_labels"]):
+                    return {**meta, "verdict": "REFUSED", "data_error": "unpaired test rows"}
+                comparison["paired_auc_difference"] = paired_bootstrap_diff(
+                    list(zip(response["test_scores"], response["test_labels"])),
+                    list(zip(prompt["test_scores"], prompt["test_labels"])),
+                    seed=seed, statistic=_auc_pairs)
+                comparison["selection_interval"] = paired_bootstrap_diff(
+                    list(zip(response["test_scores"], response["test_labels"])),
+                    list(zip(prompt["test_scores"], prompt["test_labels"])),
+                    seed=seed, statistic=_auc_pairs, confidence=1 - 0.05 / len(usable))
+                comparison["selection_interval"]["method"] = "paired_percentile_bonferroni"
+                comparison["selection_interval"]["family_size"] = len(usable)
+            beats = [c for c in usable if c["paired_auc_difference"]["excludes_zero"]
+                     and c["selection_interval"]["lo"] > 0]
             if beats:
                 verdict = "GO"
                 reasons.append(
                     f"{len(beats)}/{len(usable)} evaluable action(s) had response-only "
-                    "features beating prompt-only at predicting repair"
+                    "features beating prompt-only with a positive paired AUC interval"
                 )
             else:
                 verdict = "NARROW"
                 reasons.append(
                     f"{len(usable)} action(s) were evaluable but response-only features "
-                    "did not beat prompt-only; observing the answer bought nothing"
+                    "did not establish an advantage over prompt-only; this is not proof of no effect"
                 )
 
     return {
-        "run_id": run_id,
+        **meta,
         "rows": len(rows),
         "splits": {s: sum(1 for r in rows if r["split"] == s) for s in
                    sorted({r["split"] for r in rows})},
@@ -393,6 +451,8 @@ def _main() -> None:
             print(f"    {name:22s} {res}")
 
     print(f"\nVERDICT: {report['verdict']}")
+    if report.get("support_error") or report.get("reason"):
+        print(report.get("support_error") or report["reason"])
     for r in report.get("reasons", []):
         print(f"  - {r}")
 

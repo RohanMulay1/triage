@@ -16,25 +16,23 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-07, Checkpoint 6 money repairs)
+### Current state (2026-09-07, Checkpoint 6 inference repairs)
 
 | | |
 |---|---|
-| **Checkpoints complete** | 0–5 as recorded below; 6 (strategy addendum and CLI cap validation; D1–D10 repairs pending) |
-| **Tests** | 240 passing (`python -m pytest -q`); see Checkpoint 6 validation |
+| **Checkpoints complete** | 0–5 as recorded below; 6 in progress (money/inference repaired; measurement pending) |
+| **Tests** | 250 passing (`python -m pytest -q`); see Checkpoint 6 validation |
 | **Trace schema** | 1.2.0; reads 1.0.0 and 1.1.0 |
 | **Gate 1 (novelty)** | **NARROW: investigate deltas against readable bases**; candidates unproven; Yin & Zhang is a disclosed risk, not a gate |
-| **Gate 2 (signal)** | **INCONCLUSIVE** — cannot be decided on mock data |
+| **Gate 2 (signal)** | **REFUSED on mock input** by repaired gates; historical pilot was INCONCLUSIVE |
 | **Gate 3 (sequentiality)** | not started; the fan-out is depth-1 only |
 | **Total spend to date** | **$0.** Every run has been on the mock provider |
 | **Paper status** | no claim is supported; no controller has been implemented |
 
-**What is true right now.** The trace substrate and mock pilot exist; the legacy
-router equivalence tests pass. **The inherited readiness description was too
-strong:** analysis paths bypass the support refusal, the live cap is checked
-after execution and resets per item, and the signal comparison has control/split
-defects. See Checkpoint 5. Do not run the earlier live command until these are
-fixed and tested. Existing tests passing does not establish those properties.
+**What is true right now.** Money and inference repairs have behavioral tests
+that fail on the specified baseline. The legacy-router equivalence tests pass.
+Prompt-feature and depth-2 measurement repairs remain. No live collection,
+controller, or performance claim is authorized by these software checks.
 
 **What is not true.** No real-model repairability or candidate contribution has
 been established. The prompt-only comparison was retracted in `7479ff2`. Several
@@ -46,7 +44,7 @@ an overlap risk to disclose; it no longer prevents progressing through repairs.
 **Things blocking progress, in order.**
 
 1. **Repairs D1-D11.** The committed [defect spec](docs/research/pre-live-defect-spec.md)
-   is authoritative. Money repairs are complete; inference and measurement
+   is authoritative. Money and inference repairs are complete; measurement
    repairs remain. No live collection is authorized.
 2. **Fresh mock validation**, then a full-text-derived heuristic-gain comparator,
    then the chosen differentiator and its controlled ablation. Experimental
@@ -236,14 +234,31 @@ the Checkpoint 5 access work and are recorded here rather than edited away.
 - **Checks:** 240 tests pass; full-tree `python -m pyflakes app/ scripts/ tests/`
   is clean. The money acceptance selection fails on `7479ff2` as expected
   (8 failed, 7 passed). These are test counts, not experimental results.
+- **Inference phase completed (D4-D6, D9-D10):** Gate 2 consults validation and
+  `assert_estimable` before estimates, returning REFUSED without feature
+  comparisons on unsupported/non-analysis-grade input. Explicit support
+  thresholds are recorded, and allowing synthetic support cannot authorize GO.
+  Direct assembly/marginal-value entry points also enforce support. Unavailable
+  inventory is retained as missingness, not a phantom feasible intervention;
+  truly feasible but unobserved actions still refuse. Train fits, calibration is
+  reserved and unused, and only test scores; no item-ID fallback remains.
+  Paired bootstrap differences recompute AUC on the same sampled items rather
+  than subtracting mean prediction scores. GO requires a positive 95% paired
+  interval and a Bonferroni-adjusted selection interval across evaluated actions.
+- **Inference evidence:** all five specified regression tests fail on `7479ff2`:
+  unsupported estimates proceed, mock input lacks provenance, train-only data
+  invents a split, calibration doubles the scored rows, and a small uncertain
+  AUC improvement incorrectly yields GO. Current suite: 250 passed; full-tree
+  pyflakes clean. Logs: `docs/research/repairs-inference-20260907/`.
 - **Limitations:** admission is a conservative token/price estimate, not a
   provider-invoice guarantee; an actual overrun is recorded and halts further
-  calls. No latency forecast is claimed. Inference and measurement repairs are
+  calls. No latency forecast is claimed. Percentile bootstrap intervals rely on
+  sampling assumptions, not a finite-sample theorem. Measurement repairs are
   next; no controller, candidate effect, or live readiness is claimed yet.
-- **Remaining tasks:** D4-D6/D9-D10, then D7-D8, then a fresh mock validation run.
+- **Remaining tasks:** D7-D8, then a fresh mock validation run.
   The base comparator and candidate ablation follow those repairs; live evidence
   still requires an explicit approved cap.
-- **Exact next resumption command:** `python -m pytest -q tests/test_trace_budget_repairs.py tests/test_trace_collection_cli.py`.
+- **Exact next resumption command:** `python -m pytest -q tests/test_trace_inference_repairs.py tests/test_trace_branching.py`.
 
 ## Executive research thesis
 

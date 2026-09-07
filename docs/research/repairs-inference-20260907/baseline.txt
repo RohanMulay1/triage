@@ -1,0 +1,92 @@
+BASELINE: 7479ff2
+COMMAND: C:\Users\rohan\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\python.exe -m pytest -q tests/test_trace_inference_repairs.py -k d4 or d5 or d6 or d9 or d10
+EXIT: 1
+FFFFF                                                                    [100%]
+================================== FAILURES ===================================
+________ test_d4_unsupported_action_refuses_before_feature_comparison _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024F8001D8D0>
+
+    def test_d4_unsupported_action_refuses_before_feature_comparison(monkeypatch):
+        trajectories = _fanout()
+        # A feasible action with no observed branch, independently of mock status.
+        first = trajectories[0].steps[0]
+        missing = Action(kind=ActionKind.VERIFY, model_id="never_observed")
+        decision = first.decision.model_copy(update={"feasible": first.decision.feasible + [missing]})
+        trajectories[0] = trajectories[0].model_copy(update={
+            "steps": [first.model_copy(update={"decision": decision})]})
+        monkeypatch.setattr(analysis, "read_run", lambda _: trajectories)
+        monkeypatch.setattr(analysis, "validate_run", lambda _: {"analysis_grade": True}, raising=False)
+        monkeypatch.setattr(analysis, "assemble", lambda *a, **kw: pytest.fail("estimated before support gate"))
+>       result = analysis.gate2_report("unsupported")
+
+tests\test_trace_inference_repairs.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+app\trace\analysis.py:297: in gate2_report
+    rows = assemble(run_id)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+a = ('unsupported',), kw = {}
+
+>   monkeypatch.setattr(analysis, "assemble", lambda *a, **kw: pytest.fail("estimated before support gate"))
+E   Failed: estimated before support gate
+
+tests\test_trace_inference_repairs.py:28: Failed
+_________ test_d5_committed_mock_is_not_analysis_grade_and_cannot_go __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024F800EB390>
+
+    def test_d5_committed_mock_is_not_analysis_grade_and_cannot_go(monkeypatch):
+        root = Path(__file__).resolve().parents[1] / "data" / "traces"
+        monkeypatch.setattr(store, "trace_root", lambda: root)
+        result = analysis.gate2_report("gate2-pilot-mock")
+>       assert result["analysis_grade"] is False
+E       KeyError: 'analysis_grade'
+
+tests\test_trace_inference_repairs.py:39: KeyError
+___________ test_d6_train_only_never_invents_an_item_id_test_split ____________
+
+    def test_d6_train_only_never_invents_an_item_id_test_split():
+        result = analysis.predict_repair(rows("train", 80), "repair", "response_only")
+>       assert result["status"] == "insufficient_split_coverage"
+E       AssertionError: assert 'ok' == 'insufficient_split_coverage'
+E         
+E         - insufficient_split_coverage
+E         + ok
+
+tests\test_trace_inference_repairs.py:56: AssertionError
+____________ test_d10_calibration_rows_never_enter_scored_indices _____________
+
+    def test_d10_calibration_rows_never_enter_scored_indices():
+        data = rows("train") + rows("calib") + rows("test")
+        result = analysis.predict_repair(data, "repair", "response_only")
+>       assert result["n_train"] == result["n_test"] == 40
+E       assert 40 == 80
+
+tests\test_trace_inference_repairs.py:63: AssertionError
+_ test_d9_small_point_auc_improvement_with_paired_ci_touching_zero_is_not_go __
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x0000024F800EB790>
+
+    def test_d9_small_point_auc_improvement_with_paired_ci_touching_zero_is_not_go(monkeypatch):
+        scores = [0.5] * 40
+        scores[20] = 0.6
+        result = comparison_report(monkeypatch, scores)
+>       assert result["verdict"] == "NARROW"
+E       AssertionError: assert 'GO' == 'NARROW'
+E         
+E         - NARROW
+E         + GO
+
+tests\test_trace_inference_repairs.py:90: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_trace_inference_repairs.py::test_d4_unsupported_action_refuses_before_feature_comparison
+FAILED tests/test_trace_inference_repairs.py::test_d5_committed_mock_is_not_analysis_grade_and_cannot_go
+FAILED tests/test_trace_inference_repairs.py::test_d6_train_only_never_invents_an_item_id_test_split
+FAILED tests/test_trace_inference_repairs.py::test_d10_calibration_rows_never_enter_scored_indices
+FAILED tests/test_trace_inference_repairs.py::test_d9_small_point_auc_improvement_with_paired_ci_touching_zero_is_not_go
+5 failed, 5 deselected in 22.88s
+C:\Users\rohan\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0\LocalCache\local-packages\Python311\site-packages\pytest_asyncio\plugin.py:208: PytestDeprecationWarning: The configuration option "asyncio_default_fixture_loop_scope" is unset.
+The event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: "function", "class", "module", "package", "session"
+
+  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))

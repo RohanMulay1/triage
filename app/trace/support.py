@@ -59,11 +59,15 @@ def action_support(trajectories: list[Trajectory]) -> dict[str, Any]:
             d, o = step.decision, step.outcome
             policies[d.policy_id] = policies.get(d.policy_id, 0) + 1
             definitions.add(d.feasible_set_definition)
-            for a in d.feasible:
-                feasible[a.key] = feasible.get(a.key, 0) + 1
             k = d.chosen.key
-            taken[k] = taken.get(k, 0) + 1
-            props.setdefault(k, []).append(d.propensity)
+            # UNAVAILABLE rows are inventory records, not decisions at which an
+            # intervention could be chosen. Keep their missingness, but do not
+            # create a phantom estimand for a nonexistent specialist integration.
+            if o.status != OutcomeStatus.UNAVAILABLE:
+                for a in d.feasible:
+                    feasible[a.key] = feasible.get(a.key, 0) + 1
+                taken[k] = taken.get(k, 0) + 1
+                props.setdefault(k, []).append(d.propensity)
             status_counts.setdefault(k, {})
             status_counts[k][o.status.value] = status_counts[k].get(o.status.value, 0) + 1
             providers.setdefault(k, {})
@@ -74,7 +78,7 @@ def action_support(trajectories: list[Trajectory]) -> dict[str, Any]:
                 synthetic[k] = synthetic.get(k, 0) + 1
 
     per_action: dict[str, Any] = {}
-    for key in sorted(set(feasible) | set(taken)):
+    for key in sorted(set(feasible) | set(taken) | set(status_counts)):
         n_f, n_t = feasible.get(key, 0), taken.get(key, 0)
         p = props.get(key, [])
         weights = [1.0 / x for x in p if x > 0]
@@ -93,7 +97,8 @@ def action_support(trajectories: list[Trajectory]) -> dict[str, Any]:
             "synthetic_outcomes": synthetic.get(key, 0),
         }
 
-    unsupported = [k for k, v in per_action.items() if v["n_observed"] == 0]
+    unsupported = [k for k, v in per_action.items()
+                   if v["n_feasible"] > 0 and v["n_observed"] == 0]
     return {
         "trajectories": len(trajectories),
         "decisions": n_decisions,
@@ -101,8 +106,8 @@ def action_support(trajectories: list[Trajectory]) -> dict[str, Any]:
         "feasible_set_definitions": sorted(definitions),
         "per_action": per_action,
         "unsupported_actions": unsupported,
-        "actions_with_support": len(per_action) - len(unsupported),
-        "off_policy_ready": bool(per_action) and not unsupported,
+        "actions_with_support": sum(v["n_observed"] > 0 for v in per_action.values()),
+        "off_policy_ready": any(v["n_feasible"] > 0 for v in per_action.values()) and not unsupported,
         # Mixing action-space definitions makes coverage denominators
         # incomparable, so it is a hard defect rather than a warning.
         "mixed_feasible_set_definitions": len(definitions) > 1,
@@ -121,6 +126,8 @@ def positivity_violations(
             f"{support['feasible_set_definitions']}; coverage denominators are not comparable"
         )
     for key, s in support["per_action"].items():
+        if s["n_feasible"] == 0:
+            continue
         if s["n_observed"] < th.min_observations:
             out.append(
                 f"{key}: {s['n_observed']} executed outcome(s) in {s['n_feasible']} "
@@ -154,6 +161,8 @@ def assert_estimable(
     A diagnostic that callers may ignore is a diagnostic that gets ignored.
     """
     support = action_support(trajectories)
+    if not any(v["n_feasible"] for v in support["per_action"].values()):
+        raise SupportError("no recorded decisions; refusing an empty estimate")
     violations = positivity_violations(support, thresholds)
     if violations:
         raise SupportError(
@@ -172,12 +181,14 @@ def missingness(trajectories: list[Trajectory]) -> dict[str, int]:
     return counts
 
 
-def marginal_value_table(trajectories: list[Trajectory]) -> dict[str, Any]:
+def marginal_value_table(trajectories: list[Trajectory],
+                         thresholds: Optional[SupportThresholds] = None) -> dict[str, Any]:
     """Δ(a) = label(branch a) − label(STOP branch), per item, from fan-out runs.
 
     Only defined where an item has a labelled STOP branch to difference against;
     items without one are reported as skipped rather than silently dropped.
     """
+    assert_estimable(trajectories, thresholds)
     by_item: dict[str, dict[str, float]] = {}
     for t in trajectories:
         if t.terminal.label is None or t.branch_id == "prefix":
@@ -219,12 +230,16 @@ def marginal_value_table(trajectories: list[Trajectory]) -> dict[str, Any]:
 
 def report(run_id: str) -> dict[str, Any]:
     trajectories = read_run(run_id)
+    try:
+        marginal = marginal_value_table(trajectories)
+    except SupportError as exc:
+        marginal = {"status": "REFUSED", "support_error": str(exc), "per_action": {}}
     return {
         "validation": validate_run(run_id),
         "support": action_support(trajectories),
         "missingness": missingness(trajectories),
         "positivity_violations": positivity_violations(action_support(trajectories)),
-        "marginal_value": marginal_value_table(trajectories),
+        "marginal_value": marginal,
     }
 
 

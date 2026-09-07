@@ -84,7 +84,9 @@ from app.trace.branching import BudgetExceeded, RunBudget, collect_fanout  # noq
 from app.trace.contract import Budget  # noqa: E402
 from app.trace.policies import build_policy  # noqa: E402
 from app.trace.splits import GroupKey, SplitManifest, prompt_fingerprint  # noqa: E402
-from app.trace.support import action_support, marginal_value_table, missingness  # noqa: E402
+from app.trace.support import (  # noqa: E402
+    SupportError, action_support, marginal_value_table, missingness,
+)
 
 
 #: A deliberately heterogeneous set for fixtures and smoke runs. One item per
@@ -263,7 +265,11 @@ def main() -> None:
     print(f"  off-policy ready    : {support['off_policy_ready']}")
     print(f"  analysis grade      : {validation['analysis_grade']}")
 
-    mv = marginal_value_table(trajectories)
+    try:
+        mv = marginal_value_table(trajectories)
+    except SupportError as exc:
+        mv = {"per_action": {}}
+        print(f"Marginal-value estimate REFUSED: {exc}")
     if mv["per_action"]:
         print(f"\n--- marginal value vs STOP "
               f"(items with baseline: {mv['items_with_baseline']}) ---")
