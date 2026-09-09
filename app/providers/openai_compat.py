@@ -6,6 +6,8 @@ both speak the OpenAI /chat/completions dialect; capabilities vary by provider.
 from __future__ import annotations
 
 import contextvars
+import math
+from email.utils import parsedate_to_datetime
 import time
 from typing import Any
 
@@ -117,21 +119,27 @@ class OpenAICompatAdapter(ProviderAdapter):
                     )
             latency = (time.perf_counter() - t0) * 1000
             if resp.status_code == 429:
-                retry_after = resp.headers.get("retry-after", "")
+                retry_after = _retry_after_seconds(resp.headers.get("retry-after"))
                 return GenResult(
                     text="", provider=self.name, model=model, latency_ms=latency,
                     error=f"RATE_LIMIT retry_after={retry_after}: {resp.text[:200]}",
+                    usage_known=True, http_status=429, retry_after=retry_after,
                 )
             if resp.status_code >= 400:
                 return GenResult(
                     text="", provider=self.name, model=model, latency_ms=latency,
                     error=f"HTTP {resp.status_code}: {resp.text[:300]}",
+                    usage_known=False, http_status=resp.status_code,
+                    retry_after=_retry_after_seconds(resp.headers.get("retry-after")),
                 )
             data = resp.json()
+            data['_rate_limit_headers'] = {k: v for k, v in resp.headers.items()
+                                           if k.startswith('x-ratelimit-')}
         except Exception as exc:  # network / timeout / parse
             return GenResult(
                 text="", provider=self.name, model=model,
                 latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc),
+                usage_known=False,
             )
 
         # Some gateways (e.g. OpenRouter) return HTTP 200 with an error body and
@@ -144,6 +152,8 @@ class OpenAICompatAdapter(ProviderAdapter):
             return GenResult(
                 text="", provider=self.name, model=model, latency_ms=latency,
                 error=f"{prefix}{msg or 'empty choices in response'}"[:300],
+                usage_known=code in (429, "429"),
+                http_status=429 if code in (429, "429") else None,
             )
         choice = data["choices"][0]
         text = (choice.get("message") or {}).get("content", "") or ""
@@ -160,7 +170,27 @@ class OpenAICompatAdapter(ProviderAdapter):
             logprobs=logprobs,
             finish_reason=choice.get("finish_reason", "stop"),
             raw=data,
+            usage_known='prompt_tokens' in usage and 'completion_tokens' in usage,
+            http_status=resp.status_code,
         )
+
+
+def _retry_after_seconds(value: str | None) -> float | None:
+    """Parse a Retry-After delta or HTTP date; return None if it is invalid."""
+    if not value:
+        return None
+    try:
+        seconds = float(value)
+        return max(0.0, seconds) if math.isfinite(seconds) else None
+    except ValueError:
+        try:
+            target = parsedate_to_datetime(value)
+            now = parsedate_to_datetime(
+                time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime())
+            )
+            return max(0.0, (target - now).total_seconds())
+        except (TypeError, ValueError, OverflowError):
+            return None
 
 
 def _extract_logprobs(choice: dict[str, Any]) -> list[float] | None:

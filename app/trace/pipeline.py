@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import random
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,8 +20,10 @@ from .calibration import calibration_report
 from .contract import Budget
 from .heuristic_gain import HeuristicGainPolicy
 from .information_value import c2_report
-from .pacing import RequestControl, active_control
+from .pacing import EventJournal, RequestControl, active_control
+from .request_budget import RequestLedger, active_ledger, CHAT_ALLOWANCE
 from .policies import build_policy
+from .operations import operational_report
 from .splits import GroupKey, SplitManifest, prompt_fingerprint
 from .support import SupportError, action_support, assert_estimable, missingness, positivity_violations
 
@@ -39,9 +42,12 @@ class PipelineOptions:
     small: str | None = None
     big: str | None = None
     rps: float = .6
+    max_input_bytes: int | None = None
 
 
 def validate_options(args):
+    if args.max_input_bytes is not None and args.max_input_bytes <= CHAT_ALLOWANCE:
+        raise ValueError("max_input_bytes must exceed the chat-framing allowance")
     if not math.isfinite(args.rps) or args.rps <= 0:
         raise ValueError("rps must be finite and strictly positive")
     if not isinstance(args.n, int) or args.n <= 0:
@@ -55,13 +61,39 @@ def validate_options(args):
         raise ValueError("diagnostic scoring is forbidden live")
 
 
-def preflight(prompts, cfg, prices, small, big, live):
+def preflight(prompts, cfg, prices, small, big, live, max_input_bytes=None):
     """Conservative planning envelope, separate from per-action admission.
 
     Includes all depth-2 branches, resamples and one scoring call per item.
     Input allowance assumes 64 UTF-8 bytes per generated token plus frozen
     retrieval and JSON overhead. This is an estimate, not an invoice guarantee.
     """
+    if max_input_bytes is not None:
+        if max_input_bytes <= CHAT_ALLOWANCE:
+            raise ValueError("input-byte ceiling too small")
+        completion = int(cfg['proxy']['max_tokens'])
+        resamples = int(cfg['proxy']['resamples'])
+        # Each root/continuation uses its actual enforced completion limit.
+        # Small: draft, score, ANSWER, resamples, SELF_CHECK, VERIFY,
+        # then 3 ANSWER + 3 VERIFY continuations. Big: root + 3 continuations.
+        small_caps = [completion, 1024, completion] + [completion]*resamples + [80, 400] + [completion, 400]*3
+        big_caps = [completion]*4 if big else []
+        total = 0.0
+        for model, caps in ((small, small_caps), (big, big_caps)):
+            if not caps:
+                continue
+            price = prices[model]
+            rates = [float(price[k]) for k in ('cost_in', 'cost_out')]
+            if any(not math.isfinite(r) or r < 0 for r in rates):
+                raise ValueError('invalid snapshotted model price')
+            if live and price['live_provider'] == 'mock':
+                raise ValueError('live model resolves to mock')
+            total += len(prompts)*(len(caps)*max_input_bytes*rates[0]+sum(caps)*rates[1])/1e6
+        return {'listed_price_planning_usd': total, 'admission_estimate_usd': total if live else 0.0,
+                'max_calls': len(prompts)*(len(small_caps)+len(big_caps)), 'n_items': len(prompts),
+                'max_input_bytes': max_input_bytes,
+                'assumptions': 'enforced input UTF-8 byte ceiling including framing allowance; actual per-action completion caps; retry reservations share remaining cap',
+                'retry_completion_guarantee': False, 'not_invoice_guarantee': True}
     max_tokens = max(1024, int(cfg['proxy']['max_tokens']))
     corpus = sorted((len(t.encode()) for t in SEED_CORPUS), reverse=True)
     evidence = sum(corpus[:int(cfg['retrieval']['top_k'])])
@@ -101,10 +133,15 @@ async def run_pipeline(args: PipelineOptions):
     cfg = load_router_config()
     small = args.small or default_small_model()['id']
     big = args.big or cfg['escalation'].get('default_target')
-    items = load_items(args.dataset,args.n)
+    previous_random_state = random.getstate()
+    random.seed(args.seed)
+    try:
+        items = load_items(args.dataset,args.n)
+    finally:
+        random.setstate(previous_random_state)
     prompts = [build_prompt(args.dataset,item) for item in items]
     prices = store.model_snapshot()
-    estimate = preflight(prompts,cfg,prices,small,big,args.live)
+    estimate = preflight(prompts,cfg,prices,small,big,args.live,args.max_input_bytes)
     print('Preflight estimate (before any generation): '+json.dumps(estimate),flush=True)
     if args.max_usd is not None and estimate['admission_estimate_usd'] > args.max_usd:
         raise BudgetExceeded('whole-run planning estimate exceeds supplied cap; no calls made')
@@ -112,7 +149,7 @@ async def run_pipeline(args: PipelineOptions):
     manifest = store.build_manifest(args.run_id,dataset=args.dataset,split='mixed',seeds=[args.seed],
         command='scripts/run_gate2.py '+json.dumps(vars(args),sort_keys=True),
         notes='consolidated depth2; frozen seed corpus '+corpus_hash+
-              '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+'; max_attempts=3')
+              '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+'; max_attempts=3; max_retry_wait_seconds=60')
     store.create_run(manifest)
     root = store.run_dir(args.run_id)
     write_json(root/'preflight.json',estimate)
@@ -128,13 +165,19 @@ async def run_pipeline(args: PipelineOptions):
     retrieval._store = frozen
     stopped = None
     control = RequestControl(args.rps)
+    control.events = EventJournal(root/'request-events.jsonl')
     control_token = active_control.set(control) if args.live else None
+    ledger = RequestLedger(prices,args.max_usd,args.max_input_bytes,
+                           root/'request-budget-events.jsonl') if args.live else None
+    ledger_token = active_ledger.set(ledger) if ledger is not None else None
     wall_start = time.monotonic()
     try:
         with (root/'collect.log').open('x',encoding='utf-8') as log:
             log.write(json.dumps({'options':vars(args),'preflight':estimate})+'\n')
+            log.flush()
             for i,(item,prompt) in enumerate(zip(items,prompts)):
                 item_id = f'{args.dataset}-{i:04d}'
+                control.item_id = item_id
                 group = GroupKey(item_id,args.dataset,task_family=item.get('kind',args.dataset),
                     model_pair=f'{small}->{big}',retriever_version=corpus_hash,
                     prompt_template=args.dataset,prompt_fingerprint=prompt_fingerprint(prompt))
@@ -159,6 +202,9 @@ async def run_pipeline(args: PipelineOptions):
         retrieval._store = old_store
         if control_token is not None:
             active_control.reset(control_token)
+        if ledger_token is not None:
+            active_ledger.reset(ledger_token)
+            write_json(root/'request-budget.json',ledger.report())
         write_json(root/'request-events.json', {'rps':args.rps,'max_attempts':3,
             'wall_seconds':time.monotonic()-wall_start,'throttle_seconds':control.throttle_seconds,
             'events':control.events})
@@ -177,14 +223,19 @@ async def run_pipeline(args: PipelineOptions):
     ablations = {'C1':c1_report(args.run_id,diagnostic=not args.live),
                  'C2':c2_report(args.run_id,diagnostic=not args.live),
                  'C4':c4_report(args.run_id,diagnostic=not args.live)}
+    operations = operational_report(control.events, time.monotonic()-wall_start,
+        control.throttle_seconds, traces, ledger.report() if ledger is not None else None)
     report = {'run_id':args.run_id,'analysis_grade':validation['analysis_grade'],
         'not_evidence':not validation['analysis_grade'],'validation':validation,
         'support':support,'positivity':positivity_violations(support),
         'missingness':missingness(traces),'evidence_support':evidence_support,
         'preflight':estimate,'budget':budget.state.model_dump(),'collection_stopped':stopped,
+        'request_budget':ledger.report() if ledger is not None else None,
+        'operations': operations,
         'gate2':gate2,'calibration':calibration,'ablations':ablations,
         'gate1':'NARROW_PROVISIONAL','gate3':'UNRESOLVED','c2_real_data_status':'UNRESOLVED',
         'live_boundary':not args.live}
     write_json(root/'calibration.json',calibration)
+    write_json(root/'operations.json', operations)
     write_json(root/'report.json',report)
     return report

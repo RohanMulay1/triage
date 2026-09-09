@@ -27,7 +27,7 @@ def compare_fits(left, right, rows):
             a["calibrated_gain"], b["calibrated_gain"]),
             "n": len(a["test_item_ids"])}
     if not per_action or any(v["status"] != "OK" for v in per_action.values()):
-        return {"status": "REFUSED", "per_action": per_action,
+        return {**refused("incomplete common action support"), "per_action": per_action,
                 "policy_disagreement": refused("incomplete common action support"),
                 "established": False}
     predictions = []
@@ -55,6 +55,7 @@ def compare_fits(left, right, rows):
         quality_right.append(row["deltas"].get(y[0], 0))
     ci = paired_bootstrap_diff(disagreements, [0.0]*len(disagreements))
     return {"status": "OK" if disagreements else "REFUSED", "per_action": per_action,
+            "ci95": ci,
             "policy_disagreement": {"ci95": ci},
             "ranking_disagreement_ci95": paired_bootstrap_diff(rank_disagreements, [0.0]*len(rank_disagreements)),
             "policy_quality_difference_ci95": paired_bootstrap_diff(quality_left, quality_right),
@@ -72,6 +73,17 @@ def c4_report(run_id, diagnostic=False):
     traces = read_run(run_id)
     projected = [t for t in traces if t.branch_id == 'prefix' or
                  (t.decision_depth == 1 and t.steps[0].decision.rationale.get('served'))]
+    # Inclusion propensity is one for exhaustive fan-out. It is not the
+    # probability of the selected served action. Preserve the latter separately.
+    for trajectory in projected:
+        if trajectory.branch_id == 'prefix':
+            continue
+        propensity = trajectory.steps[0].decision.rationale.get('behavior_propensity')
+        if propensity is None:
+            return {**meta, **refused('served behavior propensity not recorded'), 'established': False}
+        step = trajectory.steps[0]
+        trajectory.steps[0] = step.model_copy(update={'decision': step.decision.model_copy(
+            update={'propensity': propensity})})
     rows = [r for r in assemble(run_id, SupportThresholds(allow_synthetic=diagnostic))
             if r.get('decision_depth',1) == 1]
     actions = sorted({a for r in rows for a in r['deltas'] if a != 'stop'})

@@ -9,6 +9,7 @@ from typing import Any
 import httpx
 
 from .base import GenResult, Message, ProviderAdapter
+from .openai_compat import _retry_after_seconds
 
 
 class HuggingFaceAdapter(ProviderAdapter):
@@ -37,12 +38,17 @@ class HuggingFaceAdapter(ProviderAdapter):
                 resp = await client.post(url, json=payload, headers=headers)
             latency = (time.perf_counter() - t0) * 1000
             if resp.status_code >= 400:
+                retry_after = _retry_after_seconds(resp.headers.get("retry-after"))
+                prefix = f"RATE_LIMIT retry_after={retry_after}: " if resp.status_code == 429 else ""
                 return GenResult(text="", provider=self.name, model=model, latency_ms=latency,
-                                 error=f"HTTP {resp.status_code}: {resp.text[:300]}")
+                                 error=f"{prefix}HTTP {resp.status_code}: {resp.text[:300]}",
+                                 usage_known=resp.status_code == 429,
+                                 http_status=resp.status_code, retry_after=retry_after)
             data = resp.json()
         except Exception as exc:
             return GenResult(text="", provider=self.name, model=model,
-                             latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc))
+                             latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc),
+                             usage_known=False)
 
         choice = (data.get("choices") or [{}])[0]
         text = (choice.get("message") or {}).get("content", "") or ""

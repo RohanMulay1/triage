@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from .analysis import FEATURE_SETS, assemble, bootstrap_ci
+from .analysis import FEATURE_SETS, assemble, bootstrap_ci, paired_bootstrap_diff
 from .store import validate_run
 from .support import SupportError, SupportThresholds
 
@@ -104,7 +104,7 @@ def calibration_block(rows):
     fits = {a: fit_gain(rows, a) for a in actions}
     return {"status": "COMPLETE", "n_fitted": sum(f["status"] == "OK" for f in fits.values()), "target": "normalized marginal quality gain (delta+1)/2",
             "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
-            "per_action": fits}
+            "per_action": fits, "induced_choice_change": calibration_choice_change(fits)}
 
 
 def calibration_report(run_id, diagnostic=False):
@@ -118,3 +118,34 @@ def calibration_report(run_id, diagnostic=False):
     except SupportError as exc:
         return {**meta, "status": "REFUSED", "reason": str(exc), "per_action": {}}
     return {**meta, **calibration_block(rows)}
+
+
+def calibration_choice_change(fits):
+    """Choice changes among fitted root actions plus STOP, not a full policy.
+
+    Unfitted actions are disclosed, never assigned default gains. Depth-2 fits
+    describe other decision states and cannot be ranked as root actions.
+    """
+    root = {a: f for a, f in fits.items() if f.get("status") == "OK" and " -> " not in a}
+    meta = {"scope": "fitted_root_action_subset_plus_STOP; not full-policy evaluation",
+            "actions": sorted(root), "excluded_actions": sorted(set(fits)-set(root)),
+            "ci_scope": "paired test-item resampling conditional on fixed fits"}
+    if not root:
+        return {**meta, "status": "REFUSED", "reason": "no fitted root actions",
+                "ci95": paired_bootstrap_diff([], [])}
+    common = set.intersection(*(set(f["test_item_ids"]) for f in root.values()))
+    if len(common) < 20:
+        return {**meta, "status": "REFUSED", "reason": "fewer than 20 common test items",
+                "n_common": len(common), "ci95": paired_bootstrap_diff([], [])}
+    predictions = {a: {item: (raw, cal) for item, raw, cal in zip(
+        f["test_item_ids"], f["raw_gain"], f["calibrated_gain"])} for a, f in root.items()}
+    changes = []
+    for item in sorted(common):
+        def choose(index):
+            scores = {a: values[item][index] for a, values in predictions.items()}
+            scores["stop"] = 0.0
+            return max(scores, key=lambda a: (scores[a], a == "stop", a))
+        changes.append(float(choose(0) != choose(1)))
+    return {**meta, "status": "OK", "n": len(common),
+            "ci95": paired_bootstrap_diff(changes, [0.0]*len(changes)),
+            "test_item_ids": sorted(common), "performance_claim": False}

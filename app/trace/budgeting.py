@@ -79,6 +79,8 @@ def estimate_action_cost(action, ctx, prices: dict) -> ActionCost:
     if action.kind in (ActionKind.SELF_CHECK, ActionKind.VERIFY):
         prompt += ctx.answer
     if action.kind == ActionKind.VERIFY:
+        from .actions import verification_question
+        prompt += verification_question(ctx)[len(ctx.question):]
         prompt += "".join(h.text for h in ctx.evidence)
     tin = n * (len(prompt.encode("utf-8")) + 1024 + 8 * len(ctx.evidence))
     tout = n * max_tokens

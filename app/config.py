@@ -53,6 +53,10 @@ class Settings:
         # telemetry_db, so a test run never writes into the committed data/ tree.
         self.trace_dir = os.getenv("TRIAGE_TRACE_DIR", str(ROOT / "data" / "traces"))
         self.force_mock = (os.getenv("TRIAGE_FORCE_MOCK") or os.getenv("SV_FORCE_MOCK") or "0") in ("1", "true", "True")
+        # Operators can select a current application lane without rewriting a
+        # historical catalog id or changing no-configuration routing behaviour.
+        # Research commands still pass --small/--big so manifests stay explicit.
+        self.default_model = os.getenv("TRIAGE_DEFAULT_MODEL", "").strip()
 
     def provider_keys(self) -> dict[str, bool]:
         return {
@@ -91,7 +95,19 @@ def get_model(model_id: str) -> dict[str, Any] | None:
 
 
 def default_small_model() -> dict[str, Any]:
-    """The router's auto-pick target: smallest flagged `default_small` model."""
+    """Return the explicit application default, or the historical auto-pick.
+
+    ``TRIAGE_DEFAULT_MODEL`` is fail-closed: a typo must not route production
+    traffic to an unintended model. With it unset, legacy selection is exact.
+    """
+    configured = get_settings().default_model
+    if configured:
+        model = get_model(configured)
+        if model is None:
+            raise ValueError(
+                f"TRIAGE_DEFAULT_MODEL names unknown model {configured!r}"
+            )
+        return model
     smalls = [m for m in load_models() if m.get("default_small")]
     pool = smalls or load_models()
     return min(pool, key=lambda m: m.get("size_b", 1e9))

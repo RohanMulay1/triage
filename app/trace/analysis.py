@@ -327,7 +327,7 @@ def predict_repair(
             "test_item_ids": [usable[i]["item_id"] for i in test],
             "test_scores": [float(v) for v in scores],
             "test_labels": [targets[i] for i in test],
-            "calibration": "not_implemented_calib_rows_unused",
+            "calibration": "discrimination_probe_unscaled; marginal_gain_calibration_reported_separately",
             "base_rate": round(sum(targets[i] for i in test) / len(test), 4)}
 
 
@@ -422,6 +422,8 @@ def gate2_report(run_id: str, seed: int = 0,
     return {
         **meta,
         "rows": len(rows),
+        "n_distinct_items": len({r["item_id"] for r in rows}),
+        "interpretation": "conditional on valid observed outcomes; failed actions are not zero-gain labels",
         "splits": {s: sum(1 for r in rows if r["split"] == s) for s in
                    sorted({r["split"] for r in rows})},
         "task_families": {f: sum(1 for r in rows if r["task_family"] == f)

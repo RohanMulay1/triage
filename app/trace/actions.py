@@ -19,11 +19,12 @@ Two rules the rest of the pipeline depends on:
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field, replace
 from typing import Any, Optional
 
 from ..config import get_model, get_settings
-from ..llm import LLMClient, RateLimitError
+from ..llm import LLMClient, ProviderFailureError, RateLimitError
 from ..retrieval.store import get_store
 from ..schemas import SignalSet
 from ..signals import proxy
@@ -42,10 +43,11 @@ from .adapter import (
     tool_action,
 )
 from .contract import Action, ActionCost, ActionKind, OutcomeStatus, text_hash
+from .budgeting import BudgetExceeded
 
 #: Action space definition id. Support denominators computed under one definition
 #: must never be compared with another; this string is recorded on every decision.
-FEASIBLE_SET_DEFINITION = "executor_v1"
+FEASIBLE_SET_DEFINITION = "executor_v2_information_consumer"
 
 DEFAULT_SYSTEM = (
     "You are a helpful, accurate assistant. Think step by step when the question "
@@ -124,12 +126,45 @@ def _model_status(client: LLMClient, answer: str) -> OutcomeStatus:
     return OutcomeStatus.CHOSEN
 
 
-def _rate_limited(client, mark, ctx, error):
+def verification_question(ctx):
+    """Expose only previously observed fallible information to the continuation.
+
+    The legacy verify function and ordinary root VERIFY prompt are unchanged.
+    These observations are not retrieval evidence or correctness labels.
+    """
+    observations = {}
+    if ctx.samples:
+        observations["resampled_answers"] = ctx.samples
+    if "self_check" in ctx.signals.detail:
+        observations["self_check"] = ctx.signals.detail["self_check"]
+    if not observations:
+        return ctx.question
+    return (ctx.question + "\n\nPRIOR INTERVENTION OBSERVATIONS "
+            "(fallible model diagnostics, not ground truth; assess rather than trust):\n"
+            + json.dumps(observations, ensure_ascii=True, sort_keys=True))
+
+
+def _provider_failed(client, mark, ctx, error):
+    provider = getattr(error, "provider", client.provider_label)
+    unknown_usage = client.unknown_usage or (
+        isinstance(error, ProviderFailureError) and not error.usage_known
+    )
+    budget_refused = isinstance(error, BudgetExceeded)
     return ExecutionResult(status=OutcomeStatus.FAILED, answer=ctx.answer,
         signals=ctx.signals, evidence=ctx.evidence,
-        cost=cost_delta(mark, client.cost, error.provider), provider_label=error.provider,
-        error=str(error), detail={"rate_limited": True, "retry_after": error.retry_after,
-                                 "model_id": client.model_id})
+        cost=cost_delta(mark, client.cost, provider), provider_label=provider,
+        error=str(error), detail={
+            "provider_failure": not budget_refused,
+            "rate_limited": isinstance(error, RateLimitError),
+            "retryable_exhausted": bool(getattr(error, "retryable", False)),
+            "retry_after": getattr(error, "retry_after", None),
+            "http_status": getattr(error, "status_code", None),
+            "usage_known": not unknown_usage,
+            "unknown_usage": unknown_usage,
+              "budget_refused": budget_refused,
+              "runtime_refused": getattr(error, 'runtime_refused', False),
+            "model_id": client.model_id,
+        })
 
 
 class InterventionExecutor:
@@ -249,8 +284,8 @@ class InterventionExecutor:
                 ctx.messages(), temperature=pcfg["base_temperature"],
                 max_tokens=pcfg["max_tokens"], want_logprobs=True,
             )
-        except RateLimitError as e:
-            return _rate_limited(client, mark, ctx, e)
+        except (ProviderFailureError, BudgetExceeded) as e:
+            return _provider_failed(client, mark, ctx, e)
         answer = res.text or "(no answer)"
         signals = ctx.signals.model_copy(deep=True)
         signals.uncertainty, signals.detail["uncertainty"] = proxy.uncertainty(res, [])
@@ -291,8 +326,8 @@ class InterventionExecutor:
                                           max_tokens=pcfg["max_tokens"])
                 if r.text:
                     samples.append(r.text)
-        except RateLimitError as e:
-            return _rate_limited(client, mark, ctx, e)
+        except (ProviderFailureError, BudgetExceeded) as e:
+            return _provider_failed(client, mark, ctx, e)
         signals = ctx.signals.model_copy(deep=True)
         if samples:
             signals.instability, signals.detail["instability"] = proxy.instability(
@@ -314,10 +349,11 @@ class InterventionExecutor:
         mark = snapshot_cost(client)
         try:
             score, detail = await proxy.contradiction_probe(client, ctx.question, ctx.answer)
-        except RateLimitError as e:
-            return _rate_limited(client, mark, ctx, e)
+        except (ProviderFailureError, BudgetExceeded) as e:
+            return _provider_failed(client, mark, ctx, e)
         signals = ctx.signals.model_copy(deep=True)
         signals.contradiction, signals.detail["contradiction"] = score, detail
+        signals.detail["self_check"] = detail
         status = OutcomeStatus.CHOSEN
         if client.provider_label == "mock" and not get_settings().force_mock:
             status = OutcomeStatus.SYNTHETIC_FALLBACK
@@ -351,9 +387,9 @@ class InterventionExecutor:
         client = LLMClient(model_id)
         mark = snapshot_cost(client)
         try:
-            v = await verify(client, ctx.question, ctx.answer, ctx.evidence)
-        except RateLimitError as e:
-            return _rate_limited(client, mark, ctx, e)
+            v = await verify(client, verification_question(ctx), ctx.answer, ctx.evidence)
+        except (ProviderFailureError, BudgetExceeded) as e:
+            return _provider_failed(client, mark, ctx, e)
         signals = ctx.signals.model_copy(deep=True)
         signals.detail["verify"] = {"pass": v["pass"], "reason": v["reason"]}
         answer = v["revised"] if v["pass"] else ctx.answer

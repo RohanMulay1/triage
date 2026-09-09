@@ -22,6 +22,7 @@ def main():
     parser.add_argument('--small')
     parser.add_argument('--big')
     parser.add_argument('--rps',type=float,default=.6)
+    parser.add_argument('--max-input-bytes',type=int,help='explicit request-byte budget; refuses oversized inputs without truncation')
     args = parser.parse_args()
     if not math.isfinite(args.rps) or args.rps <= 0:
         parser.error("--rps must be finite and strictly positive")

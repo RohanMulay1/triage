@@ -70,6 +70,7 @@ models:
     cost_in: 0.075
     cost_out: 0.30
     context: 131072
+    escalate_to: groq-gpt-oss-120b
 
   - id: groq-gpt-oss-120b
     label: "GPT OSS 120B (Groq research)"
@@ -147,6 +148,8 @@ models:
     provider: nvidia
     role: small
     provider_model: "meta/llama-3.1-8b-instruct"
+    operational_status: retired
+    retired_at: "2026-08-26T09:00:00Z"
     default_small: true         # <- router auto-pick: fast, free, returns logprobs
     escalate_to: gpt-4o         # hard/risky tasks go to the paid strong model
     alt:
@@ -164,6 +167,8 @@ models:
     provider: nvidia
     role: big
     provider_model: "meta/llama-3.3-70b-instruct"
+    operational_status: retired
+    retired_at: "2026-08-26T09:00:00Z"
     alt:
       groq: "llama-3.3-70b-versatile"
       openrouter: "meta-llama/llama-3.3-70b-instruct:free"

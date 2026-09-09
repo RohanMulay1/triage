@@ -25,6 +25,9 @@ class GenResult:
     finish_reason: str = "stop"
     raw: dict[str, Any] = field(default_factory=dict)
     error: Optional[str] = None
+    usage_known: bool = True
+    http_status: Optional[int] = None
+    retry_after: Optional[float] = None
 
 
 Message = dict[str, str]  # {"role": ..., "content": ...}

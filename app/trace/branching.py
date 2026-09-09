@@ -215,7 +215,7 @@ async def collect_fanout(
         raise ValueError("depth must be 1 or 2")
     executor = InterventionExecutor(cfg)
     run_budget = budget if isinstance(budget, RunBudget) else RunBudget(budget)
-    rng = random.Random(seed)
+    rng = random.Random(f"fanout-v2|{seed}|{item_id}")
     features = dict(prompt_features or {})
 
     ctx = InterventionContext(question=question, cfg=cfg, small_id=small_id,
@@ -255,7 +255,7 @@ async def collect_fanout(
         s1 = prefix.add(scoring_action, scoring, feasible=[scoring_action], propensity=1.0,
                         status=scoring.status, rationale={"forced": True, "policy_overhead": True},
                         exploration_seed=seed)
-        if scoring.status != OutcomeStatus.CHOSEN:
+        if scoring.status != OutcomeStatus.CHOSEN and scoring_policy is None:
             result = scoring
     prefix_traj = prefix.build(status="prefix", abstained=False, label=None,
                                label_source=None, budget=run_budget.state)
@@ -266,13 +266,18 @@ async def collect_fanout(
 
     def check_budget():
         try:
+            if any(s.outcome.detail.get("runtime_refused") for s in trajectories[-1].steps):
+                raise BudgetExceeded("provider retry delay exceeds declared runtime bound; partial trajectories retained")
+            if any(s.outcome.detail.get("budget_refused") for s in trajectories[-1].steps):
+                raise BudgetExceeded("request budget refused; partial trajectories retained")
             run_budget.check()
         except BudgetExceeded as exc:
             exc.trajectories = trajectories
             raise
 
     check_budget()
-    if prefix.steps[-1].outcome.detail.get("unknown_usage"):
+    from .request_budget import active_ledger
+    if prefix.steps[-1].outcome.detail.get("unknown_usage") and active_ledger.get() is None:
         exc = BudgetExceeded("policy scoring usage unknown; refusing further calls")
         exc.trajectories = trajectories
         raise exc
@@ -356,6 +361,7 @@ async def collect_fanout(
         builder.add(action, res, feasible=available, propensity=1.0, status=status,
                     rationale={"fanout": True, "served": is_served,
                                "sampling_design": "exhaustive_inclusion",
+                               "behavior_propensity": served_choice.propensity if is_served and served_choice else None,
                                "behavior_choice": served_choice.rationale if served_choice else None},
                     exploration_seed=seed)
 
