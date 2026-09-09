@@ -3,7 +3,7 @@
 Unavailable estimands carry null intervals with n=0, never invented zeros.
 """
 from .analysis import assemble, bootstrap_ci, paired_bootstrap_diff
-from .calibration import calibration_report, fit_gain
+from .calibration import calibration_report, fit_gain, fit_gain_pooled
 from .store import read_run, validate_run
 from .support import SupportError, SupportThresholds, assert_estimable
 
@@ -98,6 +98,13 @@ def c4_report(run_id, diagnostic=False):
                     r['split']=='test' or a == choices.get(r['item_id'])}} for r in rows]
     served_fits = {a: fit_gain(served_rows, a) for a in actions}
     full_fits = {a: fit_gain(rows, a) for a in actions}
+    if any(f.get("status") == "REFUSED_SPLIT_COVERAGE" for f in served_fits.values()):
+        pooled_served = fit_gain_pooled(served_rows, actions)
+        pooled_full = fit_gain_pooled(rows, actions)
+        if pooled_served.get("status") == "OK" and pooled_full.get("status") == "OK":
+            served_fits = pooled_served["per_action"]
+            full_fits = pooled_full["per_action"]
+            meta["estimation_method"] = "pooled_linear_interaction"
     result = compare_fits(served_fits, full_fits, rows)
     return {**meta, **result, "established": result['established'] and validation['analysis_grade'],
             "served_fits": served_fits, "full_fits": full_fits}

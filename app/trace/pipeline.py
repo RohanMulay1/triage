@@ -47,6 +47,7 @@ class PipelineOptions:
     request_timeout: float = 180.0
     item_concurrency: int = 1
     max_input_bytes: int | None = None
+    error_conditioned: bool = False
 
 
 def validate_options(args):
@@ -60,8 +61,8 @@ def validate_options(args):
         raise ValueError("item_concurrency must be a positive integer")
     if not isinstance(args.n, int) or args.n <= 0:
         raise ValueError("n must be positive integer")
-    if args.depth != 2 or args.policy != 'balanced':
-        raise ValueError("assembled pipeline requires depth 2 and balanced behavior")
+    if args.depth != 2 or args.policy not in ('balanced', 'concentrated'):
+        raise ValueError("assembled pipeline requires depth 2 and balanced or concentrated behavior")
     if (args.live and args.max_usd is None) or (args.max_usd is not None and
             (not math.isfinite(args.max_usd) or args.max_usd <= 0)):
         raise ValueError("live requires an explicit finite positive max-usd cap")
@@ -227,7 +228,8 @@ async def run_pipeline(args: PipelineOptions):
                             small_id=small,big_id=big,run_id=args.run_id,dataset=args.dataset,
                             split=split,seed=args.seed+i,labeler=make_labeler(args.dataset,item),
                             label_source='rigor.score',served_policy=policy,scoring_policy=scorer,
-                            budget=budget,depth=args.depth,prompt_features={'task_family':item.get('kind',args.dataset)})
+                            budget=budget,depth=args.depth,prompt_features={'task_family':item.get('kind',args.dataset)},
+                            error_conditioned=args.error_conditioned)
                         item_stop = None
                     except BudgetExceeded as exc:
                         traces,item_stop = exc.trajectories,str(exc)

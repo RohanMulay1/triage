@@ -313,7 +313,13 @@ def predict_repair(
                 "n_test": len(test), "n_positive_test": n_pos_test,
                 "required": {"rows": MIN_TEST_ROWS, "per_class": MIN_TEST_PER_CLASS}}
 
-    X = np.array([[usable[i]["features"][f] for f in feats] for i in range(len(usable))])
+    train_feats_mat = np.array([[usable[i]["features"][f] for f in feats] for i in train], dtype=float)
+    stds = train_feats_mat.std(axis=0) if len(train) else np.zeros(len(feats))
+    non_zero = [f for f, s in zip(feats, stds) if s > 1e-9]
+    constant_removed = [f for f, s in zip(feats, stds) if s <= 1e-9]
+    active_feats = non_zero if non_zero else feats
+
+    X = np.array([[usable[i]["features"][f] for f in active_feats] for i in range(len(usable))])
     y = np.array(targets, dtype=float)
     probe = LogisticProbe().fit(X[train], y[train])
     scores = probe.score(X[test])
@@ -328,7 +334,13 @@ def predict_repair(
             "test_scores": [float(v) for v in scores],
             "test_labels": [targets[i] for i in test],
             "calibration": "discrimination_probe_unscaled; marginal_gain_calibration_reported_separately",
-            "base_rate": round(sum(targets[i] for i in test) / len(test), 4)}
+            "base_rate": round(sum(targets[i] for i in test) / len(test), 4),
+            "feature_variance_audit": {
+                "n_total": len(feats),
+                "n_non_zero_variance": len(non_zero),
+                "constant_features_removed": constant_removed,
+                "active_features": list(active_feats),
+            }}
 
 
 def gate2_report(run_id: str, seed: int = 0,
@@ -371,6 +383,19 @@ def gate2_report(run_id: str, seed: int = 0,
 
     correctness = {f: correctness_signal([r for r in rows if r.get("decision_depth", 1) == 1], f)
                    for f in ("triage_risk", "uncertainty", "predicted_difficulty")}
+
+    feature_variance_audit = {}
+    for fs_name, fs_feats in FEATURE_SETS.items():
+        vals = [[r["features"][f] for f in fs_feats] for r in rows if r.get("decision_depth", 1) == 1]
+        if vals:
+            arr = np.array(vals, dtype=float)
+            stds = arr.std(axis=0)
+            feature_variance_audit[fs_name] = {
+                "n_features": len(fs_feats),
+                "features": list(fs_feats),
+                "non_zero_variance": [f for f, s in zip(fs_feats, stds) if s > 1e-9],
+                "zero_variance": [f for f, s in zip(fs_feats, stds) if s <= 1e-9],
+            }
 
     # A gate can only pass if some action's benefit actually varies across items.
     # Without variation there is nothing to predict and no signal to find.
@@ -435,6 +460,7 @@ def gate2_report(run_id: str, seed: int = 0,
         "repairability": repair,
         "actions_with_variation": sorted(informative),
         "feature_set_comparison": comparisons,
+        "feature_variance_audit": feature_variance_audit,
         "verdict": verdict,
         "reasons": reasons,
     }

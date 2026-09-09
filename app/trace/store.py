@@ -262,6 +262,8 @@ def validate_run(run_id: str) -> dict[str, Any]:
                          or "does not store" in e or "schema" in e.lower()]
     errors.extend(cost_mismatches)
     force_mock = bool(manifest.force_mock) if manifest else False
+    if not force_mock and synthetic > 0:
+        errors.append(f"live evaluation contains {synthetic} mock/synthetic outcomes; live and mock mixing is forbidden")
     directory = run_dir(run_id)
     plan_path = directory / COLLECTION_PLAN_NAME
     legacy_items_path = directory / "items.json"

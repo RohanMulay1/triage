@@ -201,6 +201,7 @@ async def collect_fanout(
     prompt_features: Optional[dict] = None,
     depth: int = 1,
     scoring_policy=None,
+    error_conditioned: bool = False,
 ) -> list[Trajectory]:
     """One shared ANSWER prefix, then every available action once from that state.
 
@@ -299,8 +300,13 @@ async def collect_fanout(
     if served_key is None:
         served_key = stop_action().key
 
+    root_label = labeler(ctx1.answer, False) if error_conditioned else None
+
     informational = []
     for action, ok, reason in branchable:
+        if error_conditioned and root_label == 1.0 and action.key != "stop":
+            continue
+
         builder = _Builder(item_id, run_id, dataset, split, seed, action.key,
                            prefix_traj.trajectory_id,
                            getattr(served_policy, "policy_id", "exhaustive_fanout"),
@@ -309,6 +315,8 @@ async def collect_fanout(
         builder.baseline_branch_id = "stop"
         builder.start_at(s1)
         is_served = action.key == served_key
+        behavior_propensity = served_choice.propensity if is_served and served_choice else None
+        behavior_choice = served_choice.rationale if served_choice else None
 
         if not ok:
             # Record unavailability as a real, distinguishable outcome. Dropping
@@ -321,7 +329,10 @@ async def collect_fanout(
             )
             builder.add(action, unavailable, feasible=available, propensity=1.0,
                         status=OutcomeStatus.UNAVAILABLE,
-                        rationale={"unavailable": reason}, exploration_seed=seed)
+                        rationale={"unavailable": reason, "served": is_served,
+                                   "behavior_propensity": behavior_propensity,
+                                   "behavior_choice": behavior_choice},
+                        exploration_seed=seed)
             trajectories.append(builder.build(
                 status="unavailable", abstained=False, label=None,
                 label_source=None, budget=run_budget.state))
@@ -346,7 +357,9 @@ async def collect_fanout(
             builder.add(action, res, feasible=available, propensity=1.0,
                         status=res.status,
                         rationale={"fanout": True, "served": is_served,
-                                   "not_observed": res.status.value},
+                                   "not_observed": res.status.value,
+                                   "behavior_propensity": behavior_propensity,
+                                   "behavior_choice": behavior_choice},
                         exploration_seed=seed)
             trajectories.append(builder.build(
                 status=res.status.value, abstained=False, label=None,
@@ -361,8 +374,8 @@ async def collect_fanout(
         builder.add(action, res, feasible=available, propensity=1.0, status=status,
                     rationale={"fanout": True, "served": is_served,
                                "sampling_design": "exhaustive_inclusion",
-                               "behavior_propensity": served_choice.propensity if is_served and served_choice else None,
-                               "behavior_choice": served_choice.rationale if served_choice else None},
+                               "behavior_propensity": behavior_propensity,
+                               "behavior_choice": behavior_choice},
                     exploration_seed=seed)
 
         ctx2 = res.next_context(ctx1)

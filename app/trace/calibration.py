@@ -99,6 +99,86 @@ def fit_gain(rows, action, feature_set="response_only"):
             "calibrated": calibration_metrics(calibrated, targets)}
 
 
+def fit_gain_pooled(rows, actions, feature_set="response_only"):
+    r"""Pooled multi-action OPE regression across served actions:
+    Q(s, a) = w^T \phi(s) + \sum_k \beta_k 1(a = k).
+    Preserves action identities and state features while pooling observations."""
+    roles = {role: [r for r in rows if r["split"] == role] for role in ("train", "calib", "test")}
+    counts = {role: len(group) for role, group in roles.items()}
+    ids = {role: {r["item_id"] for r in group} for role, group in roles.items()}
+    if any(ids[a] & ids[b] for a, b in (("train", "calib"), ("train", "test"), ("calib", "test"))):
+        return {"status": "REFUSED_SPLIT_LEAKAGE", "counts": counts, "per_action": {}}
+    if any(counts[r] < n for r, n in (("train", 20), ("calib", 10), ("test", 20))):
+        return {"status": "REFUSED_SPLIT_COVERAGE", "counts": counts, "per_action": {}}
+
+    feats = FEATURE_SETS[feature_set]
+    train_samples = []
+    for r in roles["train"]:
+        for a in actions:
+            if a in r["deltas"]:
+                train_samples.append((r, a, r["deltas"][a]))
+
+    if len(train_samples) < 20:
+        return {"status": "REFUSED_INSUFFICIENT_TRAIN_SAMPLES", "counts": counts, "per_action": {}}
+
+    X_train_raw = np.array([[s[0]["features"][f] for f in feats] for s in train_samples], dtype=float)
+    mu, scale = X_train_raw.mean(axis=0), X_train_raw.std(axis=0)
+    scale[scale == 0] = 1.0
+    X_train_norm = (X_train_raw - mu) / scale
+
+    action_idx = {a: i for i, a in enumerate(actions)}
+    A_train = np.zeros((len(train_samples), len(actions)), dtype=float)
+    for i, s in enumerate(train_samples):
+        A_train[i, action_idx[s[1]]] = 1.0
+
+    Phi_train = np.column_stack([X_train_norm, A_train, np.ones(len(train_samples))])
+    y_train = np.array([(s[2] + 1) / 2 for s in train_samples], dtype=float)
+
+    penalty = np.eye(Phi_train.shape[1])
+    penalty[-1, -1] = 0.0
+    try:
+        weights = np.linalg.solve(Phi_train.T @ Phi_train + penalty, Phi_train.T @ y_train)
+    except np.linalg.LinAlgError:
+        return {"status": "REFUSED_NUMERICAL_INSTABILITY", "counts": counts, "per_action": {}}
+
+    def predict_action(group, action):
+        if not group:
+            return []
+        X_raw = np.array([[r["features"][f] for f in feats] for r in group], dtype=float)
+        X_norm = (X_raw - mu) / scale
+        A = np.zeros((len(group), len(actions)), dtype=float)
+        A[:, action_idx[action]] = 1.0
+        Phi = np.column_stack([X_norm, A, np.ones(len(group))])
+        return np.clip(Phi @ weights, 0.0, 1.0).tolist()
+
+    per_action = {}
+    for a in actions:
+        calib_rows = [r for r in roles["calib"] if a in r["deltas"]]
+        test_rows = [r for r in roles["test"] if a in r["deltas"]]
+        if len(calib_rows) < 5 or len(test_rows) < 10:
+            per_action[a] = {"status": "REFUSED_ACTION_SUPPORT", "counts": {"calib": len(calib_rows), "test": len(test_rows)}}
+            continue
+        raw_calib = predict_action(calib_rows, a)
+        mapping = isotonic_fit(raw_calib, [(r["deltas"][a] + 1) / 2 for r in calib_rows])
+        raw_test = predict_action(test_rows, a)
+        calibrated_test = isotonic_predict(mapping, raw_test)
+        targets = [(r["deltas"][a] + 1) / 2 for r in test_rows]
+
+        per_action[a] = {
+            "status": "OK",
+            "counts": {"train": len(train_samples), "calib": len(calib_rows), "test": len(test_rows)},
+            "roles": {k: sorted(v) for k, v in ids.items()},
+            "test_item_ids": [r["item_id"] for r in test_rows],
+            "raw_gain": [2 * s - 1 for s in raw_test],
+            "calibrated_gain": [2 * s - 1 for s in calibrated_test],
+            "raw": calibration_metrics(raw_test, targets),
+            "calibrated": calibration_metrics(calibrated_test, targets),
+            "map": mapping,
+        }
+
+    return {"status": "OK", "per_action": per_action, "counts": counts}
+
+
 def calibration_block(rows):
     actions = sorted({a for r in rows for a in r["deltas"] if a != "stop"})
     fits = {a: fit_gain(rows, a) for a in actions}

@@ -100,7 +100,7 @@ def c2_report(run_id, continuation="verify", *, diagnostic=False, seed=0):
                           "extra_usd": child.total_cost.est_cost_usd,
                           "extra_calls": child.total_cost.llm_calls,
                           "information_usd": parent.total_cost.est_cost_usd})
-        if missing or not pairs:
+        if not pairs:
             results[kind.value] = {"status": "REFUSED_INCOMPLETE_PAIRS", "n": len(pairs),
                                    "missing_items": missing}
             continue
@@ -122,7 +122,7 @@ def c2_report(run_id, continuation="verify", *, diagnostic=False, seed=0):
                               "extra_continuation_usd": bootstrap_ci([p["extra_usd"] for p in pairs]),
                               "extra_continuation_calls": bootstrap_ci([p["extra_calls"] for p in pairs]),
                               "information_usd": bootstrap_ci([p["information_usd"] for p in pairs]),
-                              "pairs": pairs}
+                              "pairs": pairs, "missing_items": missing}
     established = not diagnostic and validation["analysis_grade"] and any(positive)
     return {**meta, "verdict": "C2_SIGNAL" if established else "C2_NOT_ESTABLISHED",
             "per_action": results, "next_candidate": "C2_REPLICATION" if established else "C4",

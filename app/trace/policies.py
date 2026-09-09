@@ -115,6 +115,32 @@ class BalancedExplorationPolicy:
                             {"tied": [a.key for a in tied], "min_count": lowest})
 
 
+class ConcentratedExplorationPolicy:
+    """Concentrate served choices on a designated subset of actions (e.g., stop,
+    stronger_model, resample) to ensure adequate served-path support (>= 40
+    per active action) for off-policy estimation."""
+
+    policy_id = "concentrated_exploration"
+    policy_version = "1"
+
+    def __init__(self, active_actions: Optional[list[str]] = None) -> None:
+        self.active_actions = list(active_actions or ["stop", "stronger_model", "resample"])
+        self.counts: dict[str, int] = {}
+
+    def choose(self, ctx, executor, taken, rng) -> PolicyChoice:
+        actions = executor.available_actions(ctx, taken)
+        concentrated = [a for a in actions if any(a.key == act or a.kind.value == act for act in self.active_actions)]
+        eligible = concentrated if concentrated else actions
+        lowest = min(self.counts.get(a.key, 0) for a in eligible)
+        tied = [a for a in eligible if self.counts.get(a.key, 0) == lowest]
+        chosen = tied[rng.randrange(len(tied))]
+        self.counts[chosen.key] = self.counts.get(chosen.key, 0) + 1
+        propensity = 1.0 / len(tied)
+        return PolicyChoice(chosen, propensity, actions,
+                            {"tied": [a.key for a in tied], "min_count": lowest,
+                             "concentrated": [a.key for a in concentrated]})
+
+
 class FixedCascadePolicy:
     """Answer small, escalate once if risk clears a fixed bar, then stop.
 
@@ -222,6 +248,7 @@ POLICIES: dict[str, callable] = {
     "prompt_only": lambda cfg: PromptOnlyPolicy(),
     "response_risk": lambda cfg: ResponseRiskThresholdPolicy(
         (cfg.get("escalation") or {}).get("risk_high", 0.55)),
+    "concentrated": lambda cfg: ConcentratedExplorationPolicy(),
 }
 
 
