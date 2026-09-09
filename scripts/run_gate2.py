@@ -24,6 +24,8 @@ def main():
     parser.add_argument('--rps',type=float,default=.6)
     parser.add_argument('--request-timeout',type=float,default=180.0,
                         help='per-attempt wall-runtime bound in seconds')
+    parser.add_argument('--item-concurrency',type=int,default=1,
+                        help='concurrent items; live zero-price lanes only')
     parser.add_argument('--max-input-bytes',type=int,help='explicit request-byte budget; refuses oversized inputs without truncation')
     args = parser.parse_args()
     if not math.isfinite(args.rps) or args.rps <= 0:

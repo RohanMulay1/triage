@@ -1,6 +1,7 @@
 """One run-wide collector and gated consolidated analysis; no live authorization implicit."""
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import json
 import math
@@ -20,7 +21,7 @@ from .calibration import calibration_report
 from .contract import Budget
 from .heuristic_gain import HeuristicGainPolicy
 from .information_value import c2_report
-from .pacing import EventJournal, RequestControl, active_control
+from .pacing import EventJournal, RequestControl, active_control, active_item_id
 from .request_budget import RequestLedger, active_ledger, CHAT_ALLOWANCE
 from .runtime import HostAwakeGuard
 from .policies import build_policy
@@ -44,6 +45,7 @@ class PipelineOptions:
     big: str | None = None
     rps: float = .6
     request_timeout: float = 180.0
+    item_concurrency: int = 1
     max_input_bytes: int | None = None
 
 
@@ -54,6 +56,8 @@ def validate_options(args):
         raise ValueError("rps must be finite and strictly positive")
     if not math.isfinite(args.request_timeout) or args.request_timeout <= 0:
         raise ValueError("request_timeout must be finite and strictly positive")
+    if not isinstance(args.item_concurrency, int) or args.item_concurrency <= 0:
+        raise ValueError("item_concurrency must be a positive integer")
     if not isinstance(args.n, int) or args.n <= 0:
         raise ValueError("n must be positive integer")
     if args.depth != 2 or args.policy != 'balanced':
@@ -133,6 +137,18 @@ def write_json(path: Path, value):
         json.dump(value,handle,indent=2,allow_nan=False)
 
 
+def validate_item_concurrency(args, prices, small, big):
+    """Permit overlapping items only on explicitly zero-price live lanes."""
+    if args.item_concurrency == 1:
+        return
+    if not args.live:
+        raise ValueError("item concurrency above one is restricted to live zero-price lanes")
+    for model in (small, big):
+        if model and any(float(prices[model][key]) != 0.0
+                         for key in ('cost_in', 'cost_out')):
+            raise ValueError("item concurrency above one is forbidden for priced models")
+
+
 async def run_pipeline(args: PipelineOptions):
     validate_options(args)
     if not args.live and not get_settings().force_mock:
@@ -151,6 +167,7 @@ async def run_pipeline(args: PipelineOptions):
         random.setstate(previous_random_state)
     prompts = [build_prompt(args.dataset,item) for item in items]
     prices = store.model_snapshot()
+    validate_item_concurrency(args, prices, small, big)
     estimate = preflight(prompts,cfg,prices,small,big,args.live,args.max_input_bytes)
     print('Preflight estimate (before any generation): '+json.dumps(estimate),flush=True)
     if args.max_usd is not None and estimate['admission_estimate_usd'] > args.max_usd:
@@ -161,7 +178,8 @@ async def run_pipeline(args: PipelineOptions):
         notes='consolidated depth2; frozen seed corpus '+corpus_hash+
               '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+
               '; max_attempts=3; max_retry_wait_seconds=60; request_timeout_seconds='+
-              str(args.request_timeout)+'; windows_host_awake='+str(args.live))
+              str(args.request_timeout)+'; item_concurrency='+str(args.item_concurrency)+
+              '; windows_host_awake='+str(args.live))
     store.create_run(manifest)
     root = store.run_dir(args.run_id)
     write_json(root/'preflight.json',estimate)
@@ -170,7 +188,7 @@ async def run_pipeline(args: PipelineOptions):
     write_json(root/store.COLLECTION_PLAN_NAME, {
         'item_ids': planned_item_ids, 'item_count': len(planned_item_ids),
         'dataset': args.dataset, 'seed': args.seed, 'depth': args.depth,
-        'policy': args.policy,
+        'policy': args.policy, 'item_concurrency': args.item_concurrency,
     })
     write_json(root/'corpus.json',{'sha256':corpus_hash,'documents':SEED_CORPUS})
     splits = SplitManifest(args.run_id)
@@ -196,30 +214,46 @@ async def run_pipeline(args: PipelineOptions):
         with (root/'collect.log').open('x',encoding='utf-8') as log:
             log.write(json.dumps({'options':vars(args),'preflight':estimate})+'\n')
             log.flush()
-            for i,(item,prompt) in enumerate(zip(items,prompts)):
+            async def collect_one(i, item, prompt):
                 item_id = f'{args.dataset}-{i:04d}'
-                control.item_id = item_id
                 group = GroupKey(item_id,args.dataset,task_family=item.get('kind',args.dataset),
                     model_pair=f'{small}->{big}',retriever_version=corpus_hash,
                     prompt_template=args.dataset,prompt_fingerprint=prompt_fingerprint(prompt))
                 split = splits.add(group)
+                item_token = active_item_id.set(item_id)
                 try:
-                    traces = await collect_fanout(item_id=item_id,question=prompt,cfg=cfg,
-                        small_id=small,big_id=big,run_id=args.run_id,dataset=args.dataset,
-                        split=split,seed=args.seed+i,labeler=make_labeler(args.dataset,item),
-                        label_source='rigor.score',served_policy=policy,scoring_policy=scorer,
-                        budget=budget,depth=args.depth,prompt_features={'task_family':item.get('kind',args.dataset)})
-                except BudgetExceeded as exc:
-                    traces,stopped = exc.trajectories,str(exc)
-                for trace in traces:
-                    store.append(trace)
-                log.write(json.dumps({'item_id':item_id,'trajectories':len(traces),'stop':stopped})+'\n')
-                log.flush()
-                print(f"Collected {i+1}/{len(items)}: {len(traces)} trajectories; "
-                      f"calls={budget.state.spent_llm_calls}; usd={budget.state.spent_usd:.6f}", flush=True)
+                    try:
+                        traces = await collect_fanout(item_id=item_id,question=prompt,cfg=cfg,
+                            small_id=small,big_id=big,run_id=args.run_id,dataset=args.dataset,
+                            split=split,seed=args.seed+i,labeler=make_labeler(args.dataset,item),
+                            label_source='rigor.score',served_policy=policy,scoring_policy=scorer,
+                            budget=budget,depth=args.depth,prompt_features={'task_family':item.get('kind',args.dataset)})
+                        item_stop = None
+                    except BudgetExceeded as exc:
+                        traces,item_stop = exc.trajectories,str(exc)
+                    return i,item_id,traces,item_stop
+                finally:
+                    active_item_id.reset(item_token)
+
+            indexed = list(enumerate(zip(items,prompts)))
+            for start in range(0, len(indexed), args.item_concurrency):
+                batch = indexed[start:start+args.item_concurrency]
+                results = await asyncio.gather(*(
+                    collect_one(i,item,prompt) for i,(item,prompt) in batch))
+                for i,item_id,traces,item_stop in results:
+                    for trace in traces:
+                        store.append(trace)
+                    log.write(json.dumps({'item_id':item_id,'trajectories':len(traces),
+                                          'stop':item_stop})+'\n')
+                    log.flush()
+                    print(f"Collected {i+1}/{len(items)}: {len(traces)} trajectories; "
+                          f"calls={budget.state.spent_llm_calls}; usd={budget.state.spent_usd:.6f}", flush=True)
+                    if item_stop:
+                        stopped = item_stop
+                        break
+                    completed_item_ids.append(item_id)
                 if stopped:
                     break
-                completed_item_ids.append(item_id)
     finally:
         retrieval._store = old_store
         if control_token is not None:

@@ -1,0 +1,9 @@
+Checkpoint 11 clean-install validation (2026-09-09)
+
+Environment: fresh Python 3.11 venv outside the repository.
+Install: python -m pip install -r requirements-dev.txt
+Tests: 374 passed, 6 warnings in 11.26s.
+Static analysis: python -m pyflakes app/ scripts/ tests/ exited 0.
+
+Warnings were dependency/framework deprecations and pydantic 2.9 protected-name
+warnings; no test, import, installation, or static-analysis failure occurred.

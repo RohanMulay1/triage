@@ -78,3 +78,5 @@ CLAUDE_MEMORY.md
 !data/traces/gate2-nvidia-full-20260909/collect.log
 !data/traces/gate2-nvidia-full-awake-20260909/
 !data/traces/gate2-nvidia-full-awake-20260909/collect.log
+!data/traces/gate2-nvidia-full-concurrent-20260909/
+!data/traces/gate2-nvidia-full-concurrent-20260909/collect.log

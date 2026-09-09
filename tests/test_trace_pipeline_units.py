@@ -1,6 +1,7 @@
 import pytest
 from app.config import load_router_config
-from app.trace.pipeline import PipelineOptions, preflight, validate_options
+from app.trace.pipeline import (PipelineOptions, preflight, validate_options,
+                                validate_item_concurrency)
 from app.trace.ablations import compare_fits
 from test_trace_calibration import rows
 from app.trace.calibration import fit_gain
@@ -21,6 +22,25 @@ def test_pipeline_refuses_live_diagnostic_provider():
 def test_pipeline_rejects_invalid_request_timeout(timeout):
     with pytest.raises(ValueError):
         validate_options(PipelineOptions('unit',request_timeout=timeout))
+
+
+@pytest.mark.parametrize('value',[0,-1])
+def test_pipeline_rejects_invalid_item_concurrency(value):
+    with pytest.raises(ValueError):
+        validate_options(PipelineOptions('unit',item_concurrency=value))
+
+
+def test_item_concurrency_is_live_and_zero_price_only():
+    zero={m:{'cost_in':0,'cost_out':0} for m in ('s','b')}
+    validate_item_concurrency(PipelineOptions('unit',live=True,max_usd=1,
+                              item_concurrency=4),zero,'s','b')
+    with pytest.raises(ValueError,match='zero-price'):
+        validate_item_concurrency(PipelineOptions('unit',item_concurrency=4),
+                                  zero,'s','b')
+    priced={**zero,'b':{'cost_in':0,'cost_out':.1}}
+    with pytest.raises(ValueError,match='priced'):
+        validate_item_concurrency(PipelineOptions('unit',live=True,max_usd=1,
+                                  item_concurrency=4),priced,'s','b')
 
 
 def test_whole_run_estimate_counts_all_calls():

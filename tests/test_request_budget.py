@@ -116,3 +116,12 @@ def test_operations_latencies_use_item_clusters_and_no_router_claim():
     assert report['latency']['p50_ms']['n'] == 1
     assert report['reported_tokens_in'] == 7
     assert report['legacy_router_overhead']['status'] == 'NOT_MEASURED'
+
+
+def test_operations_retains_bounded_provider_timeouts():
+    from app.trace.operations import operational_report
+    events = [dict(item_id='a',status='provider_timeout',latency_ms=180000)]
+    report = operational_report(events, 180, 0, [], None)
+    assert report['n_request_attempts'] == 1
+    assert report['request_status_counts'] == {'provider_timeout': 1}
+    assert report['latency']['p95_ms']['point'] == 180000

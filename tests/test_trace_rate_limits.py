@@ -104,6 +104,24 @@ def test_wall_runtime_timeout_is_bounded_retried_and_recorded():
     assert all(delay < .01 for delay in sleeps[1:])
 
 
+def test_concurrent_items_keep_request_event_identity():
+    from app.trace.pacing import active_item_id
+    control=RequestControl(rps=100000,attempts=1)
+    async def one(item):
+        token=active_item_id.set(item)
+        client=SimpleNamespace(model_id='unit',provider_label='nvidia',
+                               unknown_usage=False)
+        try:
+            await control.call(client,lambda: asyncio.sleep(.005,
+                result=GenResult(text='ok',provider='nvidia',model='unit')))
+        finally:
+            active_item_id.reset(token)
+    async def run():
+        await asyncio.gather(one('item-a'),one('item-b'))
+    asyncio.run(run())
+    assert sorted(e['item_id'] for e in control.events)==['item-a','item-b']
+
+
 def test_partial_resample_cost_is_preserved_on_exhaustion(monkeypatch):
     async def partly_successful(self,*args,**kwargs):
         self.provider_label='nvidia'

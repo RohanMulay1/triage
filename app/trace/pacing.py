@@ -6,6 +6,7 @@ import math
 import time
 
 active_control = ContextVar("triage_run_request_control", default=None)
+active_item_id = ContextVar("triage_run_item_id", default=None)
 
 
 class EventJournal(list):
@@ -41,6 +42,9 @@ class RequestControl:
         self.throttle_seconds = 0.0
         self.item_id = None
 
+    def current_item_id(self):
+        return active_item_id.get() or self.item_id
+
     async def acquire(self):
         async with self.lock:
             delay = max(0.0, self.next_start-self.clock())
@@ -67,7 +71,7 @@ class RequestControl:
                 ))
                 client.unknown_usage = True
                 wait = min(30.0, 2.0**(attempt-1))
-                self.events.append({"item_id":self.item_id,"model":client.model_id,
+                self.events.append({"item_id":self.current_item_id(),"model":client.model_id,
                     "provider":exc.provider,"attempt":attempt,"status":"provider_timeout",
                     "latency_ms":1000*(self.clock()-start),"http_status":None,
                     "retryable":True,"usage_known":False,"error":str(exc),
@@ -79,7 +83,7 @@ class RequestControl:
             except BudgetExceeded as exc:
                 result = getattr(exc, 'result', None)
                 if result is not None:
-                    self.events.append({'item_id': self.item_id, 'model': client.model_id,
+                    self.events.append({'item_id': self.current_item_id(), 'model': client.model_id,
                         'provider': client.provider_label, 'attempt': attempt,
                         'status': 'returned', 'budget_overrun': True,
                         'latency_ms': 1000*(self.clock()-start),
@@ -95,7 +99,7 @@ class RequestControl:
                 wait = max(float(exc.retry_after or 0), min(30.0, 2.0**(attempt-1)))
                 runtime_refused = not math.isfinite(wait) or wait > self.max_retry_wait
                 exc.runtime_refused = runtime_refused
-                self.events.append({"item_id":self.item_id,"model":client.model_id,"provider":exc.provider,
+                self.events.append({"item_id":self.current_item_id(),"model":client.model_id,"provider":exc.provider,
                     "attempt":attempt,"status":status,"latency_ms":1000*(self.clock()-start),
                     "http_status":exc.status_code,"retryable":exc.retryable,
                     "usage_known":exc.usage_known,"error":str(exc),
@@ -106,7 +110,7 @@ class RequestControl:
                     raise
                 await self.sleep(wait)
             else:
-                self.events.append({"item_id":self.item_id,"model":client.model_id,"provider":client.provider_label,
+                self.events.append({"item_id":self.current_item_id(),"model":client.model_id,"provider":client.provider_label,
                     "attempt":attempt,"status":"returned","latency_ms":1000*(self.clock()-start),
                     "tokens_in":result.tokens_in,"tokens_out":result.tokens_out,
                     "usage_known":result.usage_known,

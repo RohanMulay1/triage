@@ -15,7 +15,7 @@ def quantile(values, q):
 
 def operational_report(events, wall_seconds, throttle_seconds, traces, ledger):
     requests = [e for e in events if e.get('status') in
-                ('returned', 'rate_limited', 'provider_failure')]
+                ('returned', 'rate_limited', 'provider_failure', 'provider_timeout')]
     groups = defaultdict(list)
     for i, event in enumerate(requests):
         groups[event.get('item_id') or f'ungrouped-{i}'].append(event['latency_ms'])
