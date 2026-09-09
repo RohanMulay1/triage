@@ -16,7 +16,83 @@ Every major phase must end in a durable checkpoint before the next phase starts.
 | Research decision | This section updated with completion evidence, decisions, rejected hypotheses, remaining tasks, and one exact resumption command or action |
 | Consistency gate | `git status`, configuration validation, relevant tests, and an artifact-existence check recorded before proceeding |
 
-### Current state (2026-09-08, Checkpoint 10: usable live fallback)
+### Current state (2026-09-09, Checkpoint 11: full live depth-2 trace evidence on GSM8K)
+
+| | |
+|---|---|
+| **Checkpoint** | 11: full live depth-2 trace collection on GSM8K complete; Gate 2 INCONCLUSIVE |
+| **Tests** | 379 passing; pyflakes clean; legacy-router equivalence verified |
+| **Trace schema** | 1.3.0 |
+| **Gate 1** | Provisionally NARROW; Yin & Zhang (*Knowledge-Based Systems*, 2026, DOI 10.1016/j.knosys.2026.116685) verified paywalled, unread overlap risk |
+| **Gate 2** | INCONCLUSIVE: held-out test split lacks minimum class variation (need >=20 test rows, >=5/class); not a GO |
+| **Calibration** | COMPLETE: `abstain` (calibrated test ECE 0.0468 [0.0177, 0.1172]) and `retrieve -> answer` (calibrated test ECE 0.0220 [0.0079, 0.1013]) fitted; choice change = 0.0000; other actions refused |
+| **C1 / C2 / C4** | C1 REFUSED (incomplete action support); C2 C2_NOT_ESTABLISHED (depth-1 zero gain verified; depth-2 test pairs n<20); C4 REFUSED (served support <20, unrecorded propensities on failures) |
+| **Budget** | Approved program cap $2.00; realized listed spend $0.00 (NVIDIA trial zero listed price, not invoice guarantee); cumulative Groq spend $0.0026961 |
+| **Controller** | None implemented; gated on positive Gate 2 GO |
+
+A full 120-item depth-2 live collection on GSM8K completed under NVIDIA
+(`gate2-nvidia-full-concurrent-20260909`, 2,245 trajectories, zero synthetic outcomes,
+intact chains, conserved costs, `analysis_grade=true`). Gate 2 is **INCONCLUSIVE**:
+while 11 candidate actions exhibited marginal quality variation across the sample,
+positive repair instances on the 25% held-out test split were sparse (<5 per class)
+under balanced root selection, so repairability probe fitting refused under the
+preregistered minimum test thresholds. Per preregistration, no controller was built.
+Calibration fits succeeded for `abstain` and `retrieve -> answer`, but induced choice
+difference was 0.0000; C1 and C4 refused due to missing common action support and
+served-path sample size; C2 depth-1 answer-preservation is confirmed (zero gain by
+construction), but depth-2 paired contrasts lacked >= 20 complete test pairs.
+
+**Checkpoint 11 — full live depth-2 trace evidence and operational audit (complete).**
+
+- **Live trace execution and validation:** Run `gate2-nvidia-full-concurrent-20260909`
+  executed with 8-way item concurrency and global 0.6 rps rate pacing, collecting
+  all 120 planned GSM8K items (`gsm8k-0000` through `gsm8k-0119`). Independent
+  `store.validate_run` confirms `expected_items=120`, `observed_items=120`,
+  `collection_complete=true`, `chain_ok=true`, `cost_conservation_ok=true`, `errors=[]`,
+  `force_mock=false`, zero synthetic outcomes, and `analysis_grade=true`.
+  Total trajectories committed: 2,245.
+- **Preserved interrupted runs:** Two prior interrupted attempts are preserved as
+  immature non-evidence runs: `gate2-nvidia-full-20260909` (11/120 items, host sleep
+  interruption, `collection_complete=false`, `analysis_grade=false`) and
+  `gate2-nvidia-full-awake-20260909` (2/120 items, stopped due to ~20h sequential runtime
+  projection, `collection_complete=false`, `analysis_grade=false`). Both validate with
+  zero structural errors but are excluded from evidence.
+- **Support, positivity, and missingness:** 3,314 recorded decisions across 9 supported
+  actions (`abstain`, `answer`, `resample`, `retrieve`, `self_check`, `heuristic_gain_scoring`,
+  `stop`, `stronger_model`, `verify`). Zero unsupported actions and zero positivity
+  violations (`off_policy_ready=true`). Missingness: 316 chosen, 2,221 counterfactual,
+  20 attempted, 425 unavailable, 332 failed, and 0 synthetic fallback.
+- **Gate 2 (Repairability):** Verdict is **INCONCLUSIVE**. Across the full 120 items, 11 actions
+  exhibited marginal quality variation (`abstain` mean delta -0.6275, 95% CI [-0.7157, -0.5294], n=102;
+  `stronger_model` mean delta +0.0149, 95% CI [-0.1343, 0.1642], n=67 with 14 positive, 13 negative,
+  40 zero; depth-2 branches with variation up to +0.0727). However, when evaluated on the 25%
+  leakage-safe held-out test split, positive repair instances were sparse (<5 per class for every
+  action), causing probe fitting to fail closed under `MIN_TEST_ROWS >= 20` and `MIN_TEST_PER_CLASS >= 5`.
+  Because response-only features did not clear the preregistered positive paired AUC difference
+  threshold, Gate 2 does not license a controller.
+- **Calibration:** `calibration_report` completed. Per-action isotonic calibration maps
+  fitted on disjoint `calib` and scored on `test`:
+  - `abstain`: train=50, calib=26, test=26. Raw test ECE 0.0818 (95% CI [0.0354, 0.1472]); calibrated test ECE 0.0468 (95% CI [0.0177, 0.1172], n=26).
+  - `retrieve -> answer`: train=47, calib=15, test=21. Raw test ECE 0.0421 (95% CI [0.0060, 0.1070]); calibrated test ECE 0.0220 (95% CI [0.0079, 0.1013], n=21).
+  - Other actions were refused due to `REFUSED_SPLIT_COVERAGE` (test < 20 or calib < 10) or `REFUSED_NO_TRAIN_VARIATION`.
+  - Induced root choice change on fitted actions (`abstain` + `stop`) was 0.0000 (95% CI [0.0000, 0.0000], n=26). Calibration did not change choices; performance claim is False.
+- **C1 ablation:** Refused (`gain estimator refused for feasible action; missing outcomes for feasible actions; missing recorded heuristic utility scores`; `ci95` point=None, n=0, `established=false`).
+- **C2 ablation:** Verdict `C2_NOT_ESTABLISHED`. Depth-1 answer preservation is verified exactly: mean quality delta is 0.0000 (95% CI [0.0000, 0.0000]) for RESAMPLE (n=56), RETRIEVE (n=102), and SELF_CHECK (n=63). For depth-2 continuation value, transient provider failures on subsequent branches reduced complete held-out test pairs below the required $n=20$ threshold (RESAMPLE $n=15$, SELF_CHECK $n=16$, RETRIEVE $n=18$), resulting in `REFUSED_INCOMPLETE_PAIRS`.
+- **C4 ablation:** Refused (`served behavior propensity not recorded` on failed branches, and served-path support has ~11 observations/action, below the MIN_TEST_ROWS=20 gate; `established=false`).
+- **Operational accounting:** Total request attempts: 2,343. Wall clock: 10,871.67 s (~3.02 hours). Throttle delay: 2,268.51 s under global 0.6 rps rate pacing. 1,183 returned attempts; 951 rate-limited (429) requests successfully backed off and retried within bounds; 209 transient provider failures (93 x 503, 1 x 500, 8 x 404); zero provider timeouts. Reported tokens: 331,793 input, 177,972 output. Item-clustered latency: p50 = 3,688 ms (95% CI [2672.0, 5367.0], n=120); p95 = 133,576 ms (95% CI [120753.75, 150484.0], n=120). Scoring overhead: 12,705.5 ms/item (95% CI [9840.2, 16227.4], n=120). Realized listed spend: $0.00 (NVIDIA trial zero price list, not an invoice guarantee). Realized cumulative spend across all programs remains $0.0026961 (from prior Groq runs), within the $2.00 cap. 209 requests retained unknown-usage reservations.
+- **Limits and confounds:** Single domain (GSM8K only); replacement model pair (`nim-nemotron-lightning-30b` to `nim-nemotron-ultra-550b`); 8-way item concurrency alters provider queuing and is not sequential production latency; Yin & Zhang KBS 2026 overlap risk; NVIDIA trial zero price is not an invoice guarantee.
+- **Second domain preflight:** Preflighted 120-item `mixed` dataset. On Groq, preflight planning requires ~$29.29, which exceeds the remaining approved cap of $1.997; on NVIDIA, trial listings carry no invoice guarantee and heavy concurrency loads. External budget approval remains the blocker.
+
+**One exact next command** (re-read the preserved Checkpoint 11 analysis):
+
+```powershell
+python -m app.trace.analysis --run gate2-nvidia-full-concurrent-20260909
+```
+
+The following Checkpoint 10 state is retained as historical evidence and is
+superseded by Checkpoint 11 above.
+
+### Historical state (2026-09-08, Checkpoint 10: usable live fallback)
 
 NVIDIA and Groq credentials are configured locally and excluded from Git.
 NVIDIA Lightning and Ultra both generated real responses, but the depth-2 smoke
@@ -26,7 +102,7 @@ No scientific negative or positive result follows. Gate 1 stays provisionally
 NARROW with Yin & Zhang unread; C1/calibration/C4 lack adequate fitted support,
 C2 remains unresolved, Gate 3 is unestablished, and no controller was built.
 
-**Checkpoint 10 ? documentation-driven provider recovery (complete).**
+**Checkpoint 10 — documentation-driven provider recovery (complete).**
 
 - Reviewed the relevant NVIDIA hosted text-generation, request-format, reasoning
   and model documentation plus Groq compatibility, deprecations, pricing and rate

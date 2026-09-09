@@ -1,4 +1,5 @@
 # Triage
+# Triage
 
 Triage is a reliability-aware text LLM router and an experimental action-outcome
 trace substrate. The production router uses black-box signals from an actual
@@ -6,13 +7,17 @@ model response to choose among serving, retrieving, verifying, using a calculato
 escalating, or abstaining to PENDING_REVIEW. Its heuristic decisions are preserved.
 
 **No performance claim is currently supported by this research program.**
-NVIDIA generation works with explicit current-model settings, but its latest
-smoke contains Ultra service failures and is excluded from evidence. The Groq
-fallback (GPT-OSS 20B to 120B) completed a live, analysis-grade smoke after fixing
-score-JSON envelope handling. Gate 2 remains INCONCLUSIVE at smoke-test size.
-The full Groq collection refuses because its conservative planning estimate
-exceeds the approved cap. Calibration and C1/C2/C4 remain unestablished.
-See [provider recovery evidence](docs/research/checkpoint10/provider-notes.md).
+A full live 120-item depth-2 trace collection on GSM8K completed under NVIDIA
+(`gate2-nvidia-full-concurrent-20260909`, 2,245 trajectories, zero synthetic outcomes,
+intact chains, conserved costs, `analysis_grade=true`). Gate 2 is **INCONCLUSIVE**:
+11 candidate actions exhibit marginal quality variation across the sample, but none
+cleared the preregistered held-out test thresholds (>= 20 test rows, >= 5 per class)
+to support a trained repairability probe. Per preregistration, no controller is built.
+Calibration fits succeeded for `abstain` and `retrieve -> answer`, but induced choice
+difference was 0.0000; C1 and C4 refused due to missing common action support and
+served-path sample size; C2 depth-1 answer-preservation is confirmed (zero gain by
+construction), but depth-2 paired contrasts lacked >= 20 complete test pairs.
+See [Checkpoint 11 evidence](RESEARCH_STRATEGY.md).
 
 Research model IDs: `nim-nemotron-lightning-30b` / `nim-nemotron-ultra-550b`,
 with `groq-gpt-oss-20b` / `groq-gpt-oss-120b` as a separately recorded fallback
@@ -88,6 +93,12 @@ comparator's real client path. It is forbidden with `--live`. Ordinary mock scor
 still fails closed on malformed output. The comparator is an equation-level Triage
 adaptation of arXiv:2603.19896, not a reproduction of its released search/stop experiment.
 
+
+`--diagnostic-scores` explicitly enables seeded synthetic score JSON through the
+comparator's real client path. It is forbidden with `--live`. Ordinary mock scoring
+still fails closed on malformed output. The comparator is an equation-level Triage
+adaptation of arXiv:2603.19896, not a reproduction of its released search/stop experiment.
+
 Gain models fit only on `train`; isotonic maps fit only on `calib`; reliability
 bins and expected calibration error are evaluated only on `test`. The target is
 normalized marginal quality gain, not correctness probability. Missing split
@@ -97,19 +108,33 @@ An interval with null endpoints and n=0 means unavailable, not a zero effect.
 ## Research status and limits
 
 - **Gate 1: provisionally NARROW.** Deltas must be established against fully read
-  prior work. Yin & Zhang (Knowledge-Based Systems, DOI 10.1016/j.knosys.2026.116685)
-  remains an unread related-work limitation and overlap risk.
-- **Gate 2: undecided on real data.** Synthetic runs cannot return GO.
-- **C1:** the gain-replacement experiment is implemented; insufficient calibration
-  or comparator coverage refuses a numerical comparison.
-- **C2:** mock nulls test the apparatus. They do not refute real information value.
-- **C4:** the same estimator is fitted to matched served and counterfactual data
-  when support permits. Unsupported served actions cannot be assigned invented
-  values. Ranking disagreement is not policy superiority.
-- **Gate 3 and a learned controller:** still gated on real evidence.
+  prior work. Yin & Zhang (*Knowledge-Based Systems*, Aug 2026, DOI 10.1016/j.knosys.2026.116685,
+  "Failure-mode-aware uncertainty intervention routing for large language models") remains
+  a confirmed closed-access journal publication without an open preprint, and is a disclosed
+  overlap risk. Broad novelty, sequential routing priority, and calibrated stopping claims remain barred.
+- **Gate 2: INCONCLUSIVE on live data.** Evaluated on 120 live GSM8K items under NVIDIA
+  (`gate2-nvidia-full-concurrent-20260909`). While 11 candidate actions showed marginal quality
+  variation across the sample, positive instances on the held-out test split were sparse (<5 per class),
+  so probe fitting refused under the preregistered minimum test thresholds. Per preregistration,
+  this precludes a GO verdict and no controller was built.
+- **Calibration:** `abstain` (calibrated test ECE 0.0468, 95% CI [0.0177, 0.1172], n=26) and
+  `retrieve -> answer` (calibrated test ECE 0.0220, 95% CI [0.0079, 0.1013], n=21) successfully fitted
+  isotonic maps on disjoint calib; induced root choice change was 0.0000 (95% CI [0.0000, 0.0000], n=26).
+  Other actions were refused due to incomplete test/calib coverage or lack of training variation.
+- **C1:** Refused due to incomplete common action support and comparator coverage across the full action space.
+- **C2:** Depth-1 answer preservation is established (mean delta 0.0000, 95% CI [0.0000, 0.0000] across all
+  informational actions). Depth-2 continuation value is `C2_NOT_ESTABLISHED` because provider failures
+  left complete test pairs below the required n=20 threshold (RESAMPLE n=15, SELF_CHECK n=16, RETRIEVE n=18).
+- **C4:** Refused because served behavior propensities were absent on failed branches and served support was
+  below the fitting threshold (~11 observations/action vs 20 required).
+- **Gate 3 and learned controller:** Unbuilt and ungated; Gate 2 did not return GO.
+- **Second-domain validity:** Unresolved. Groq preflight for 120-item `mixed` requires ~$29.29, exceeding
+  the remaining approved cap ($1.997); NVIDIA trial listings carry no invoice guarantee. External budget
+  approval is the explicit blocker.
 
 The approved program cap is $2.00, with earlier listed-price spend accounted
-against it. New live commands require an explicit remaining cap and fresh run id;
+against it. NVIDIA trial pricing is snapshotted at $0 listed price (not an invoice guarantee);
+Groq listed-price spend remains $0.0026961. New live commands require an explicit remaining cap and fresh run id;
 the pipeline never infers authorization from a configured credential:
 
 ```powershell
@@ -119,7 +144,7 @@ python scripts/run_gate2.py --n 120 --dataset gsm8k --depth 2 --policy balanced 
 The command refuses before generation if its whole-run estimate exceeds the cap.
 Per-action admission and actual settlement still apply. Listed-price token costs
 are not provider invoices; an admission estimate is not an invoice guarantee.
-No second-domain robustness result is established by the mixed mock fixture.
+No second-domain robustness result is established by the single-domain GSM8K run.
 
 The [charter](CHARTER.md) keeps the project text-only, API-cost focused, and limited
 to black-box signals. Multimodal routing, local vLLM/GPU-second/energy accounting,
@@ -137,5 +162,5 @@ python -m pyflakes app/ scripts/ tests/
 `tests/test_end_to_end.py` exercises the assembled pipeline from a cold process,
 checks provenance and refusals, preserves committed receipts, and compares router
 decisions with tracing enabled and disabled. See [RESEARCH_STRATEGY.md](RESEARCH_STRATEGY.md)
-for Checkpoint 8 evidence and limitations, and [the novelty strategy](docs/research/novelty-strategy.md)
+for Checkpoint 11 evidence and limitations, and [the novelty strategy](docs/research/novelty-strategy.md)
 for the forbidden claims and candidate ablations.

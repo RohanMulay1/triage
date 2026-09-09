@@ -1,0 +1,1078 @@
+{
+  "analysis_grade": true,
+  "not_evidence": false,
+  "status": "COMPLETE",
+  "n_fitted": 2,
+  "target": "normalized marginal quality gain (delta+1)/2",
+  "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+  "per_action": {
+    "abstain": {
+      "status": "OK",
+      "counts": {
+        "train": 56,
+        "calib": 20,
+        "test": 26
+      },
+      "roles": {
+        "train": [
+          "gsm8k-0005",
+          "gsm8k-0006",
+          "gsm8k-0007",
+          "gsm8k-0008",
+          "gsm8k-0009",
+          "gsm8k-0011",
+          "gsm8k-0012",
+          "gsm8k-0013",
+          "gsm8k-0014",
+          "gsm8k-0015",
+          "gsm8k-0016",
+          "gsm8k-0020",
+          "gsm8k-0024",
+          "gsm8k-0025",
+          "gsm8k-0028",
+          "gsm8k-0030",
+          "gsm8k-0031",
+          "gsm8k-0034",
+          "gsm8k-0036",
+          "gsm8k-0038",
+          "gsm8k-0039",
+          "gsm8k-0040",
+          "gsm8k-0041",
+          "gsm8k-0043",
+          "gsm8k-0049",
+          "gsm8k-0050",
+          "gsm8k-0051",
+          "gsm8k-0052",
+          "gsm8k-0053",
+          "gsm8k-0055",
+          "gsm8k-0056",
+          "gsm8k-0057",
+          "gsm8k-0059",
+          "gsm8k-0060",
+          "gsm8k-0061",
+          "gsm8k-0063",
+          "gsm8k-0064",
+          "gsm8k-0066",
+          "gsm8k-0067",
+          "gsm8k-0072",
+          "gsm8k-0075",
+          "gsm8k-0076",
+          "gsm8k-0077",
+          "gsm8k-0085",
+          "gsm8k-0087",
+          "gsm8k-0088",
+          "gsm8k-0089",
+          "gsm8k-0098",
+          "gsm8k-0101",
+          "gsm8k-0104",
+          "gsm8k-0105",
+          "gsm8k-0112",
+          "gsm8k-0114",
+          "gsm8k-0115",
+          "gsm8k-0117",
+          "gsm8k-0118"
+        ],
+        "calib": [
+          "gsm8k-0000",
+          "gsm8k-0010",
+          "gsm8k-0018",
+          "gsm8k-0021",
+          "gsm8k-0022",
+          "gsm8k-0026",
+          "gsm8k-0029",
+          "gsm8k-0033",
+          "gsm8k-0042",
+          "gsm8k-0045",
+          "gsm8k-0047",
+          "gsm8k-0068",
+          "gsm8k-0090",
+          "gsm8k-0092",
+          "gsm8k-0094",
+          "gsm8k-0096",
+          "gsm8k-0107",
+          "gsm8k-0109",
+          "gsm8k-0113",
+          "gsm8k-0119"
+        ],
+        "test": [
+          "gsm8k-0001",
+          "gsm8k-0002",
+          "gsm8k-0003",
+          "gsm8k-0004",
+          "gsm8k-0017",
+          "gsm8k-0019",
+          "gsm8k-0023",
+          "gsm8k-0027",
+          "gsm8k-0032",
+          "gsm8k-0035",
+          "gsm8k-0037",
+          "gsm8k-0044",
+          "gsm8k-0046",
+          "gsm8k-0048",
+          "gsm8k-0054",
+          "gsm8k-0058",
+          "gsm8k-0062",
+          "gsm8k-0065",
+          "gsm8k-0069",
+          "gsm8k-0070",
+          "gsm8k-0071",
+          "gsm8k-0073",
+          "gsm8k-0078",
+          "gsm8k-0079",
+          "gsm8k-0093",
+          "gsm8k-0111"
+        ]
+      },
+      "model": {
+        "features": [
+          "uncertainty",
+          "instability",
+          "contradiction",
+          "retrieval_disagreement",
+          "evidence_sufficiency",
+          "answer_len",
+          "answer_has_digit"
+        ],
+        "mean": [
+          0.3000000000000003,
+          0.0,
+          0.0,
+          0.0,
+          1.0,
+          632.1964285714286,
+          0.9821428571428571
+        ],
+        "scale": [
+          3.3306690738754696e-16,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1071.3343552325439,
+          0.13243211584099407
+        ],
+        "weights": [
+          4.884194841507531e-16,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.007178158040790225,
+          -0.03959110160298307,
+          0.20535714285714338
+        ],
+        "ridge": 1.0
+      },
+      "map": {
+        "x": [
+          0.19579623558129358,
+          0.20378287797993552,
+          0.21047638113114633,
+          0.5496248319167774
+        ],
+        "y": [
+          0.19444444444444445,
+          0.19444444444444445,
+          0.5,
+          0.5
+        ],
+        "interpolation": "linear",
+        "outside": "clip"
+      },
+      "test_item_ids": [
+        "gsm8k-0001",
+        "gsm8k-0002",
+        "gsm8k-0003",
+        "gsm8k-0004",
+        "gsm8k-0017",
+        "gsm8k-0019",
+        "gsm8k-0023",
+        "gsm8k-0027",
+        "gsm8k-0032",
+        "gsm8k-0035",
+        "gsm8k-0037",
+        "gsm8k-0044",
+        "gsm8k-0046",
+        "gsm8k-0048",
+        "gsm8k-0054",
+        "gsm8k-0058",
+        "gsm8k-0062",
+        "gsm8k-0065",
+        "gsm8k-0069",
+        "gsm8k-0070",
+        "gsm8k-0071",
+        "gsm8k-0073",
+        "gsm8k-0078",
+        "gsm8k-0079",
+        "gsm8k-0093",
+        "gsm8k-0111"
+      ],
+      "raw_gain": [
+        -0.6083941284307037,
+        -0.5953287318893012,
+        -0.5245343832449634,
+        -0.6023505450048857,
+        -0.6048028194326567,
+        -0.5961595571052674,
+        -0.6083941284307037,
+        -0.5991210469879853,
+        -0.6083941284307037,
+        -0.589874766358685,
+        -0.6045348112984741,
+        -0.6083941284307037,
+        -0.5949937217215729,
+        -0.6038513905563083,
+        -0.6080859190763936,
+        -0.5940690936586429,
+        -0.6010775063675183,
+        -0.5989200408873483,
+        -0.5754157275195328,
+        -0.6084075288374129,
+        -0.5989334412940575,
+        -0.6054996405815314,
+        -0.6081395207032303,
+        -0.6053388357010219,
+        -0.6049636243131662,
+        -0.5843001971676867
+      ],
+      "calibrated_gain": [
+        -0.6111111111111112,
+        -0.6111111111111112,
+        0.0,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.4942720498276072,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        0.0,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.6111111111111112,
+        -0.23979535090646298
+      ],
+      "raw": {
+        "status": "OK",
+        "n": 26,
+        "ece": {
+          "point": 0.0857,
+          "lo": 0.0443,
+          "hi": 0.1642,
+          "n": 26
+        },
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "n": 15,
+            "predicted": {
+              "point": 0.197,
+              "lo": 0.1964,
+              "hi": 0.1976,
+              "n": 15
+            },
+            "observed": {
+              "point": 0.1667,
+              "lo": 0.0667,
+              "hi": 0.3,
+              "n": 15
+            }
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "n": 11,
+            "predicted": {
+              "point": 0.2067,
+              "lo": 0.2021,
+              "hi": 0.2139,
+              "n": 11
+            },
+            "observed": {
+              "point": 0.0455,
+              "lo": 0.0,
+              "hi": 0.1364,
+              "n": 11
+            }
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          }
+        ],
+        "ci_scope": "test resampling conditional on fixed training and calibration fits"
+      },
+      "calibrated": {
+        "status": "OK",
+        "n": 26,
+        "ece": {
+          "point": 0.112,
+          "lo": 0.0403,
+          "hi": 0.2043,
+          "n": 26
+        },
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "n": 22,
+            "predicted": {
+              "point": 0.1944,
+              "lo": 0.1944,
+              "hi": 0.1944,
+              "n": 22
+            },
+            "observed": {
+              "point": 0.1364,
+              "lo": 0.0455,
+              "hi": 0.25,
+              "n": 22
+            }
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "n": 2,
+            "predicted": {
+              "point": 0.3165,
+              "lo": 0.2529,
+              "hi": 0.3801,
+              "n": 2
+            },
+            "observed": {
+              "point": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "n": 2
+            }
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "n": 2,
+            "predicted": {
+              "point": 0.5,
+              "lo": 0.5,
+              "hi": 0.5,
+              "n": 2
+            },
+            "observed": {
+              "point": 0.0,
+              "lo": 0.0,
+              "hi": 0.0,
+              "n": 2
+            }
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          }
+        ],
+        "ci_scope": "test resampling conditional on fixed training and calibration fits"
+      }
+    },
+    "answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 34,
+        "calib": 11,
+        "test": 17
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 30,
+        "calib": 11,
+        "test": 15
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 29,
+        "calib": 11,
+        "test": 15
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 24,
+        "calib": 8,
+        "test": 12
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 30,
+        "calib": 11,
+        "test": 15
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4": {
+      "status": "REFUSED_NO_TRAIN_VARIATION",
+      "counts": {
+        "train": 56,
+        "calib": 20,
+        "test": 26
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "OK",
+      "counts": {
+        "train": 47,
+        "calib": 15,
+        "test": 21
+      },
+      "roles": {
+        "train": [
+          "gsm8k-0005",
+          "gsm8k-0006",
+          "gsm8k-0007",
+          "gsm8k-0008",
+          "gsm8k-0009",
+          "gsm8k-0011",
+          "gsm8k-0012",
+          "gsm8k-0013",
+          "gsm8k-0014",
+          "gsm8k-0016",
+          "gsm8k-0020",
+          "gsm8k-0024",
+          "gsm8k-0025",
+          "gsm8k-0028",
+          "gsm8k-0030",
+          "gsm8k-0031",
+          "gsm8k-0034",
+          "gsm8k-0036",
+          "gsm8k-0038",
+          "gsm8k-0039",
+          "gsm8k-0040",
+          "gsm8k-0041",
+          "gsm8k-0043",
+          "gsm8k-0049",
+          "gsm8k-0050",
+          "gsm8k-0051",
+          "gsm8k-0052",
+          "gsm8k-0053",
+          "gsm8k-0055",
+          "gsm8k-0056",
+          "gsm8k-0057",
+          "gsm8k-0059",
+          "gsm8k-0060",
+          "gsm8k-0061",
+          "gsm8k-0063",
+          "gsm8k-0064",
+          "gsm8k-0066",
+          "gsm8k-0067",
+          "gsm8k-0072",
+          "gsm8k-0075",
+          "gsm8k-0077",
+          "gsm8k-0085",
+          "gsm8k-0089",
+          "gsm8k-0101",
+          "gsm8k-0104",
+          "gsm8k-0112",
+          "gsm8k-0118"
+        ],
+        "calib": [
+          "gsm8k-0000",
+          "gsm8k-0010",
+          "gsm8k-0018",
+          "gsm8k-0021",
+          "gsm8k-0022",
+          "gsm8k-0026",
+          "gsm8k-0029",
+          "gsm8k-0033",
+          "gsm8k-0042",
+          "gsm8k-0045",
+          "gsm8k-0047",
+          "gsm8k-0068",
+          "gsm8k-0096",
+          "gsm8k-0107",
+          "gsm8k-0109"
+        ],
+        "test": [
+          "gsm8k-0001",
+          "gsm8k-0002",
+          "gsm8k-0003",
+          "gsm8k-0004",
+          "gsm8k-0017",
+          "gsm8k-0019",
+          "gsm8k-0023",
+          "gsm8k-0027",
+          "gsm8k-0032",
+          "gsm8k-0035",
+          "gsm8k-0037",
+          "gsm8k-0044",
+          "gsm8k-0046",
+          "gsm8k-0048",
+          "gsm8k-0054",
+          "gsm8k-0058",
+          "gsm8k-0062",
+          "gsm8k-0065",
+          "gsm8k-0070",
+          "gsm8k-0071",
+          "gsm8k-0111"
+        ]
+      },
+      "model": {
+        "features": [
+          "uncertainty",
+          "instability",
+          "contradiction",
+          "retrieval_disagreement",
+          "evidence_sufficiency",
+          "answer_len",
+          "answer_has_digit"
+        ],
+        "mean": [
+          0.30000000000000027,
+          0.0,
+          0.0,
+          0.5354978723404255,
+          0.17715319148936173,
+          552.7872340425532,
+          0.9787234042553191
+        ],
+        "scale": [
+          2.7755575615628914e-16,
+          1.0,
+          1.0,
+          0.44252096355648785,
+          0.15180020582928866,
+          635.5630754030269,
+          0.14430489325798446
+        ],
+        "weights": [
+          -2.4951976243443833e-15,
+          0.0,
+          0.0,
+          -0.1055668225494361,
+          0.0834135372439836,
+          -0.03036906383177077,
+          -0.0758491854148801,
+          0.5106382978723379
+        ],
+        "ridge": 1.0
+      },
+      "map": {
+        "x": [
+          0.4466762025755089,
+          0.46106105447340723,
+          0.4651680769625313,
+          0.4705189733756949,
+          0.4783061693625325,
+          0.4790741208165247,
+          0.504117709105772,
+          0.5068042580839615,
+          0.5243520407839638,
+          0.5358677261135679,
+          0.5443408039182156,
+          0.5803715121364061,
+          0.594133159598509,
+          0.6129472590008775
+        ],
+        "y": [
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.5,
+          0.6666666666666666,
+          0.6666666666666666,
+          1.0,
+          1.0
+        ],
+        "interpolation": "linear",
+        "outside": "clip"
+      },
+      "test_item_ids": [
+        "gsm8k-0001",
+        "gsm8k-0002",
+        "gsm8k-0003",
+        "gsm8k-0004",
+        "gsm8k-0017",
+        "gsm8k-0019",
+        "gsm8k-0023",
+        "gsm8k-0027",
+        "gsm8k-0032",
+        "gsm8k-0035",
+        "gsm8k-0037",
+        "gsm8k-0044",
+        "gsm8k-0046",
+        "gsm8k-0048",
+        "gsm8k-0054",
+        "gsm8k-0058",
+        "gsm8k-0062",
+        "gsm8k-0065",
+        "gsm8k-0070",
+        "gsm8k-0071",
+        "gsm8k-0111"
+      ],
+      "raw_gain": [
+        -0.02642207301290167,
+        -0.09604891170791008,
+        -0.43787543137829277,
+        -0.03580186782124373,
+        -0.07536910843959066,
+        -0.12590676689276836,
+        0.11225537405080543,
+        -0.09063483739823386,
+        -0.04813807649435431,
+        -0.20028217565492656,
+        0.08473240828378459,
+        0.05578068424709359,
+        -0.08258658199466484,
+        -0.06699249048696587,
+        0.11005735942357808,
+        -0.14589860740826543,
+        0.06723715549783327,
+        -0.08139229971822637,
+        0.05231398453004754,
+        0.04478588158026131,
+        -0.05957203028635916
+      ],
+      "calibrated_gain": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.33333333333333326,
+        0.0,
+        0.0,
+        0.0,
+        0.2556520065927641,
+        0.0,
+        0.0,
+        0.0,
+        0.33333333333333326,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "raw": {
+        "status": "OK",
+        "n": 21,
+        "ece": {
+          "point": 0.0421,
+          "lo": 0.006,
+          "hi": 0.107,
+          "n": 21
+        },
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "n": 2,
+            "predicted": {
+              "point": 0.3405,
+              "lo": 0.2811,
+              "hi": 0.3999,
+              "n": 2
+            },
+            "observed": {
+              "point": 0.25,
+              "lo": 0.0,
+              "hi": 0.5,
+              "n": 2
+            }
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "n": 19,
+            "predicted": {
+              "point": 0.4893,
+              "lo": 0.4719,
+              "hi": 0.5073,
+              "n": 19
+            },
+            "observed": {
+              "point": 0.5263,
+              "lo": 0.5,
+              "hi": 0.5789,
+              "n": 19
+            }
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          }
+        ],
+        "ci_scope": "test resampling conditional on fixed training and calibration fits"
+      },
+      "calibrated": {
+        "status": "OK",
+        "n": 21,
+        "ece": {
+          "point": 0.022,
+          "lo": 0.0079,
+          "hi": 0.1013,
+          "n": 21
+        },
+        "bins": [
+          {
+            "lower": 0.0,
+            "upper": 0.2,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          },
+          {
+            "lower": 0.2,
+            "upper": 0.4,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          },
+          {
+            "lower": 0.4,
+            "upper": 0.6,
+            "n": 18,
+            "predicted": {
+              "point": 0.5,
+              "lo": 0.5,
+              "hi": 0.5,
+              "n": 18
+            },
+            "observed": {
+              "point": 0.5,
+              "lo": 0.4167,
+              "hi": 0.5833,
+              "n": 18
+            }
+          },
+          {
+            "lower": 0.6,
+            "upper": 0.8,
+            "n": 3,
+            "predicted": {
+              "point": 0.6537,
+              "lo": 0.6278,
+              "hi": 0.6667,
+              "n": 3
+            },
+            "observed": {
+              "point": 0.5,
+              "lo": 0.5,
+              "hi": 0.5,
+              "n": 3
+            }
+          },
+          {
+            "lower": 0.8,
+            "upper": 1.0,
+            "n": 0,
+            "predicted": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            },
+            "observed": {
+              "point": null,
+              "lo": null,
+              "hi": null,
+              "n": 0
+            }
+          }
+        ],
+        "ci_scope": "test resampling conditional on fixed training and calibration fits"
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 36,
+        "calib": 16,
+        "test": 14
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_NO_TRAIN_VARIATION",
+      "counts": {
+        "train": 45,
+        "calib": 14,
+        "test": 22
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 35,
+        "calib": 11,
+        "test": 17
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b -> answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 33,
+        "calib": 11,
+        "test": 17
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b -> stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 25,
+        "calib": 8,
+        "test": 11
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b -> verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 34,
+        "calib": 11,
+        "test": 17
+      }
+    },
+    "stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 35,
+        "calib": 16,
+        "test": 16
+      }
+    },
+    "verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 36,
+        "calib": 11,
+        "test": 18
+      }
+    }
+  },
+  "induced_choice_change": {
+    "scope": "fitted_root_action_subset_plus_STOP; not full-policy evaluation",
+    "actions": [
+      "abstain"
+    ],
+    "excluded_actions": [
+      "answer:nim-nemotron-lightning-30b:t=0.2",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> answer:nim-nemotron-lightning-30b:t=0.2",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> stronger_model:nim-nemotron-ultra-550b",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> verify:nim-nemotron-lightning-30b:max_rounds=1",
+      "retrieve:min_score=0.2,top_k=4",
+      "retrieve:min_score=0.2,top_k=4 -> answer:nim-nemotron-lightning-30b:t=0.2",
+      "retrieve:min_score=0.2,top_k=4 -> stronger_model:nim-nemotron-ultra-550b",
+      "retrieve:min_score=0.2,top_k=4 -> verify:nim-nemotron-lightning-30b:max_rounds=1",
+      "self_check:nim-nemotron-lightning-30b",
+      "self_check:nim-nemotron-lightning-30b -> answer:nim-nemotron-lightning-30b:t=0.2",
+      "self_check:nim-nemotron-lightning-30b -> stronger_model:nim-nemotron-ultra-550b",
+      "self_check:nim-nemotron-lightning-30b -> verify:nim-nemotron-lightning-30b:max_rounds=1",
+      "stronger_model:nim-nemotron-ultra-550b",
+      "verify:nim-nemotron-lightning-30b:max_rounds=1"
+    ],
+    "ci_scope": "paired test-item resampling conditional on fixed fits",
+    "status": "OK",
+    "n": 26,
+    "ci95": {
+      "point": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "n": 26,
+      "excludes_zero": false
+    },
+    "test_item_ids": [
+      "gsm8k-0001",
+      "gsm8k-0002",
+      "gsm8k-0003",
+      "gsm8k-0004",
+      "gsm8k-0017",
+      "gsm8k-0019",
+      "gsm8k-0023",
+      "gsm8k-0027",
+      "gsm8k-0032",
+      "gsm8k-0035",
+      "gsm8k-0037",
+      "gsm8k-0044",
+      "gsm8k-0046",
+      "gsm8k-0048",
+      "gsm8k-0054",
+      "gsm8k-0058",
+      "gsm8k-0062",
+      "gsm8k-0065",
+      "gsm8k-0069",
+      "gsm8k-0070",
+      "gsm8k-0071",
+      "gsm8k-0073",
+      "gsm8k-0078",
+      "gsm8k-0079",
+      "gsm8k-0093",
+      "gsm8k-0111"
+    ],
+    "performance_claim": false
+  }
+}

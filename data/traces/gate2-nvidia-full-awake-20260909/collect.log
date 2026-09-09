@@ -1,0 +1,3 @@
+{"options": {"run_id": "gate2-nvidia-full-awake-20260909", "n": 120, "dataset": "gsm8k", "depth": 2, "policy": "balanced", "live": true, "max_usd": 1.99, "diagnostic_scores": false, "seed": 0, "small": "nim-nemotron-lightning-30b", "big": "nim-nemotron-ultra-550b", "rps": 0.6, "request_timeout": 180.0, "max_input_bytes": null}, "preflight": {"listed_price_planning_usd": 0.0, "admission_estimate_usd": 0.0, "max_calls": 2160, "n_items": 120, "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call", "not_invoice_guarantee": true}}
+{"item_id": "gsm8k-0000", "trajectories": 26, "stop": null}
+{"item_id": "gsm8k-0001", "trajectories": 26, "stop": null}

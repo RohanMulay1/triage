@@ -1,0 +1,1699 @@
+{
+  "run_id": "gate2-nvidia-full-concurrent-20260909",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788963998.5263755,
+  "group_count": 120,
+  "counts": {
+    "calib": 25,
+    "test": 30,
+    "train": 65
+  },
+  "groups": {
+    "3d8c43d59c29671fa31d432873286218f0cfbaa874601bb7b4f9b9ffcf9c39d4": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "amber micah and ahito ran 52 miles in total amber ran 8"
+      },
+      "items": [
+        "gsm8k-0000"
+      ]
+    },
+    "5d3275b99e1e9405d3c89cf7c0a4df0b08f1044da5e7eb13464d23a51cad1a24": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "miguel uses 2 pads of paper a week for his drawing if"
+      },
+      "items": [
+        "gsm8k-0001"
+      ]
+    },
+    "2750cc29fc7bb4546ae6a4bb6ca2ef5e784403871244faa5a4dc67a91070038c": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "at a certain grade level three fourths of students have a desktop"
+      },
+      "items": [
+        "gsm8k-0002"
+      ]
+    },
+    "40d1fe35a7c7f4547d69db4be13c7242781881927051ee75c41fa6cea925cb0b": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "comet halley orbits the sun every 75 years bill s dad saw"
+      },
+      "items": [
+        "gsm8k-0003"
+      ]
+    },
+    "3881b274efc7fadc3de208446d7a8a9e98146b73ee9ba901d5fd2a6c03066b44": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "tom plants 10 trees a year every year he also chops down"
+      },
+      "items": [
+        "gsm8k-0004"
+      ]
+    },
+    "186d410cc939847b2c2b4599f39d72145b9adf32e528530d2451f55887b2c6bb": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "john picks 4 bananas on wednesday then he picks 6 bananas on"
+      },
+      "items": [
+        "gsm8k-0005"
+      ]
+    },
+    "e43259cfb3c2ce98316d324c4a0690b8cf7cdd205463703f3837abb8f138ab3b": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "peyton scheduled after work activities of a one hour yoga class on"
+      },
+      "items": [
+        "gsm8k-0006"
+      ]
+    },
+    "119a4cf8fdd6abd0d92172a5954f254591335ea500f43ed44684c4874ec832bf": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "ben has 4 tubes of blue paint and 3 tubes of yellow"
+      },
+      "items": [
+        "gsm8k-0007"
+      ]
+    },
+    "75f4e44c485822150b445b6e7c371a99c3514ce7aa0cddfd4e783f6308d33321": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "elaina is holding the final concert in her tour to celebrate her"
+      },
+      "items": [
+        "gsm8k-0008"
+      ]
+    },
+    "04f2d49073ce61fbeca14d4bb0f55bc286f6581050e2ed26fadba4e7357f4626": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "hannah slips on a banana peel and breaks her arm the doctor"
+      },
+      "items": [
+        "gsm8k-0009"
+      ]
+    },
+    "9e4b92a37ebab1cf262eaab6527b88b9158516022d3d2222e39df133b9ff8fac": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a loaf of bread at the bakery costs 2 bagels cost 1"
+      },
+      "items": [
+        "gsm8k-0010"
+      ]
+    },
+    "fe444024780714d783294ee2d407d561649884caddfeb1ca12b4356095cbe622": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "bob thinks he needs 56 popsicle sticks to recreate the washington monument"
+      },
+      "items": [
+        "gsm8k-0011"
+      ]
+    },
+    "dc3884d4bbae2595b81d0bfd16a190f4bc88cb28c8d67f49d2a5977fcf046e64": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "dennis uses 1 pound of butter for every dozen croissants that he"
+      },
+      "items": [
+        "gsm8k-0012"
+      ]
+    },
+    "e876565c7582d0ebc06276de76d90e8506ca679984780a2ca46de717153dd0c1": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "regina wrote 9 novels last year if this is 3 quarters of"
+      },
+      "items": [
+        "gsm8k-0013"
+      ]
+    },
+    "a9ca2d2d7a021cf88766a390c75a72a867fa8ae8c19baa29e6faae41b2f84788": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "alex is getting ready to attend an event that she has hosted"
+      },
+      "items": [
+        "gsm8k-0014"
+      ]
+    },
+    "7883da65fda9250c72deeeeb179629a8dcf5a0f9b3e822199f75ba1cc0d6558f": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "rozanne is making eggnog for her family she uses 4 dozen eggs"
+      },
+      "items": [
+        "gsm8k-0015"
+      ]
+    },
+    "af94e8ff78e3ffde042a9ca79b442bd62b2d1674b2b76a455cd2a28439c3a170": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "matthew has a collection of 12 unique toy soldiers he wants to"
+      },
+      "items": [
+        "gsm8k-0016"
+      ]
+    },
+    "0f79d905e1a96c8d7d59026594abd8f7cfcd8939334c0817a129723fccd89190": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "mrs cruz is looking for a house that will not go beyond"
+      },
+      "items": [
+        "gsm8k-0017"
+      ]
+    },
+    "50ae35b1a926e15c743b1d4daa861a96f9b021984dc31f86de2583173f089990": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "juan and his brother carlos are selling lemonade for each gallon they"
+      },
+      "items": [
+        "gsm8k-0018"
+      ]
+    },
+    "b44dbc98d5f7b429c36532ec41f56120821b453953925a4df5709e3c7158c6ae": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "when the water is cold ray swims a mile in 16 minutes"
+      },
+      "items": [
+        "gsm8k-0019"
+      ]
+    },
+    "170fe38addd9e57eb54fa237c7fd305155f279da203e3f565d3f1891782e6bbc": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "abraham owns 80 square meters of unused land he sold half of"
+      },
+      "items": [
+        "gsm8k-0020"
+      ]
+    },
+    "f8ec64bafa0c6eaebb1efa26f3848dfa45b5a147726ebdba37fb6082acee9424": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "arianna plants a garden that has 10 rows of flowers with 20"
+      },
+      "items": [
+        "gsm8k-0021"
+      ]
+    },
+    "345b89c67c97e9cf4b95bc132309efea942bf4175891bc14121070a09fb893f2": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "for four hours patrick sold 15 cups of lemonade per hour at"
+      },
+      "items": [
+        "gsm8k-0022"
+      ]
+    },
+    "9daf687d7dc47d8a5d029e3764c314261e53f0ee1680244c435d7d0922c47120": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "although soledad works in a windowless office she loves the outdoors she"
+      },
+      "items": [
+        "gsm8k-0023"
+      ]
+    },
+    "219018fdbe0e2f7b15e207fa1b255c31529cafd8a147baeb251f57ea25b2b8da": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "janet had 22 green pens and 10 yellow pens then she bought"
+      },
+      "items": [
+        "gsm8k-0024"
+      ]
+    },
+    "8743a92edbf874afed4f6a0c7e6ae0ff15865983ba713d2dac3d633b9f601a6d": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "carson lives in an old house where the pipes will freeze if"
+      },
+      "items": [
+        "gsm8k-0025"
+      ]
+    },
+    "6a792eb8e737b81909ad57ebc4ba2ace28d392761c59599ce6f4ff9fc321ad41": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "in the city of soda there are exactly 23786 inhabitants they include"
+      },
+      "items": [
+        "gsm8k-0026"
+      ]
+    },
+    "2ab06aec111d425e77d56f6a30ccdf8dd84b01820f2dffea83de118ed7dcf83c": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "alfie the albatross flies 400 kilometers every day if the circumference of"
+      },
+      "items": [
+        "gsm8k-0027"
+      ]
+    },
+    "680c15ff112244cdc966207e804d3a81e3c13bc94cf842ce5ae2957a4280d312": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a candle melts by 2 centimeters every hour that it burns how"
+      },
+      "items": [
+        "gsm8k-0028"
+      ]
+    },
+    "ad8ede6294da885f30fa59ac89cd90cb385c08e0c564fc6fd208234e667dd51f": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "donny can only drink water if it s at least 40 degrees"
+      },
+      "items": [
+        "gsm8k-0029"
+      ]
+    },
+    "0c8e87ae2c815d791ea848098ced6f3ecc99951fdffd16b70b7a0a210349f5ef": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "the bananas at the supermarket cost 0 80 each or a bunch"
+      },
+      "items": [
+        "gsm8k-0030"
+      ]
+    },
+    "5041504c51a88b7fc91a14df2840f67b918f137db1e8ba2973b6aea3607c3c78": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "romeo boards a train with 120 people at the first stop 20"
+      },
+      "items": [
+        "gsm8k-0031"
+      ]
+    },
+    "f7fd7631290bd87f98fb946a71cae91c3b4b807f8f653f0181742d139b54e34f": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "vince can staple 30 reports every 15 minutes if he was stapling"
+      },
+      "items": [
+        "gsm8k-0032"
+      ]
+    },
+    "465ae06765dd7614fb48867c1ea3684070ab83b5c9b48ce28904f2ff2ec8ab31": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "daisy bought a bag of potatoes that weighed 5 pounds she also"
+      },
+      "items": [
+        "gsm8k-0033"
+      ]
+    },
+    "8c75b3f627d5f5dde913fe1f786ded59236308d5e30e8e763996c35b5b38531f": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "ginger and amy both start with 100 pieces of halloween candy ginger"
+      },
+      "items": [
+        "gsm8k-0034"
+      ]
+    },
+    "e4e0ad77e9c31ee5d3718aa32e4c18941789be9c1d151af975fcc857b130da1c": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "bahati azibo and dinar each contributed to their team s 45 points"
+      },
+      "items": [
+        "gsm8k-0035"
+      ]
+    },
+    "e1882c3eee9fd2798dfabc2a7a4ac6a1e80d7b7afef7e812d4a2112da1bdbdab": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a dvd can be played 1000 times before it breaks there are"
+      },
+      "items": [
+        "gsm8k-0036"
+      ]
+    },
+    "2216ca6c3db2bbc7bf06fb2e532e504e67642849ac6aa665928257a9c8c1bf06": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "for each small task accomplished jairus gets 0 8 while jenny gets"
+      },
+      "items": [
+        "gsm8k-0037"
+      ]
+    },
+    "702767633481d21965aaa9783667836efcfb456c6dd5773b5a0897b8454d53d0": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "zoey and sydney are having a watermelon seed spitting contest whoever spits"
+      },
+      "items": [
+        "gsm8k-0038"
+      ]
+    },
+    "56a07d52102d49a79c75d87383dbb22c447019ee8b1d75cfccbcf10ad70679c8": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a basic manicure starts at 35 while a pedicure starts at 40"
+      },
+      "items": [
+        "gsm8k-0039"
+      ]
+    },
+    "d4d7b70b9a9da968da23565d8866aca8ca7785950bd1fad551436861368176fd": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "alice is 7 years older than beth who is 5 years older"
+      },
+      "items": [
+        "gsm8k-0040"
+      ]
+    },
+    "26173ca75a369eaafc6ecfcf55de8c02079f419e466fcf517b17d6dc73ce125d": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "ben bought a car for 20000 in 2007 the price of the"
+      },
+      "items": [
+        "gsm8k-0041"
+      ]
+    },
+    "20a282f490571d6d4d2ddc8d410fe6ca679c72b6861df62f947f532dffc8c30d": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "the elevator in jack s building supports a maximum load of 700"
+      },
+      "items": [
+        "gsm8k-0042"
+      ]
+    },
+    "5e1aa038933b02834e69850661205c26a43a0164bf975393f906b9fef2e2f596": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "mara added 3 slices of cake to a plate that already had"
+      },
+      "items": [
+        "gsm8k-0043"
+      ]
+    },
+    "28dcd6d0b5e749df18c7b99fd011ebf361bfb1d6d894422030139fa871a2f1f2": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "madeline ate 6 grapes her brother wanted to make grape juice and"
+      },
+      "items": [
+        "gsm8k-0044"
+      ]
+    },
+    "eaaa29c1f5e6869bcb09397bc56c1f49518a69dd5cf02050c312f460af2f30a7": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "jeff and brad are trying to divide 100 dollars between them jeff"
+      },
+      "items": [
+        "gsm8k-0045"
+      ]
+    },
+    "6fada77e32f87297f489c54785d4b2475e5c1f2233a6d91a7be6f6cf24ae953b": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "andrea has 8 more apples than jamal and half as many bananas"
+      },
+      "items": [
+        "gsm8k-0046"
+      ]
+    },
+    "eac5c1351f03f57edbc97b79e9a0242849beefd54f9d5c911580a45e59079281": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "shawna s father is five times as old as shawna shawna is"
+      },
+      "items": [
+        "gsm8k-0047"
+      ]
+    },
+    "54f03d9cf6c81eb0e2f0c5d969c7d5964867433494ffde3e37fb749139599577": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "howard spends 8 dollars at the arcade on monday on tuesday he"
+      },
+      "items": [
+        "gsm8k-0048"
+      ]
+    },
+    "6b6b1fc092e091536c7d26f465f65ba8e7cb84a21a2c9c99f4d51cb1a56c05d2": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "miss maria is a middle school teacher and she loves to collect"
+      },
+      "items": [
+        "gsm8k-0049"
+      ]
+    },
+    "bc3330263d0efcd7a6e0faefdf78afe4ccb7abda612a844a66910469317fe558": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a tank has a capacity of 18000 gallons wanda and ms b"
+      },
+      "items": [
+        "gsm8k-0050"
+      ]
+    },
+    "107968743b22634695fe7d80628d16555e4d2674188601d0b80c360487a0ed55": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a food caterer was told to prepare gourmet hot dogs for 36"
+      },
+      "items": [
+        "gsm8k-0051"
+      ]
+    },
+    "ce732a971465b094cc239b0bb481999c40d26dc642cc4b204b74444066f69463": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "cecilia just bought a new puppy according to her veterinarian she has"
+      },
+      "items": [
+        "gsm8k-0052"
+      ]
+    },
+    "ed5cc6dc80d9735e9ae89cefd9fa1ceb7b01bdc190769ef26ab8dee2facb2416": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "bob is in charge of doing laundry for a large hotel each"
+      },
+      "items": [
+        "gsm8k-0053"
+      ]
+    },
+    "9b0c3b464d3e5c890c05bc4c370c1b700adca2d7c5cae003405b883b502e698b": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "tim decides to light off some fireworks for the fourth of july"
+      },
+      "items": [
+        "gsm8k-0054"
+      ]
+    },
+    "19ad3f5a9fe6643bdb914d5e89da23a59343f9fb448f03b9cff5551f21ef4a45": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "there are 4 roses in the vase there are 7 more dahlias"
+      },
+      "items": [
+        "gsm8k-0055"
+      ]
+    },
+    "73fccdd157b763935c433d0e9619277843df92f04b0d5388fe7ccb094d890bf4": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "the amount of water passing through a river at one point in"
+      },
+      "items": [
+        "gsm8k-0056"
+      ]
+    },
+    "3b5c1be63ea1eb67eb479e2600849dd78184371715da533a4c650b495f7bc870": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "it is approximately 1955 kilometers from san diego california to new york"
+      },
+      "items": [
+        "gsm8k-0057"
+      ]
+    },
+    "b55130a18c60f2420b37fcc983626f15a1c475bc657b1dd3b9d997daab64fa0f": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "richard wants to make a video to share online of him doing"
+      },
+      "items": [
+        "gsm8k-0058"
+      ]
+    },
+    "4d6c02de9dd8d07d38ec56f83a6d75221a06fbba9857b959a008fef2bd70c3a5": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "will buys 15 oranges when he gets home he asks his 2"
+      },
+      "items": [
+        "gsm8k-0059"
+      ]
+    },
+    "7dad2048d597c867ecc72f282a3506ed294ac00261998514f94824b0cf7ae948": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "jack had 100 sophia gave him 1 5 of her 100 how"
+      },
+      "items": [
+        "gsm8k-0060"
+      ]
+    },
+    "457d3f6e35936345e34b79628a139c886d86c820ffd9b53e12b889e3d67e8221": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "john decides to build a program capable of identifying cancer cells he"
+      },
+      "items": [
+        "gsm8k-0061"
+      ]
+    },
+    "d9f4a305924bda724f9e2e54568718131fa2de2521b3292e8ff46ae3a429e76f": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "tom s ship can travel at 10 miles per hour he is"
+      },
+      "items": [
+        "gsm8k-0062"
+      ]
+    },
+    "4fce6ada516c0986949f277342e485e35f8b2de6aa082cd066905dbd393e06a5": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "carrie was given ten twenties and 140 quarters by her aunt to"
+      },
+      "items": [
+        "gsm8k-0063"
+      ]
+    },
+    "fded3a9c9a7b2bb31aa081420bb1795b27eef86568f83a4735baaba1c96a44b3": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "michael is racing his horse and notices that for every mile the"
+      },
+      "items": [
+        "gsm8k-0064"
+      ]
+    },
+    "83dc01cfce0069f56600ed1f03ee941eca8567138bcc6be9f80a8079c81f64ff": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "sarah went to buy books from the store and spent 300 on"
+      },
+      "items": [
+        "gsm8k-0065"
+      ]
+    },
+    "d278da700d5508b0b21d102fd4e1fed6699f7a9722e0c1a0527c0243840e1f9b": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "anna is trying to buy books for her local library she had"
+      },
+      "items": [
+        "gsm8k-0066"
+      ]
+    },
+    "9ae9eb6982b6ac580df3a64123f1af75b627cba82960c67b8f56edd7795deaab": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "kylie and robert enjoy going to the beach to collect shells on"
+      },
+      "items": [
+        "gsm8k-0067"
+      ]
+    },
+    "bb449f71d2647444dea002df0e856943996ed5e1752939c4452decdb1443f729": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "ella earned 33 for 3 hours of dog walking if she continues"
+      },
+      "items": [
+        "gsm8k-0068"
+      ]
+    },
+    "7dc0fbcb2feb7a86b66f8c5fac97086da0c999f57e630fbe714cae5ca21aceb6": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a shop sells school supplies one notebook is sold at 1 50"
+      },
+      "items": [
+        "gsm8k-0069"
+      ]
+    },
+    "03d5423173751f6a72a901100b8fb33470c6bff83375888ba108ad22738429eb": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "boris has 100 apples beck has 23 fewer apples than boris if"
+      },
+      "items": [
+        "gsm8k-0070"
+      ]
+    },
+    "dc28d4b5cc08bbde4dde64707342c168c75a54b0fc459c55e23dc406d3694dd3": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "every day charisma meditates for 15 minutes when she first wakes up"
+      },
+      "items": [
+        "gsm8k-0071"
+      ]
+    },
+    "7ead9cbc5480e13fca3afce6398b278654e0291d4e0ebba14f9f316020379f71": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "nik has 200 crayons he wants to separate them into groups of"
+      },
+      "items": [
+        "gsm8k-0072"
+      ]
+    },
+    "75de8c350048d2424f0c5b73de816b5db48cff19a73c40e9cff7fe8a753ce189": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "to fund his store mr josue solicited money from two banks the"
+      },
+      "items": [
+        "gsm8k-0073"
+      ]
+    },
+    "99b42f78329ef946574c3ad9506dbd5d917f69f0437b8d10f5fc1701edb2d657": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a family of parents and a child go to the cinema the"
+      },
+      "items": [
+        "gsm8k-0074"
+      ]
+    },
+    "7ca8914acf5def254cd5a2d74e37a217770d973bcc130282d423a3e27db4cfd1": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "uncle ben has four horses each horse can consume five pounds of"
+      },
+      "items": [
+        "gsm8k-0075"
+      ]
+    },
+    "73d84472c87a3227a0513769380199e9161c5a8aca5bcf812766381b5a5dcf87": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "henry is making cookies for a local baking competition he wants to"
+      },
+      "items": [
+        "gsm8k-0076"
+      ]
+    },
+    "c7be58760fa8467796b479a2b0934145e6652341eca273701349f05d4f9af8cd": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "conor lives near a beach and loves going there every day to"
+      },
+      "items": [
+        "gsm8k-0077"
+      ]
+    },
+    "552c6a319f0c1d08eb45347297371820181cadab33b9cd8fc27f22e403ba6494": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "tara bought 8 packs of 5 canvas bags for 4 each she"
+      },
+      "items": [
+        "gsm8k-0078"
+      ]
+    },
+    "85695ba833bc6c4c6a58a796aacd87eb7c4e47aabd9091ef6103718efde5aa81": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "four friends ordered four pizzas for a total of 64 dollars if"
+      },
+      "items": [
+        "gsm8k-0079"
+      ]
+    },
+    "05eedcdff627f31c64d3ab0162e75a0451b97cb43b2073b3291307c70affea1d": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "rob royce and pedro are contractors getting ready to put a new"
+      },
+      "items": [
+        "gsm8k-0080"
+      ]
+    },
+    "fa6fcdab326637dd717a7a20e1e63c7ce6f8300006f3eba71424d6af9d039280": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a mother goes shopping she buys cocoa at 4 20 laundry at"
+      },
+      "items": [
+        "gsm8k-0081"
+      ]
+    },
+    "b585f9f40948fb259f32d3d72f226bbccd0df0fb0c199afce895a0b8de407236": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "isabelle bought party supplies for her little sister s birthday party she"
+      },
+      "items": [
+        "gsm8k-0082"
+      ]
+    },
+    "b170788c36f5004aaf50c3f6e474cfbe289ffa431c58edadcf080868784638ed": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a wall mural has four different colors of paint in it red"
+      },
+      "items": [
+        "gsm8k-0083"
+      ]
+    },
+    "ea194cb0bddef8ca2693fe34b8a4b7ddc3b7e66f7bf63d5426b9136c1e5a2c5f": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "catherine goes to the grocery store she buys 1 kilo of apples"
+      },
+      "items": [
+        "gsm8k-0084"
+      ]
+    },
+    "6504aaa70d0b6b35f80330616cb8743c68d4cd84c91c6ddac3159e93ddf7eefc": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "octavia wants to make a quilt for her sister she is going"
+      },
+      "items": [
+        "gsm8k-0085"
+      ]
+    },
+    "dff89aedf98ad7079d2f037dd84b1a829955a913f12740af329a6101cb335de8": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a news website publishes an average of 20 political and weather news"
+      },
+      "items": [
+        "gsm8k-0086"
+      ]
+    },
+    "084f479accb2da6be437536af1a872d537f22641af7008e9fa55893856394d09": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "jordan wanted to surprise her mom with a homemade birthday cake from"
+      },
+      "items": [
+        "gsm8k-0087"
+      ]
+    },
+    "30c40965835df62410ec77a97d81e107d4442b10a4b51f538787d5de1d5d3de8": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "mary is an avid gardener yesterday she received 18 new potted plants"
+      },
+      "items": [
+        "gsm8k-0088"
+      ]
+    },
+    "9b878ccbae34e3a268638a3c1068c6e2fa5c3cc286212c429a9846229bcca8d2": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "cole wanted to buy new jeans for a dance contest at the"
+      },
+      "items": [
+        "gsm8k-0089"
+      ]
+    },
+    "3c004e00f411b4f32bb6afdff224ada348f7d673a62850182d94cce0ee97863e": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "on monday sue ate 4 times as many cookies as her sister"
+      },
+      "items": [
+        "gsm8k-0090"
+      ]
+    },
+    "5232a166161c83d74301e9dc93d8d2522704426ba512fe0889c874a2db50975a": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "given a 7 day week how much does alex charge for 2"
+      },
+      "items": [
+        "gsm8k-0091"
+      ]
+    },
+    "e7b169e3695d176926066fec2e15c60674a53f10db15af1d3f4a84e906e8fdb3": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "james loves to go swimming and has to swim across a 20"
+      },
+      "items": [
+        "gsm8k-0092"
+      ]
+    },
+    "140a062d733df3a51360c5dd00d4d57f18d0e320ba957d150814c5815cb7efae": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "theo bought a pen for 2 and a piece of paper that"
+      },
+      "items": [
+        "gsm8k-0093"
+      ]
+    },
+    "b609ba559ce7b0b8a2031b3fec491e57fa578a4a7e1a389561110160bb8c0d30": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a marketing company pays its employees on a commission based salary system"
+      },
+      "items": [
+        "gsm8k-0094"
+      ]
+    },
+    "be2617ea024ddf167076e37e56edfccaee9092ff82c29757f301adf16d837276": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "jeff s work is 3 miles away he walks there and back"
+      },
+      "items": [
+        "gsm8k-0095"
+      ]
+    },
+    "ce27bd357e428b951c503d714c2d4b9164947db6e3921af8f56b6f3ecab02c99": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "the ratio of the electric poles and electric wires needed to connect"
+      },
+      "items": [
+        "gsm8k-0096"
+      ]
+    },
+    "df7ff56cb726e045eaa4c9e94d3f99435a197b4b8c115bd115e23ee27c64e760": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "there are twice as many boys as girls at dr wertz s"
+      },
+      "items": [
+        "gsm8k-0097"
+      ]
+    },
+    "c0bac8047cb807f0733a3ecda6a6009f78a7d288d3ef998e86555bbbb94b7367": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "chris is way behind on his math homework he has 100 math"
+      },
+      "items": [
+        "gsm8k-0098"
+      ]
+    },
+    "406f44edbb14c74071d0d242e39af9363cd5138dad299531f41a16aaa9461606": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "jennifer s dog has 8 puppies 3 of which have spots brandon"
+      },
+      "items": [
+        "gsm8k-0099"
+      ]
+    },
+    "d6fd0756cc1217dd205759053415d3fa79f9025e3dcbae8ca3a1ad61df959096": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "carly wants to treat her friends she orders five hamburgers at 4"
+      },
+      "items": [
+        "gsm8k-0100"
+      ]
+    },
+    "84e00d18ebac295a8be59032eeb2b82b676c4acc64517e3a76b87088fb632bdb": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a bag of buttons had 21 buttons in it seven buttons had"
+      },
+      "items": [
+        "gsm8k-0101"
+      ]
+    },
+    "49496a6da6808f7cf10f37195484dc6f7299a098191f9fd0c8a589e5c998f9d9": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "mr boarden is remodeling his bathroom for every square foot he needs"
+      },
+      "items": [
+        "gsm8k-0102"
+      ]
+    },
+    "41c3c4236036aec699e8825250b4f46b90302e9f7991711a9c02a230df729a90": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "jerry has two pools both with leaks emptying them out at 4"
+      },
+      "items": [
+        "gsm8k-0103"
+      ]
+    },
+    "a0f591056480d329448d938dbe4733760306222f04e292273157c33a3340040e": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "there are 10 quarts of tea left from the party four students"
+      },
+      "items": [
+        "gsm8k-0104"
+      ]
+    },
+    "5990e9c6206bf8c2b44952bf3a8e2ee2f089cafe7d0a059e027e033e4c840230": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "movie a was one fourth the length of movie b movie b"
+      },
+      "items": [
+        "gsm8k-0105"
+      ]
+    },
+    "324e256c4d5bc7f5ac342b582d31a359dbb68974ecb29e69558ce5defa542016": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "it takes james 10 minutes to read 3 pages of his book"
+      },
+      "items": [
+        "gsm8k-0106"
+      ]
+    },
+    "98b3b7af7819c287b16c63da324030424558577b889486c32a6e56d41c3605f3": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "robert had 3 pounds of candy cindy had 5 pounds of candy"
+      },
+      "items": [
+        "gsm8k-0107"
+      ]
+    },
+    "bbb7c56b214179685234dc4ae8f4b3905a8f77c3e5a2b393f5aec3cc22300f44": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "an ice cream truck is traveling through a neighborhood children from various"
+      },
+      "items": [
+        "gsm8k-0108"
+      ]
+    },
+    "9f53433a9367794cac0e4a8121034233f4288f9a05cf3b86f2f9514f62668593": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "for one medical dosage saanvi had to combine 14 ml of one"
+      },
+      "items": [
+        "gsm8k-0109"
+      ]
+    },
+    "7344de3dd1e7c4cd070be51600cb03e35503da9e7fb0221123fd0a4619e759c5": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "frances sells 20 cupcakes for 2 for each cupcake and 40 cookies"
+      },
+      "items": [
+        "gsm8k-0110"
+      ]
+    },
+    "40301fe879036d3f9682c8a75e04a44c27e35037ceface55a5f33dca72557214": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "marcus is trying to decide whether he really needs to do his"
+      },
+      "items": [
+        "gsm8k-0111"
+      ]
+    },
+    "01eb4086f652b78f82dacee307a2854c2649b76a12dbc7ee62345536b94ae9a2": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "goldy bought 20 sacks of rice and gave 3 sacks to her"
+      },
+      "items": [
+        "gsm8k-0112"
+      ]
+    },
+    "c800cf77120d8f0f08a426e4cf17326f97c87f368984568e6db91d4bb7af3b68": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "randy has 9 oatmeal cookies 4 chocolate chip cookies and 5 sugar"
+      },
+      "items": [
+        "gsm8k-0113"
+      ]
+    },
+    "8d36279e5f422f9039b47449df37b15e2c1719f8e27eab40b54e1d35df8ec647": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "watson works a 10 hour shift each day five days a week"
+      },
+      "items": [
+        "gsm8k-0114"
+      ]
+    },
+    "e180f980e2e31b098f7b643a0787e4a0f60ee26e0044e61bb7b791edf5f9716f": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "michael is replacing the carpet in his bedroom the new carpet he"
+      },
+      "items": [
+        "gsm8k-0115"
+      ]
+    },
+    "183eec575938e31abe3af39fb291d2f40e9d5f550199c963aa03ac74418065b7": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "the glee club ordered 20 pizzas and ate 70 of them the"
+      },
+      "items": [
+        "gsm8k-0116"
+      ]
+    },
+    "5d21ccf8f119fa2679bea257f8f72290fddcbdea4cd4b562f9050d8f06adf3be": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "jerry is twice as old as he was 5 years ago how"
+      },
+      "items": [
+        "gsm8k-0117"
+      ]
+    },
+    "fe04b234d77c0243bb9ca5c32b51eca744de0790444d36273ef085175f6f0a19": {
+      "split": "train",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "a football team played 22 games they won 8 more than they"
+      },
+      "items": [
+        "gsm8k-0118"
+      ]
+    },
+    "77f57e3085b61ccb0d35ec0b86466b5e3237b7b4bbfe62ffb44ca2b315188696": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "mrs sherman made a dozen bread rolls for breakfast after feeding her"
+      },
+      "items": [
+        "gsm8k-0119"
+      ]
+    }
+  }
+}
