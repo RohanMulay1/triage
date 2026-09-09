@@ -1,0 +1,25 @@
+{
+  "dataset": "gsm8k",
+  "items": [
+    {
+      "q": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?",
+      "gold": "16",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?",
+      "gold": "240",
+      "kind": "gsm8k"
+    },
+    {
+      "q": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?",
+      "gold": "80",
+      "kind": "gsm8k"
+    }
+  ],
+  "prompts": [
+    "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer.",
+    "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer.",
+    "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+  ]
+}

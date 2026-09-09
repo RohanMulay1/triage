@@ -1,0 +1,60 @@
+{
+  "run_id": "gate2-nvidia-retry-smoke-20260908",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788887694.3263774,
+  "group_count": 3,
+  "counts": {
+    "calib": 1,
+    "test": 2
+  },
+  "groups": {
+    "3d8c43d59c29671fa31d432873286218f0cfbaa874601bb7b4f9b9ffcf9c39d4": {
+      "split": "calib",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "amber micah and ahito ran 52 miles in total amber ran 8"
+      },
+      "items": [
+        "gsm8k-0000"
+      ]
+    },
+    "5d3275b99e1e9405d3c89cf7c0a4df0b08f1044da5e7eb13464d23a51cad1a24": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "miguel uses 2 pads of paper a week for his drawing if"
+      },
+      "items": [
+        "gsm8k-0001"
+      ]
+    },
+    "2750cc29fc7bb4546ae6a4bb6ca2ef5e784403871244faa5a4dc67a91070038c": {
+      "split": "test",
+      "key": {
+        "dataset": "gsm8k",
+        "task_family": "gsm8k",
+        "model_pair": "nim-nemotron-lightning-30b->nim-nemotron-ultra-550b",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "gsm8k",
+        "prompt_fingerprint": "at a certain grade level three fourths of students have a desktop"
+      },
+      "items": [
+        "gsm8k-0002"
+      ]
+    }
+  }
+}

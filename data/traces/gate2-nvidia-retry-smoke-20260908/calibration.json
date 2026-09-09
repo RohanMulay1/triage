@@ -1,0 +1,170 @@
+{
+  "analysis_grade": true,
+  "not_evidence": false,
+  "status": "COMPLETE",
+  "n_fitted": 0,
+  "target": "normalized marginal quality gain (delta+1)/2",
+  "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+  "per_action": {
+    "abstain": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b -> answer:nim-nemotron-lightning-30b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b -> stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "self_check:nim-nemotron-lightning-30b -> verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "stronger_model:nim-nemotron-ultra-550b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    },
+    "verify:nim-nemotron-lightning-30b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 0,
+        "calib": 1,
+        "test": 2
+      }
+    }
+  },
+  "induced_choice_change": {
+    "scope": "fitted_root_action_subset_plus_STOP; not full-policy evaluation",
+    "actions": [],
+    "excluded_actions": [
+      "abstain",
+      "answer:nim-nemotron-lightning-30b:t=0.2",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> answer:nim-nemotron-lightning-30b:t=0.2",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> stronger_model:nim-nemotron-ultra-550b",
+      "resample:nim-nemotron-lightning-30b:n=3,t=0.7 -> verify:nim-nemotron-lightning-30b:max_rounds=1",
+      "retrieve:min_score=0.2,top_k=4",
+      "retrieve:min_score=0.2,top_k=4 -> answer:nim-nemotron-lightning-30b:t=0.2",
+      "retrieve:min_score=0.2,top_k=4 -> stronger_model:nim-nemotron-ultra-550b",
+      "retrieve:min_score=0.2,top_k=4 -> verify:nim-nemotron-lightning-30b:max_rounds=1",
+      "self_check:nim-nemotron-lightning-30b",
+      "self_check:nim-nemotron-lightning-30b -> answer:nim-nemotron-lightning-30b:t=0.2",
+      "self_check:nim-nemotron-lightning-30b -> stronger_model:nim-nemotron-ultra-550b",
+      "self_check:nim-nemotron-lightning-30b -> verify:nim-nemotron-lightning-30b:max_rounds=1",
+      "stronger_model:nim-nemotron-ultra-550b",
+      "verify:nim-nemotron-lightning-30b:max_rounds=1"
+    ],
+    "ci_scope": "paired test-item resampling conditional on fixed fits",
+    "status": "REFUSED",
+    "reason": "no fitted root actions",
+    "ci95": {
+      "point": null,
+      "lo": null,
+      "hi": null,
+      "n": 0,
+      "excludes_zero": false
+    }
+  }
+}

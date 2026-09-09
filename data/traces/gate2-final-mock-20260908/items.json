@@ -1,0 +1,55 @@
+{
+  "dataset": "mixed",
+  "items": [
+    {
+      "q": "what is 17 * 23 + 5?",
+      "gold": "396",
+      "kind": "arith"
+    },
+    {
+      "q": "what is the square root of 144?",
+      "gold": "12",
+      "kind": "arith"
+    },
+    {
+      "q": "What is the capital of France?",
+      "gold": "Paris",
+      "kind": "factual"
+    },
+    {
+      "q": "Who wrote Hamlet?",
+      "gold": "Shakespeare",
+      "kind": "factual"
+    },
+    {
+      "q": "At what temperature does water boil at sea level?",
+      "gold": "100",
+      "kind": "factual"
+    },
+    {
+      "q": "What are next week's winning lottery numbers?",
+      "gold": null,
+      "kind": "trap"
+    },
+    {
+      "q": "What did I eat for breakfast this morning?",
+      "gold": null,
+      "kind": "trap"
+    },
+    {
+      "q": "What is the exact current population of the planet Mars right now?",
+      "gold": null,
+      "kind": "trap"
+    }
+  ],
+  "prompts": [
+    "what is 17 * 23 + 5?",
+    "what is the square root of 144?",
+    "What is the capital of France?",
+    "Who wrote Hamlet?",
+    "At what temperature does water boil at sea level?",
+    "What are next week's winning lottery numbers?",
+    "What did I eat for breakfast this morning?",
+    "What is the exact current population of the planet Mars right now?"
+  ]
+}

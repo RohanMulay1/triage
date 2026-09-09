@@ -1,0 +1,7 @@
+{
+  "code_commit": "f422e8f",
+  "pytest_passed": 354,
+  "pyflakes_exit": 0,
+  "protected_prior_artifacts_changed": [],
+  "production_checks": "mock cold-start health/chat/telemetry plus default override and legacy equivalence; not public deployment or load certification"
+}

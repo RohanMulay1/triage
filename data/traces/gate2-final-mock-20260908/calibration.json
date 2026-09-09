@@ -1,0 +1,206 @@
+{
+  "analysis_grade": false,
+  "not_evidence": true,
+  "status": "COMPLETE",
+  "n_fitted": 0,
+  "target": "normalized marginal quality gain (delta+1)/2",
+  "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+  "per_action": {
+    "abstain": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "answer:llama-3.1-8b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "resample:llama-3.1-8b:n=3,t=0.7": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "resample:llama-3.1-8b:n=3,t=0.7 -> answer:llama-3.1-8b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "resample:llama-3.1-8b:n=3,t=0.7 -> stronger_model:gpt-4o": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "resample:llama-3.1-8b:n=3,t=0.7 -> tool:name=\"calculator\"": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 2,
+        "calib": 0,
+        "test": 0
+      }
+    },
+    "resample:llama-3.1-8b:n=3,t=0.7 -> verify:llama-3.1-8b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> answer:llama-3.1-8b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> stronger_model:gpt-4o": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> tool:name=\"calculator\"": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 2,
+        "calib": 0,
+        "test": 0
+      }
+    },
+    "retrieve:min_score=0.2,top_k=4 -> verify:llama-3.1-8b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "self_check:llama-3.1-8b": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "self_check:llama-3.1-8b -> answer:llama-3.1-8b:t=0.2": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "self_check:llama-3.1-8b -> stronger_model:gpt-4o": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "self_check:llama-3.1-8b -> tool:name=\"calculator\"": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 2,
+        "calib": 0,
+        "test": 0
+      }
+    },
+    "self_check:llama-3.1-8b -> verify:llama-3.1-8b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "stronger_model:gpt-4o": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    },
+    "tool:name=\"calculator\"": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 2,
+        "calib": 0,
+        "test": 0
+      }
+    },
+    "verify:llama-3.1-8b:max_rounds=1": {
+      "status": "REFUSED_SPLIT_COVERAGE",
+      "counts": {
+        "train": 5,
+        "calib": 2,
+        "test": 1
+      }
+    }
+  },
+  "induced_choice_change": {
+    "scope": "fitted_root_action_subset_plus_STOP; not full-policy evaluation",
+    "actions": [],
+    "excluded_actions": [
+      "abstain",
+      "answer:llama-3.1-8b:t=0.2",
+      "resample:llama-3.1-8b:n=3,t=0.7",
+      "resample:llama-3.1-8b:n=3,t=0.7 -> answer:llama-3.1-8b:t=0.2",
+      "resample:llama-3.1-8b:n=3,t=0.7 -> stronger_model:gpt-4o",
+      "resample:llama-3.1-8b:n=3,t=0.7 -> tool:name=\"calculator\"",
+      "resample:llama-3.1-8b:n=3,t=0.7 -> verify:llama-3.1-8b:max_rounds=1",
+      "retrieve:min_score=0.2,top_k=4",
+      "retrieve:min_score=0.2,top_k=4 -> answer:llama-3.1-8b:t=0.2",
+      "retrieve:min_score=0.2,top_k=4 -> stronger_model:gpt-4o",
+      "retrieve:min_score=0.2,top_k=4 -> tool:name=\"calculator\"",
+      "retrieve:min_score=0.2,top_k=4 -> verify:llama-3.1-8b:max_rounds=1",
+      "self_check:llama-3.1-8b",
+      "self_check:llama-3.1-8b -> answer:llama-3.1-8b:t=0.2",
+      "self_check:llama-3.1-8b -> stronger_model:gpt-4o",
+      "self_check:llama-3.1-8b -> tool:name=\"calculator\"",
+      "self_check:llama-3.1-8b -> verify:llama-3.1-8b:max_rounds=1",
+      "stronger_model:gpt-4o",
+      "tool:name=\"calculator\"",
+      "verify:llama-3.1-8b:max_rounds=1"
+    ],
+    "ci_scope": "paired test-item resampling conditional on fixed fits",
+    "status": "REFUSED",
+    "reason": "no fitted root actions",
+    "ci95": {
+      "point": null,
+      "lo": null,
+      "hi": null,
+      "n": 0,
+      "excludes_zero": false
+    }
+  }
+}

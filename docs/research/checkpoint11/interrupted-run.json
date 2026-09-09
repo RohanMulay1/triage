@@ -1,0 +1,29 @@
+{
+  "run_id": "gate2-nvidia-full-20260909",
+  "status": "INTERRUPTED_NOT_EVIDENCE",
+  "planned_items": 120,
+  "completed_items": 11,
+  "items_with_request_events": 12,
+  "trajectories": 286,
+  "request_attempts": 223,
+  "request_status_counts": {
+    "returned": 211,
+    "provider_failure": 12
+  },
+  "reported_tokens_in": 52111,
+  "reported_tokens_out": 31741,
+  "unknown_usage_events": 14,
+  "longest_request_latency_ms": 32047672.000000007,
+  "validation": {
+    "chain_ok": true,
+    "cost_conservation_ok": true,
+    "collection_complete": false,
+    "analysis_grade": false,
+    "errors": []
+  },
+  "gate2": {
+    "verdict": "REFUSED",
+    "reason": "prespecified collection is incomplete"
+  },
+  "interpretation": "Operational failure evidence only. No partial quality, calibration, repairability, C1, C2, C4, or policy claim is reported."
+}

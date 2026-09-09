@@ -1,0 +1,9 @@
+{"options": {"run_id": "gate2-final-mock-20260908", "n": 8, "dataset": "mixed", "depth": 2, "policy": "balanced", "live": false, "max_usd": null, "diagnostic_scores": true, "seed": 0, "small": null, "big": null, "rps": 0.6, "max_input_bytes": null}, "preflight": {"listed_price_planning_usd": 11.832840000000001, "admission_estimate_usd": 0.0, "max_calls": 144, "n_items": 8, "assumptions": "64 bytes/generated token; frozen corpus; all actions; one scoring call", "not_invoice_guarantee": true}}
+{"item_id": "mixed-0000", "trajectories": 26, "stop": null}
+{"item_id": "mixed-0001", "trajectories": 26, "stop": null}
+{"item_id": "mixed-0002", "trajectories": 26, "stop": null}
+{"item_id": "mixed-0003", "trajectories": 26, "stop": null}
+{"item_id": "mixed-0004", "trajectories": 26, "stop": null}
+{"item_id": "mixed-0005", "trajectories": 26, "stop": null}
+{"item_id": "mixed-0006", "trajectories": 26, "stop": null}
+{"item_id": "mixed-0007", "trajectories": 26, "stop": null}

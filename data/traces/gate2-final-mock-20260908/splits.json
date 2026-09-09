@@ -1,0 +1,131 @@
+{
+  "run_id": "gate2-final-mock-20260908",
+  "definition": "group_key_v2:family+modelpair+retriever+template+fingerprint",
+  "ratios": {
+    "train": 0.5,
+    "calib": 0.25,
+    "test": 0.25
+  },
+  "salt": "",
+  "created_ts": 1788887703.866393,
+  "group_count": 8,
+  "counts": {
+    "train": 5,
+    "test": 1,
+    "calib": 2
+  },
+  "groups": {
+    "7b3829cf9da6975351da8e6bf090e1ac157cd78f49294019b9147d783e9b260e": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "arith",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is 17 23 5"
+      },
+      "items": [
+        "mixed-0000"
+      ]
+    },
+    "32adb14c2e9835d6d150798de4589fc2de99b2b9595a6e39e51a8d3978e308e5": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "arith",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is the square root of 144"
+      },
+      "items": [
+        "mixed-0001"
+      ]
+    },
+    "c4d17508cff47579b8a2e868d01ac5c366d9c077fe464f75613815cbdb37e9f3": {
+      "split": "test",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "factual",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is the capital of france"
+      },
+      "items": [
+        "mixed-0002"
+      ]
+    },
+    "d0c8dd9bc49399c768259d6a26492a635e9680454dad6d62c6242bb906472e30": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "factual",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "who wrote hamlet"
+      },
+      "items": [
+        "mixed-0003"
+      ]
+    },
+    "02f50fce6d56784b4f2d7a869d452f9019a7afce730f9616f3bb1c6e62f0f078": {
+      "split": "calib",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "factual",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "at what temperature does water boil at sea level"
+      },
+      "items": [
+        "mixed-0004"
+      ]
+    },
+    "ef7d8209b384062e0a8bdffb08c3da0a3951919220824b161683fbda7ef77697": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "trap",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what are next week s winning lottery numbers"
+      },
+      "items": [
+        "mixed-0005"
+      ]
+    },
+    "14869133eabba1f0b47fc8580cfe3d9c997f96806d8922d213371596a3f7e6d5": {
+      "split": "train",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "trap",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what did i eat for breakfast this morning"
+      },
+      "items": [
+        "mixed-0006"
+      ]
+    },
+    "6e5c089938727fdfe0207af12e717d55f4c35aa011a95e02d215899aecfb5176": {
+      "split": "calib",
+      "key": {
+        "dataset": "mixed",
+        "task_family": "trap",
+        "model_pair": "llama-3.1-8b->gpt-4o",
+        "retriever_version": "488dc3f590b345004ffbb45da88ef9192eab21872e7113a7583681ccabe8eafc",
+        "prompt_template": "mixed",
+        "prompt_fingerprint": "what is the exact current population of the planet mars right now"
+      },
+      "items": [
+        "mixed-0007"
+      ]
+    }
+  }
+}

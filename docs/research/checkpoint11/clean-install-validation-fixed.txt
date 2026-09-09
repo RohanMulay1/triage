@@ -1,0 +1,122 @@
+Clean-install validation after dependency fix (Python 3.11)
+===========================================================
+
+Result: PASS
+Repository: C:\Users\rohan\triage
+Git commit: f422e8f0bf394a59cfd4eeb6b5aa2386ccfe9409
+Validated manifest state: requirements-dev.txt includes requests==2.34.2
+Temporary validation root (left intact): C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e
+Virtual environment: C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv
+Interpreter: Python 3.11.9
+pip: 24.0
+Environment override: TRIAGE_FORCE_MOCK=1 for pytest and pyflakes
+
+The earlier failure record at clean-install-validation.txt was preserved. No
+environment file, API key, credential, or secret was printed. The existing
+source tree, committed fixtures, data receipts, and independent NVIDIA run were
+not modified or controlled by this validation.
+
+Command 1
+---------
+py -3.11 -m venv 'C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv'
+
+Exit code: 0
+Output: (none)
+
+Command 2
+---------
+& 'C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Scripts\python.exe' --version
+
+Exit code: 0
+Output:
+Python 3.11.9
+
+Command 3
+---------
+& 'C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Scripts\python.exe' -m pip --version
+
+Exit code: 0
+Output:
+pip 24.0 from C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\pip (python 3.11)
+
+Command 4
+---------
+& 'C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Scripts\python.exe' -m pip install -r requirements-dev.txt
+
+Exit code: 0
+Output (download/progress chatter normalized to the resolved package result):
+Successfully installed annotated-types-0.8.0 anyio-4.15.1 certifi-2026.7.22 charset_normalizer-3.5.1 click-8.5.0 colorama-0.4.6 fastapi-0.115.5 h11-0.16.0 httpcore-1.0.9 httptools-0.8.0 httpx-0.27.2 idna-3.19 iniconfig-2.3.0 numpy-1.26.4 packaging-26.3 pluggy-1.6.0 pydantic-2.9.2 pydantic-core-2.23.4 pydantic-settings-2.6.1 pyflakes-3.4.0 pygments-2.21.0 pytest-9.1.1 python-dotenv-1.0.1 pyyaml-6.0.2 requests-2.34.2 sniffio-1.3.1 starlette-0.41.3 typing-extensions-4.16.0 urllib3-2.7.0 uvicorn-0.32.1 watchfiles-1.2.0 websockets-17.1
+
+Command 5
+---------
+$env:TRIAGE_FORCE_MOCK = '1'
+& 'C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Scripts\python.exe' -m pytest -q
+
+Exit code: 0
+Output:
+........................................................................ [ 20%]
+........................................................................ [ 40%]
+........................................................................ [ 61%]
+........................................................................ [ 81%]
+..................................................................       [100%]
+============================== warnings summary ===============================
+..\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\pydantic\_internal\_fields.py:132
+  C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\pydantic\_internal\_fields.py:132: UserWarning: Field "model_id" in Action has conflict with protected namespace "model_".
+
+  You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+    warnings.warn(
+
+..\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\pydantic\_internal\_fields.py:132
+  C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\pydantic\_internal\_fields.py:132: UserWarning: Field "model_id" in StateSnapshot has conflict with protected namespace "model_".
+
+  You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+    warnings.warn(
+
+..\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\pydantic\_internal\_fields.py:132
+  C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\pydantic\_internal\_fields.py:132: UserWarning: Field "model_snapshot" in TraceManifest has conflict with protected namespace "model_".
+
+  You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+    warnings.warn(
+
+..\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\starlette\testclient.py:40
+  C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\starlette\testclient.py:40: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = typing.Callable[[], typing.ContextManager[anyio.abc.BlockingPortal]]
+
+tests/test_production_readiness.py::test_fastapi_health_chat_and_telemetry_without_network
+  C:\Users\rohan\triage\app\main.py:27: DeprecationWarning:
+          on_event is deprecated, use lifespan event handlers instead.
+
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+
+    @app.on_event("startup")
+
+tests/test_production_readiness.py::test_fastapi_health_chat_and_telemetry_without_network
+  C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Lib\site-packages\fastapi\applications.py:4495: DeprecationWarning:
+          on_event is deprecated, use lifespan event handlers instead.
+
+          Read more about it in the
+          [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+
+    return self.router.on_event(event_type)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+354 passed, 6 warnings in 12.71s
+
+Command 6
+---------
+$env:TRIAGE_FORCE_MOCK = '1'
+& 'C:\Users\rohan\AppData\Local\Temp\triage-clean-install-fixed-1f94ea48569f456394ee1b9a1ca9278e\venv\Scripts\python.exe' -m pyflakes app scripts tests
+
+Exit code: 0
+Output: (none)
+
+Findings
+--------
+* requirements-dev.txt installs successfully from a fresh Python 3.11 environment.
+* The earlier undeclared requests dependency is resolved by requests==2.34.2.
+* The full test suite passes: 354 passed, 6 warnings in 12.71 seconds.
+* pyflakes passes with no findings across app/, scripts/, and tests/.
+* Remaining warnings concern Pydantic protected namespaces, the Starlette/AnyIO
+  BlockingPortal alias, and FastAPI startup on_event deprecation; none failed the
+  clean-install validation.

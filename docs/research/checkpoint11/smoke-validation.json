@@ -1,0 +1,40 @@
+[
+  {
+    "run_id": "gate2-final-mock-20260908",
+    "validation": {
+      "run_id": "gate2-final-mock-20260908",
+      "schema_version": "1.3.0",
+      "trajectories": 208,
+      "manifest_present": true,
+      "force_mock": true,
+      "synthetic_trajectories": 120,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": false,
+      "errors": []
+    },
+    "gate2": "REFUSED",
+    "n_request_events": 0,
+    "wall_seconds": 1.4539999999979045,
+    "meaning": "harness/connectivity evidence only; smoke is not powered for scientific claims"
+  },
+  {
+    "run_id": "gate2-nvidia-retry-smoke-20260908",
+    "validation": {
+      "run_id": "gate2-nvidia-retry-smoke-20260908",
+      "schema_version": "1.3.0",
+      "trajectories": 78,
+      "manifest_present": true,
+      "force_mock": false,
+      "synthetic_trajectories": 0,
+      "cost_conservation_ok": true,
+      "chain_ok": true,
+      "analysis_grade": true,
+      "errors": []
+    },
+    "gate2": "INCONCLUSIVE",
+    "n_request_events": 55,
+    "wall_seconds": 898.0310000000027,
+    "meaning": "harness/connectivity evidence only; smoke is not powered for scientific claims"
+  }
+]

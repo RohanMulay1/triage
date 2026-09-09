@@ -1,0 +1,945 @@
+diff --git a/app/config.py b/app/config.py
+index bfaa7c9..05f0047 100644
+--- a/app/config.py
++++ b/app/config.py
+@@ -53,6 +53,10 @@ class Settings:
+         # telemetry_db, so a test run never writes into the committed data/ tree.
+         self.trace_dir = os.getenv("TRIAGE_TRACE_DIR", str(ROOT / "data" / "traces"))
+         self.force_mock = (os.getenv("TRIAGE_FORCE_MOCK") or os.getenv("SV_FORCE_MOCK") or "0") in ("1", "true", "True")
++        # Operators can select a current application lane without rewriting a
++        # historical catalog id or changing no-configuration routing behaviour.
++        # Research commands still pass --small/--big so manifests stay explicit.
++        self.default_model = os.getenv("TRIAGE_DEFAULT_MODEL", "").strip()
+ 
+     def provider_keys(self) -> dict[str, bool]:
+         return {
+@@ -91,7 +95,19 @@ def get_model(model_id: str) -> dict[str, Any] | None:
+ 
+ 
+ def default_small_model() -> dict[str, Any]:
+-    """The router's auto-pick target: smallest flagged `default_small` model."""
++    """Return the explicit application default, or the historical auto-pick.
++
++    ``TRIAGE_DEFAULT_MODEL`` is fail-closed: a typo must not route production
++    traffic to an unintended model. With it unset, legacy selection is exact.
++    """
++    configured = get_settings().default_model
++    if configured:
++        model = get_model(configured)
++        if model is None:
++            raise ValueError(
++                f"TRIAGE_DEFAULT_MODEL names unknown model {configured!r}"
++            )
++        return model
+     smalls = [m for m in load_models() if m.get("default_small")]
+     pool = smalls or load_models()
+     return min(pool, key=lambda m: m.get("size_b", 1e9))
+diff --git a/app/llm.py b/app/llm.py
+index ef83419..794f742 100644
+--- a/app/llm.py
++++ b/app/llm.py
+@@ -10,14 +10,38 @@ from .providers.registry import get_registry
+ from .schemas import CostMetrics
+ 
+ 
+-class RateLimitError(Exception):
++class ProviderFailureError(Exception):
++    """A live-provider failure surfaced without a synthetic substitution."""
++
++    def __init__(self, provider: str, result: GenResult, *, retryable: bool = False) -> None:
++        self.provider = provider
++        self.result = result
++        self.status_code = result.http_status
++        self.retry_after = result.retry_after
++        self.usage_known = result.usage_known
++        self.retryable = retryable
++        super().__init__(result.error or f"{provider} provider failure")
++
++
++class RetryableProviderError(ProviderFailureError):
++    """A transient provider response that may succeed after bounded backoff."""
++
++    def __init__(self, provider: str, result: GenResult) -> None:
++        super().__init__(provider, result, retryable=True)
++
++
++class RateLimitError(ProviderFailureError):
+     """The live provider returned HTTP 429 — surface it to the user instead of
+     silently serving the mock fallback."""
+ 
+-    def __init__(self, provider: str, retry_after: int | None) -> None:
+-        self.provider = provider
+-        self.retry_after = retry_after
+-        super().__init__(f"{provider} rate-limited (retry_after={retry_after})")
++    def __init__(self, provider: str, retry_after: float | None,
++                 result: GenResult | None = None) -> None:
++        result = result or GenResult(
++            text="", provider=provider, model="", usage_known=True,
++            http_status=429, retry_after=retry_after,
++            error=f"{provider} rate-limited (retry_after={retry_after})",
++        )
++        super().__init__(provider, result, retryable=True)
+ 
+ 
+ def estimate_cost(model_id: str, tokens_in: int, tokens_out: int) -> float:
+@@ -38,6 +62,7 @@ class LLMClient:
+         self.registry = get_registry()
+         self.cost = CostMetrics()
+         self.provider_label = "mock"
++        self.unknown_usage = False
+ 
+     async def generate(
+         self,
+@@ -52,15 +77,40 @@ class LLMClient:
+         return await control.call(self, operation) if control is not None else await operation()
+ 
+     async def _generate_once(self, messages, temperature, max_tokens, want_logprobs):
++        from .trace.pacing import active_control
++        from .trace.request_budget import active_ledger
+         adapter, provider_model, label = self.registry.resolve(self.model_id)
+         self.provider_label = label
++        ledger = active_ledger.get()
++        ticket = ledger.admit(self.model_id, label, provider_model, messages, max_tokens) if ledger else None
+         res = await adapter.generate(
+             provider_model, messages, temperature, max_tokens, want_logprobs
+         )
++        if ledger is not None:
++            from .trace.budgeting import BudgetExceeded
++            try:
++                ledger.settle(ticket, res)
++            except BudgetExceeded:
++                self.cost.tokens_in += res.tokens_in
++                self.cost.tokens_out += res.tokens_out
++                self.cost.est_cost_usd += estimate_cost(self.model_id, res.tokens_in, res.tokens_out)
++                self.cost.llm_calls += 1
++                raise
+         # Rate limits are user-facing: tell them when to come back, don't mock.
+         if res.error and res.error.startswith("RATE_LIMIT") and label != "mock":
+-            m = re.search(r"retry_after=(\d+)", res.error)
+-            raise RateLimitError(label, int(m.group(1)) if m else None)
++            m = re.search(r"retry_after=([0-9]+(?:\.[0-9]+)?)", res.error)
++            retry_after = res.retry_after
++            if retry_after is None and m:
++                retry_after = float(m.group(1))
++            raise RateLimitError(label, retry_after, res)
++        # Research collection must never turn a provider failure into synthetic
++        # text. Retry transient gateway failures through the run-wide control;
++        # surface every other failure immediately. Legacy routing keeps its
++        # historical mock fallback when no research control is active.
++        if res.error and label != "mock" and active_control.get() is not None:
++            if res.http_status in (502, 503, 504):
++                raise RetryableProviderError(label, res)
++            raise ProviderFailureError(label, res)
+         # Fall back to mock on a live-provider error so a request never hard-fails.
+         if res.error and label != "mock":
+             provider_error = res.error
+diff --git a/app/providers/base.py b/app/providers/base.py
+index 7990eee..ea4b040 100644
+--- a/app/providers/base.py
++++ b/app/providers/base.py
+@@ -25,6 +25,9 @@ class GenResult:
+     finish_reason: str = "stop"
+     raw: dict[str, Any] = field(default_factory=dict)
+     error: Optional[str] = None
++    usage_known: bool = True
++    http_status: Optional[int] = None
++    retry_after: Optional[float] = None
+ 
+ 
+ Message = dict[str, str]  # {"role": ..., "content": ...}
+diff --git a/app/providers/huggingface.py b/app/providers/huggingface.py
+index 2db0769..e4d9dd4 100644
+--- a/app/providers/huggingface.py
++++ b/app/providers/huggingface.py
+@@ -9,6 +9,7 @@ from typing import Any
+ import httpx
+ 
+ from .base import GenResult, Message, ProviderAdapter
++from .openai_compat import _retry_after_seconds
+ 
+ 
+ class HuggingFaceAdapter(ProviderAdapter):
+@@ -37,12 +38,17 @@ class HuggingFaceAdapter(ProviderAdapter):
+                 resp = await client.post(url, json=payload, headers=headers)
+             latency = (time.perf_counter() - t0) * 1000
+             if resp.status_code >= 400:
++                retry_after = _retry_after_seconds(resp.headers.get("retry-after"))
++                prefix = f"RATE_LIMIT retry_after={retry_after}: " if resp.status_code == 429 else ""
+                 return GenResult(text="", provider=self.name, model=model, latency_ms=latency,
+-                                 error=f"HTTP {resp.status_code}: {resp.text[:300]}")
++                                 error=f"{prefix}HTTP {resp.status_code}: {resp.text[:300]}",
++                                 usage_known=resp.status_code == 429,
++                                 http_status=resp.status_code, retry_after=retry_after)
+             data = resp.json()
+         except Exception as exc:
+             return GenResult(text="", provider=self.name, model=model,
+-                             latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc))
++                             latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc),
++                             usage_known=False)
+ 
+         choice = (data.get("choices") or [{}])[0]
+         text = (choice.get("message") or {}).get("content", "") or ""
+diff --git a/app/providers/ollama.py b/app/providers/ollama.py
+index 81ac284..3326985 100644
+--- a/app/providers/ollama.py
++++ b/app/providers/ollama.py
+@@ -8,6 +8,7 @@ from typing import Any
+ import httpx
+ 
+ from .base import GenResult, Message, ProviderAdapter
++from .openai_compat import _retry_after_seconds
+ 
+ 
+ class OllamaAdapter(ProviderAdapter):
+@@ -34,12 +35,17 @@ class OllamaAdapter(ProviderAdapter):
+                 resp = await client.post(f"{self.base_url}/api/chat", json=payload, headers=headers)
+             latency = (time.perf_counter() - t0) * 1000
+             if resp.status_code >= 400:
++                retry_after = _retry_after_seconds(resp.headers.get("retry-after"))
++                prefix = f"RATE_LIMIT retry_after={retry_after}: " if resp.status_code == 429 else ""
+                 return GenResult(text="", provider=self.name, model=model, latency_ms=latency,
+-                                 error=f"HTTP {resp.status_code}: {resp.text[:300]}")
++                                 error=f"{prefix}HTTP {resp.status_code}: {resp.text[:300]}",
++                                 usage_known=resp.status_code == 429,
++                                 http_status=resp.status_code, retry_after=retry_after)
+             data = resp.json()
+         except Exception as exc:
+             return GenResult(text="", provider=self.name, model=model,
+-                             latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc))
++                             latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc),
++                             usage_known=False)
+ 
+         text = (data.get("message") or {}).get("content", "") or ""
+         return GenResult(
+diff --git a/app/providers/openai_compat.py b/app/providers/openai_compat.py
+index c3067bf..caf712b 100644
+--- a/app/providers/openai_compat.py
++++ b/app/providers/openai_compat.py
+@@ -6,6 +6,8 @@ both speak the OpenAI /chat/completions dialect; capabilities vary by provider.
+ from __future__ import annotations
+ 
+ import contextvars
++import math
++from email.utils import parsedate_to_datetime
+ import time
+ from typing import Any
+ 
+@@ -117,21 +119,27 @@ class OpenAICompatAdapter(ProviderAdapter):
+                     )
+             latency = (time.perf_counter() - t0) * 1000
+             if resp.status_code == 429:
+-                retry_after = resp.headers.get("retry-after", "")
++                retry_after = _retry_after_seconds(resp.headers.get("retry-after"))
+                 return GenResult(
+                     text="", provider=self.name, model=model, latency_ms=latency,
+                     error=f"RATE_LIMIT retry_after={retry_after}: {resp.text[:200]}",
++                    usage_known=True, http_status=429, retry_after=retry_after,
+                 )
+             if resp.status_code >= 400:
+                 return GenResult(
+                     text="", provider=self.name, model=model, latency_ms=latency,
+                     error=f"HTTP {resp.status_code}: {resp.text[:300]}",
++                    usage_known=False, http_status=resp.status_code,
++                    retry_after=_retry_after_seconds(resp.headers.get("retry-after")),
+                 )
+             data = resp.json()
++            data['_rate_limit_headers'] = {k: v for k, v in resp.headers.items()
++                                           if k.startswith('x-ratelimit-')}
+         except Exception as exc:  # network / timeout / parse
+             return GenResult(
+                 text="", provider=self.name, model=model,
+                 latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc),
++                usage_known=False,
+             )
+ 
+         # Some gateways (e.g. OpenRouter) return HTTP 200 with an error body and
+@@ -144,6 +152,8 @@ class OpenAICompatAdapter(ProviderAdapter):
+             return GenResult(
+                 text="", provider=self.name, model=model, latency_ms=latency,
+                 error=f"{prefix}{msg or 'empty choices in response'}"[:300],
++                usage_known=code in (429, "429"),
++                http_status=429 if code in (429, "429") else None,
+             )
+         choice = data["choices"][0]
+         text = (choice.get("message") or {}).get("content", "") or ""
+@@ -160,9 +170,29 @@ class OpenAICompatAdapter(ProviderAdapter):
+             logprobs=logprobs,
+             finish_reason=choice.get("finish_reason", "stop"),
+             raw=data,
++            usage_known='prompt_tokens' in usage and 'completion_tokens' in usage,
++            http_status=resp.status_code,
+         )
+ 
+ 
++def _retry_after_seconds(value: str | None) -> float | None:
++    """Parse a Retry-After delta or HTTP date; return None if it is invalid."""
++    if not value:
++        return None
++    try:
++        seconds = float(value)
++        return max(0.0, seconds) if math.isfinite(seconds) else None
++    except ValueError:
++        try:
++            target = parsedate_to_datetime(value)
++            now = parsedate_to_datetime(
++                time.strftime("%a, %d %b %Y %H:%M:%S GMT", time.gmtime())
++            )
++            return max(0.0, (target - now).total_seconds())
++        except (TypeError, ValueError, OverflowError):
++            return None
++
++
+ def _extract_logprobs(choice: dict[str, Any]) -> list[float] | None:
+     lp = choice.get("logprobs")
+     if not lp:
+diff --git a/app/trace/ablations.py b/app/trace/ablations.py
+index 7d6b485..736c047 100644
+--- a/app/trace/ablations.py
++++ b/app/trace/ablations.py
+@@ -27,7 +27,7 @@ def compare_fits(left, right, rows):
+             a["calibrated_gain"], b["calibrated_gain"]),
+             "n": len(a["test_item_ids"])}
+     if not per_action or any(v["status"] != "OK" for v in per_action.values()):
+-        return {"status": "REFUSED", "per_action": per_action,
++        return {**refused("incomplete common action support"), "per_action": per_action,
+                 "policy_disagreement": refused("incomplete common action support"),
+                 "established": False}
+     predictions = []
+@@ -55,6 +55,7 @@ def compare_fits(left, right, rows):
+         quality_right.append(row["deltas"].get(y[0], 0))
+     ci = paired_bootstrap_diff(disagreements, [0.0]*len(disagreements))
+     return {"status": "OK" if disagreements else "REFUSED", "per_action": per_action,
++            "ci95": ci,
+             "policy_disagreement": {"ci95": ci},
+             "ranking_disagreement_ci95": paired_bootstrap_diff(rank_disagreements, [0.0]*len(rank_disagreements)),
+             "policy_quality_difference_ci95": paired_bootstrap_diff(quality_left, quality_right),
+@@ -72,6 +73,17 @@ def c4_report(run_id, diagnostic=False):
+     traces = read_run(run_id)
+     projected = [t for t in traces if t.branch_id == 'prefix' or
+                  (t.decision_depth == 1 and t.steps[0].decision.rationale.get('served'))]
++    # Inclusion propensity is one for exhaustive fan-out. It is not the
++    # probability of the selected served action. Preserve the latter separately.
++    for trajectory in projected:
++        if trajectory.branch_id == 'prefix':
++            continue
++        propensity = trajectory.steps[0].decision.rationale.get('behavior_propensity')
++        if propensity is None:
++            return {**meta, **refused('served behavior propensity not recorded'), 'established': False}
++        step = trajectory.steps[0]
++        trajectory.steps[0] = step.model_copy(update={'decision': step.decision.model_copy(
++            update={'propensity': propensity})})
+     rows = [r for r in assemble(run_id, SupportThresholds(allow_synthetic=diagnostic))
+             if r.get('decision_depth',1) == 1]
+     actions = sorted({a for r in rows for a in r['deltas'] if a != 'stop'})
+diff --git a/app/trace/actions.py b/app/trace/actions.py
+index 62e649d..6078e03 100644
+--- a/app/trace/actions.py
++++ b/app/trace/actions.py
+@@ -19,11 +19,12 @@ Two rules the rest of the pipeline depends on:
+ """
+ from __future__ import annotations
+ 
++import json
+ from dataclasses import dataclass, field, replace
+ from typing import Any, Optional
+ 
+ from ..config import get_model, get_settings
+-from ..llm import LLMClient, RateLimitError
++from ..llm import LLMClient, ProviderFailureError, RateLimitError
+ from ..retrieval.store import get_store
+ from ..schemas import SignalSet
+ from ..signals import proxy
+@@ -42,10 +43,11 @@ from .adapter import (
+     tool_action,
+ )
+ from .contract import Action, ActionCost, ActionKind, OutcomeStatus, text_hash
++from .budgeting import BudgetExceeded
+ 
+ #: Action space definition id. Support denominators computed under one definition
+ #: must never be compared with another; this string is recorded on every decision.
+-FEASIBLE_SET_DEFINITION = "executor_v1"
++FEASIBLE_SET_DEFINITION = "executor_v2_information_consumer"
+ 
+ DEFAULT_SYSTEM = (
+     "You are a helpful, accurate assistant. Think step by step when the question "
+@@ -124,12 +126,45 @@ def _model_status(client: LLMClient, answer: str) -> OutcomeStatus:
+     return OutcomeStatus.CHOSEN
+ 
+ 
+-def _rate_limited(client, mark, ctx, error):
++def verification_question(ctx):
++    """Expose only previously observed fallible information to the continuation.
++
++    The legacy verify function and ordinary root VERIFY prompt are unchanged.
++    These observations are not retrieval evidence or correctness labels.
++    """
++    observations = {}
++    if ctx.samples:
++        observations["resampled_answers"] = ctx.samples
++    if "self_check" in ctx.signals.detail:
++        observations["self_check"] = ctx.signals.detail["self_check"]
++    if not observations:
++        return ctx.question
++    return (ctx.question + "\n\nPRIOR INTERVENTION OBSERVATIONS "
++            "(fallible model diagnostics, not ground truth; assess rather than trust):\n"
++            + json.dumps(observations, ensure_ascii=True, sort_keys=True))
++
++
++def _provider_failed(client, mark, ctx, error):
++    provider = getattr(error, "provider", client.provider_label)
++    unknown_usage = client.unknown_usage or (
++        isinstance(error, ProviderFailureError) and not error.usage_known
++    )
++    budget_refused = isinstance(error, BudgetExceeded)
+     return ExecutionResult(status=OutcomeStatus.FAILED, answer=ctx.answer,
+         signals=ctx.signals, evidence=ctx.evidence,
+-        cost=cost_delta(mark, client.cost, error.provider), provider_label=error.provider,
+-        error=str(error), detail={"rate_limited": True, "retry_after": error.retry_after,
+-                                 "model_id": client.model_id})
++        cost=cost_delta(mark, client.cost, provider), provider_label=provider,
++        error=str(error), detail={
++            "provider_failure": not budget_refused,
++            "rate_limited": isinstance(error, RateLimitError),
++            "retryable_exhausted": bool(getattr(error, "retryable", False)),
++            "retry_after": getattr(error, "retry_after", None),
++            "http_status": getattr(error, "status_code", None),
++            "usage_known": not unknown_usage,
++            "unknown_usage": unknown_usage,
++              "budget_refused": budget_refused,
++              "runtime_refused": getattr(error, 'runtime_refused', False),
++            "model_id": client.model_id,
++        })
+ 
+ 
+ class InterventionExecutor:
+@@ -249,8 +284,8 @@ class InterventionExecutor:
+                 ctx.messages(), temperature=pcfg["base_temperature"],
+                 max_tokens=pcfg["max_tokens"], want_logprobs=True,
+             )
+-        except RateLimitError as e:
+-            return _rate_limited(client, mark, ctx, e)
++        except (ProviderFailureError, BudgetExceeded) as e:
++            return _provider_failed(client, mark, ctx, e)
+         answer = res.text or "(no answer)"
+         signals = ctx.signals.model_copy(deep=True)
+         signals.uncertainty, signals.detail["uncertainty"] = proxy.uncertainty(res, [])
+@@ -291,8 +326,8 @@ class InterventionExecutor:
+                                           max_tokens=pcfg["max_tokens"])
+                 if r.text:
+                     samples.append(r.text)
+-        except RateLimitError as e:
+-            return _rate_limited(client, mark, ctx, e)
++        except (ProviderFailureError, BudgetExceeded) as e:
++            return _provider_failed(client, mark, ctx, e)
+         signals = ctx.signals.model_copy(deep=True)
+         if samples:
+             signals.instability, signals.detail["instability"] = proxy.instability(
+@@ -314,10 +349,11 @@ class InterventionExecutor:
+         mark = snapshot_cost(client)
+         try:
+             score, detail = await proxy.contradiction_probe(client, ctx.question, ctx.answer)
+-        except RateLimitError as e:
+-            return _rate_limited(client, mark, ctx, e)
++        except (ProviderFailureError, BudgetExceeded) as e:
++            return _provider_failed(client, mark, ctx, e)
+         signals = ctx.signals.model_copy(deep=True)
+         signals.contradiction, signals.detail["contradiction"] = score, detail
++        signals.detail["self_check"] = detail
+         status = OutcomeStatus.CHOSEN
+         if client.provider_label == "mock" and not get_settings().force_mock:
+             status = OutcomeStatus.SYNTHETIC_FALLBACK
+@@ -351,9 +387,9 @@ class InterventionExecutor:
+         client = LLMClient(model_id)
+         mark = snapshot_cost(client)
+         try:
+-            v = await verify(client, ctx.question, ctx.answer, ctx.evidence)
+-        except RateLimitError as e:
+-            return _rate_limited(client, mark, ctx, e)
++            v = await verify(client, verification_question(ctx), ctx.answer, ctx.evidence)
++        except (ProviderFailureError, BudgetExceeded) as e:
++            return _provider_failed(client, mark, ctx, e)
+         signals = ctx.signals.model_copy(deep=True)
+         signals.detail["verify"] = {"pass": v["pass"], "reason": v["reason"]}
+         answer = v["revised"] if v["pass"] else ctx.answer
+diff --git a/app/trace/analysis.py b/app/trace/analysis.py
+index d5a47a7..de5beeb 100644
+--- a/app/trace/analysis.py
++++ b/app/trace/analysis.py
+@@ -327,7 +327,7 @@ def predict_repair(
+             "test_item_ids": [usable[i]["item_id"] for i in test],
+             "test_scores": [float(v) for v in scores],
+             "test_labels": [targets[i] for i in test],
+-            "calibration": "not_implemented_calib_rows_unused",
++            "calibration": "discrimination_probe_unscaled; marginal_gain_calibration_reported_separately",
+             "base_rate": round(sum(targets[i] for i in test) / len(test), 4)}
+ 
+ 
+@@ -422,6 +422,8 @@ def gate2_report(run_id: str, seed: int = 0,
+     return {
+         **meta,
+         "rows": len(rows),
++        "n_distinct_items": len({r["item_id"] for r in rows}),
++        "interpretation": "conditional on valid observed outcomes; failed actions are not zero-gain labels",
+         "splits": {s: sum(1 for r in rows if r["split"] == s) for s in
+                    sorted({r["split"] for r in rows})},
+         "task_families": {f: sum(1 for r in rows if r["task_family"] == f)
+diff --git a/app/trace/branching.py b/app/trace/branching.py
+index 97ac854..3dceaa9 100644
+--- a/app/trace/branching.py
++++ b/app/trace/branching.py
+@@ -215,7 +215,7 @@ async def collect_fanout(
+         raise ValueError("depth must be 1 or 2")
+     executor = InterventionExecutor(cfg)
+     run_budget = budget if isinstance(budget, RunBudget) else RunBudget(budget)
+-    rng = random.Random(seed)
++    rng = random.Random(f"fanout-v2|{seed}|{item_id}")
+     features = dict(prompt_features or {})
+ 
+     ctx = InterventionContext(question=question, cfg=cfg, small_id=small_id,
+@@ -255,7 +255,7 @@ async def collect_fanout(
+         s1 = prefix.add(scoring_action, scoring, feasible=[scoring_action], propensity=1.0,
+                         status=scoring.status, rationale={"forced": True, "policy_overhead": True},
+                         exploration_seed=seed)
+-        if scoring.status != OutcomeStatus.CHOSEN:
++        if scoring.status != OutcomeStatus.CHOSEN and scoring_policy is None:
+             result = scoring
+     prefix_traj = prefix.build(status="prefix", abstained=False, label=None,
+                                label_source=None, budget=run_budget.state)
+@@ -266,13 +266,18 @@ async def collect_fanout(
+ 
+     def check_budget():
+         try:
++            if any(s.outcome.detail.get("runtime_refused") for s in trajectories[-1].steps):
++                raise BudgetExceeded("provider retry delay exceeds declared runtime bound; partial trajectories retained")
++            if any(s.outcome.detail.get("budget_refused") for s in trajectories[-1].steps):
++                raise BudgetExceeded("request budget refused; partial trajectories retained")
+             run_budget.check()
+         except BudgetExceeded as exc:
+             exc.trajectories = trajectories
+             raise
+ 
+     check_budget()
+-    if prefix.steps[-1].outcome.detail.get("unknown_usage"):
++    from .request_budget import active_ledger
++    if prefix.steps[-1].outcome.detail.get("unknown_usage") and active_ledger.get() is None:
+         exc = BudgetExceeded("policy scoring usage unknown; refusing further calls")
+         exc.trajectories = trajectories
+         raise exc
+@@ -356,6 +361,7 @@ async def collect_fanout(
+         builder.add(action, res, feasible=available, propensity=1.0, status=status,
+                     rationale={"fanout": True, "served": is_served,
+                                "sampling_design": "exhaustive_inclusion",
++                               "behavior_propensity": served_choice.propensity if is_served and served_choice else None,
+                                "behavior_choice": served_choice.rationale if served_choice else None},
+                     exploration_seed=seed)
+ 
+diff --git a/app/trace/budgeting.py b/app/trace/budgeting.py
+index f402a25..7e23cd3 100644
+--- a/app/trace/budgeting.py
++++ b/app/trace/budgeting.py
+@@ -79,6 +79,8 @@ def estimate_action_cost(action, ctx, prices: dict) -> ActionCost:
+     if action.kind in (ActionKind.SELF_CHECK, ActionKind.VERIFY):
+         prompt += ctx.answer
+     if action.kind == ActionKind.VERIFY:
++        from .actions import verification_question
++        prompt += verification_question(ctx)[len(ctx.question):]
+         prompt += "".join(h.text for h in ctx.evidence)
+     tin = n * (len(prompt.encode("utf-8")) + 1024 + 8 * len(ctx.evidence))
+     tout = n * max_tokens
+diff --git a/app/trace/calibration.py b/app/trace/calibration.py
+index 4c3c96d..793a32c 100644
+--- a/app/trace/calibration.py
++++ b/app/trace/calibration.py
+@@ -7,7 +7,7 @@ from __future__ import annotations
+ 
+ import numpy as np
+ 
+-from .analysis import FEATURE_SETS, assemble, bootstrap_ci
++from .analysis import FEATURE_SETS, assemble, bootstrap_ci, paired_bootstrap_diff
+ from .store import validate_run
+ from .support import SupportError, SupportThresholds
+ 
+@@ -104,7 +104,7 @@ def calibration_block(rows):
+     fits = {a: fit_gain(rows, a) for a in actions}
+     return {"status": "COMPLETE", "n_fitted": sum(f["status"] == "OK" for f in fits.values()), "target": "normalized marginal quality gain (delta+1)/2",
+             "roles": "train=ridge fit; calib=isotonic map; test=ECE and reliability",
+-            "per_action": fits}
++            "per_action": fits, "induced_choice_change": calibration_choice_change(fits)}
+ 
+ 
+ def calibration_report(run_id, diagnostic=False):
+@@ -118,3 +118,34 @@ def calibration_report(run_id, diagnostic=False):
+     except SupportError as exc:
+         return {**meta, "status": "REFUSED", "reason": str(exc), "per_action": {}}
+     return {**meta, **calibration_block(rows)}
++
++
++def calibration_choice_change(fits):
++    """Choice changes among fitted root actions plus STOP, not a full policy.
++
++    Unfitted actions are disclosed, never assigned default gains. Depth-2 fits
++    describe other decision states and cannot be ranked as root actions.
++    """
++    root = {a: f for a, f in fits.items() if f.get("status") == "OK" and " -> " not in a}
++    meta = {"scope": "fitted_root_action_subset_plus_STOP; not full-policy evaluation",
++            "actions": sorted(root), "excluded_actions": sorted(set(fits)-set(root)),
++            "ci_scope": "paired test-item resampling conditional on fixed fits"}
++    if not root:
++        return {**meta, "status": "REFUSED", "reason": "no fitted root actions",
++                "ci95": paired_bootstrap_diff([], [])}
++    common = set.intersection(*(set(f["test_item_ids"]) for f in root.values()))
++    if len(common) < 20:
++        return {**meta, "status": "REFUSED", "reason": "fewer than 20 common test items",
++                "n_common": len(common), "ci95": paired_bootstrap_diff([], [])}
++    predictions = {a: {item: (raw, cal) for item, raw, cal in zip(
++        f["test_item_ids"], f["raw_gain"], f["calibrated_gain"])} for a, f in root.items()}
++    changes = []
++    for item in sorted(common):
++        def choose(index):
++            scores = {a: values[item][index] for a, values in predictions.items()}
++            scores["stop"] = 0.0
++            return max(scores, key=lambda a: (scores[a], a == "stop", a))
++        changes.append(float(choose(0) != choose(1)))
++    return {**meta, "status": "OK", "n": len(common),
++            "ci95": paired_bootstrap_diff(changes, [0.0]*len(changes)),
++            "test_item_ids": sorted(common), "performance_claim": False}
+diff --git a/app/trace/heuristic_gain.py b/app/trace/heuristic_gain.py
+index 31d558f..3b6850e 100644
+--- a/app/trace/heuristic_gain.py
++++ b/app/trace/heuristic_gain.py
+@@ -11,10 +11,10 @@ import re
+ from dataclasses import replace
+ 
+ from ..config import get_settings
+-from ..llm import LLMClient, RateLimitError
++from ..llm import LLMClient, ProviderFailureError
+ from .actions import ExecutionResult
+ from .adapter import cost_delta, snapshot_cost
+-from .budgeting import estimate_action_cost
++from .budgeting import BudgetExceeded, estimate_action_cost
+ from .contract import Action, ActionKind, OutcomeStatus
+ 
+ 
+@@ -73,6 +73,7 @@ class HeuristicGainPolicy:
+         before = snapshot_cost(client)
+         payload, error, latency = None, None, 0.0
+         raw_text = None
++        runtime_refused = False
+         status = OutcomeStatus.CHOSEN
+         try:
+             response = await client.generate(
+@@ -96,9 +97,12 @@ class HeuristicGainPolicy:
+                     raise ValueError("nonfinite, out-of-range or nonnumeric self-estimate")
+                 scores[a.key] = [min(1.0, max(0.0, v)) for v in values]
+             self._prepared = (prompt, scores)
+-        except RateLimitError as exc:
++        except BudgetExceeded:
++            raise
++        except ProviderFailureError as exc:
+             error = str(exc)
+             status = OutcomeStatus.FAILED
++            runtime_refused = getattr(exc, 'runtime_refused', False)
+         except Exception as exc:
+             error = str(exc)
+             if status == OutcomeStatus.CHOSEN:
+@@ -111,7 +115,8 @@ class HeuristicGainPolicy:
+             samples=ctx.samples, cost=cost, provider_label=client.provider_label, error=error,
+             detail={"purpose": "policy_overhead", "scores": payload if error is None else None,
+                     "raw_response": raw_text,
+-                    "unknown_usage": error is not None and client.cost.llm_calls == 0 and status != OutcomeStatus.FAILED,
++                    "runtime_refused": runtime_refused,
++                    "unknown_usage": getattr(client, 'unknown_usage', False) or (error is not None and client.cost.llm_calls == 0 and status != OutcomeStatus.FAILED),
+                     "weights": self.weights, "max_steps": self.max_steps,
+                     "adaptation": "heterogeneous_actions_exact_key_redundancy",
+                     "uncalibrated": True})
+diff --git a/app/trace/pacing.py b/app/trace/pacing.py
+index a7748a4..6767d72 100644
+--- a/app/trace/pacing.py
++++ b/app/trace/pacing.py
+@@ -1,5 +1,6 @@
+-"""Run-scoped pacing and bounded 429 retries; inactive on the legacy router."""
++"""Run-scoped pacing and bounded provider retries; inactive on legacy routing."""
+ import asyncio
++import json
+ from contextvars import ContextVar
+ import math
+ import time
+@@ -7,16 +8,35 @@ import time
+ active_control = ContextVar("triage_run_request_control", default=None)
+ 
+ 
++class EventJournal(list):
++    """Persist each completed attempt before the next call can start."""
++    def __init__(self, path):
++        super().__init__()
++        self.path = path
++        with path.open('x', encoding='utf-8'):
++            pass
++
++    def append(self, event):
++        with self.path.open('a', encoding='utf-8') as handle:
++            handle.write(json.dumps(event, allow_nan=False)+'\n')
++        super().append(event)
++
++
+ class RequestControl:
+-    def __init__(self, rps=.6, attempts=3, sleep=asyncio.sleep, clock=time.monotonic):
++    def __init__(self, rps=.6, attempts=3, sleep=asyncio.sleep, clock=time.monotonic,
++                 max_retry_wait=60.0):
+         if not math.isfinite(rps) or rps <= 0 or attempts < 1:
+             raise ValueError("finite positive rps and positive attempts required")
+         self.rps, self.attempts = rps, attempts
++        if not math.isfinite(max_retry_wait) or max_retry_wait <= 0:
++            raise ValueError('finite positive retry-wait bound required')
++        self.max_retry_wait = max_retry_wait
+         self.sleep, self.clock = sleep, clock
+         self.next_start = 0.0
+         self.lock = asyncio.Lock()
+         self.events = []
+         self.throttle_seconds = 0.0
++        self.item_id = None
+ 
+     async def acquire(self):
+         async with self.lock:
+@@ -27,23 +47,37 @@ class RequestControl:
+             self.next_start = self.clock()+1/self.rps
+ 
+     async def call(self, client, operation):
+-        from ..llm import RateLimitError
++        from ..llm import ProviderFailureError, RateLimitError
+         for attempt in range(1,self.attempts+1):
+             await self.acquire()
+             start = self.clock()
+             try:
+                 result = await operation()
+-            except RateLimitError as exc:
++            except ProviderFailureError as exc:
++                if not exc.usage_known:
++                    client.unknown_usage = True
++                status = "rate_limited" if isinstance(exc, RateLimitError) else "provider_failure"
+                 wait = max(float(exc.retry_after or 0), min(30.0, 2.0**(attempt-1)))
+-                self.events.append({"model":client.model_id,"provider":exc.provider,
+-                    "attempt":attempt,"status":"rate_limited","latency_ms":1000*(self.clock()-start),
+-                    "retry_after":exc.retry_after,"backoff_seconds":wait if attempt<self.attempts else 0})
+-                if attempt == self.attempts:
++                runtime_refused = not math.isfinite(wait) or wait > self.max_retry_wait
++                exc.runtime_refused = runtime_refused
++                self.events.append({"item_id":self.item_id,"model":client.model_id,"provider":exc.provider,
++                    "attempt":attempt,"status":status,"latency_ms":1000*(self.clock()-start),
++                    "http_status":exc.status_code,"retryable":exc.retryable,
++                    "usage_known":exc.usage_known,"error":str(exc),
++                    "retry_after":exc.retry_after,
++                    "runtime_refused": runtime_refused,
++                    "backoff_seconds":wait if exc.retryable and attempt<self.attempts and not runtime_refused else 0})
++                if runtime_refused or not exc.retryable or attempt == self.attempts:
+                     raise
+                 await self.sleep(wait)
+             else:
+-                self.events.append({"model":client.model_id,"provider":client.provider_label,
++                self.events.append({"item_id":self.item_id,"model":client.model_id,"provider":client.provider_label,
+                     "attempt":attempt,"status":"returned","latency_ms":1000*(self.clock()-start),
+                     "tokens_in":result.tokens_in,"tokens_out":result.tokens_out,
++                    "usage_known":result.usage_known,
++                    "unknown_usage_before_success":client.unknown_usage,
++                    "raw_response":result.raw, "response_text":result.text,
+                     "error":result.error,"fallback_error":result.raw.get("fallback_error")})
++                if client.unknown_usage:
++                    result.raw["unknown_usage_before_success"] = True
+                 return result
+diff --git a/app/trace/pipeline.py b/app/trace/pipeline.py
+index 5656519..0dcee91 100644
+--- a/app/trace/pipeline.py
++++ b/app/trace/pipeline.py
+@@ -4,6 +4,7 @@ from __future__ import annotations
+ import hashlib
+ import json
+ import math
++import random
+ import time
+ from dataclasses import dataclass
+ from pathlib import Path
+@@ -19,8 +20,10 @@ from .calibration import calibration_report
+ from .contract import Budget
+ from .heuristic_gain import HeuristicGainPolicy
+ from .information_value import c2_report
+-from .pacing import RequestControl, active_control
++from .pacing import EventJournal, RequestControl, active_control
++from .request_budget import RequestLedger, active_ledger, CHAT_ALLOWANCE
+ from .policies import build_policy
++from .operations import operational_report
+ from .splits import GroupKey, SplitManifest, prompt_fingerprint
+ from .support import SupportError, action_support, assert_estimable, missingness, positivity_violations
+ 
+@@ -39,9 +42,12 @@ class PipelineOptions:
+     small: str | None = None
+     big: str | None = None
+     rps: float = .6
++    max_input_bytes: int | None = None
+ 
+ 
+ def validate_options(args):
++    if args.max_input_bytes is not None and args.max_input_bytes <= CHAT_ALLOWANCE:
++        raise ValueError("max_input_bytes must exceed the chat-framing allowance")
+     if not math.isfinite(args.rps) or args.rps <= 0:
+         raise ValueError("rps must be finite and strictly positive")
+     if not isinstance(args.n, int) or args.n <= 0:
+@@ -55,13 +61,39 @@ def validate_options(args):
+         raise ValueError("diagnostic scoring is forbidden live")
+ 
+ 
+-def preflight(prompts, cfg, prices, small, big, live):
++def preflight(prompts, cfg, prices, small, big, live, max_input_bytes=None):
+     """Conservative planning envelope, separate from per-action admission.
+ 
+     Includes all depth-2 branches, resamples and one scoring call per item.
+     Input allowance assumes 64 UTF-8 bytes per generated token plus frozen
+     retrieval and JSON overhead. This is an estimate, not an invoice guarantee.
+     """
++    if max_input_bytes is not None:
++        if max_input_bytes <= CHAT_ALLOWANCE:
++            raise ValueError("input-byte ceiling too small")
++        completion = int(cfg['proxy']['max_tokens'])
++        resamples = int(cfg['proxy']['resamples'])
++        # Each root/continuation uses its actual enforced completion limit.
++        # Small: draft, score, ANSWER, resamples, SELF_CHECK, VERIFY,
++        # then 3 ANSWER + 3 VERIFY continuations. Big: root + 3 continuations.
++        small_caps = [completion, 1024, completion] + [completion]*resamples + [80, 400] + [completion, 400]*3
++        big_caps = [completion]*4 if big else []
++        total = 0.0
++        for model, caps in ((small, small_caps), (big, big_caps)):
++            if not caps:
++                continue
++            price = prices[model]
++            rates = [float(price[k]) for k in ('cost_in', 'cost_out')]
++            if any(not math.isfinite(r) or r < 0 for r in rates):
++                raise ValueError('invalid snapshotted model price')
++            if live and price['live_provider'] == 'mock':
++                raise ValueError('live model resolves to mock')
++            total += len(prompts)*(len(caps)*max_input_bytes*rates[0]+sum(caps)*rates[1])/1e6
++        return {'listed_price_planning_usd': total, 'admission_estimate_usd': total if live else 0.0,
++                'max_calls': len(prompts)*(len(small_caps)+len(big_caps)), 'n_items': len(prompts),
++                'max_input_bytes': max_input_bytes,
++                'assumptions': 'enforced input UTF-8 byte ceiling including framing allowance; actual per-action completion caps; retry reservations share remaining cap',
++                'retry_completion_guarantee': False, 'not_invoice_guarantee': True}
+     max_tokens = max(1024, int(cfg['proxy']['max_tokens']))
+     corpus = sorted((len(t.encode()) for t in SEED_CORPUS), reverse=True)
+     evidence = sum(corpus[:int(cfg['retrieval']['top_k'])])
+@@ -101,10 +133,15 @@ async def run_pipeline(args: PipelineOptions):
+     cfg = load_router_config()
+     small = args.small or default_small_model()['id']
+     big = args.big or cfg['escalation'].get('default_target')
+-    items = load_items(args.dataset,args.n)
++    previous_random_state = random.getstate()
++    random.seed(args.seed)
++    try:
++        items = load_items(args.dataset,args.n)
++    finally:
++        random.setstate(previous_random_state)
+     prompts = [build_prompt(args.dataset,item) for item in items]
+     prices = store.model_snapshot()
+-    estimate = preflight(prompts,cfg,prices,small,big,args.live)
++    estimate = preflight(prompts,cfg,prices,small,big,args.live,args.max_input_bytes)
+     print('Preflight estimate (before any generation): '+json.dumps(estimate),flush=True)
+     if args.max_usd is not None and estimate['admission_estimate_usd'] > args.max_usd:
+         raise BudgetExceeded('whole-run planning estimate exceeds supplied cap; no calls made')
+@@ -112,7 +149,7 @@ async def run_pipeline(args: PipelineOptions):
+     manifest = store.build_manifest(args.run_id,dataset=args.dataset,split='mixed',seeds=[args.seed],
+         command='scripts/run_gate2.py '+json.dumps(vars(args),sort_keys=True),
+         notes='consolidated depth2; frozen seed corpus '+corpus_hash+
+-              '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+'; max_attempts=3')
++              '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+'; max_attempts=3; max_retry_wait_seconds=60')
+     store.create_run(manifest)
+     root = store.run_dir(args.run_id)
+     write_json(root/'preflight.json',estimate)
+@@ -128,13 +165,19 @@ async def run_pipeline(args: PipelineOptions):
+     retrieval._store = frozen
+     stopped = None
+     control = RequestControl(args.rps)
++    control.events = EventJournal(root/'request-events.jsonl')
+     control_token = active_control.set(control) if args.live else None
++    ledger = RequestLedger(prices,args.max_usd,args.max_input_bytes,
++                           root/'request-budget-events.jsonl') if args.live else None
++    ledger_token = active_ledger.set(ledger) if ledger is not None else None
+     wall_start = time.monotonic()
+     try:
+         with (root/'collect.log').open('x',encoding='utf-8') as log:
+             log.write(json.dumps({'options':vars(args),'preflight':estimate})+'\n')
++            log.flush()
+             for i,(item,prompt) in enumerate(zip(items,prompts)):
+                 item_id = f'{args.dataset}-{i:04d}'
++                control.item_id = item_id
+                 group = GroupKey(item_id,args.dataset,task_family=item.get('kind',args.dataset),
+                     model_pair=f'{small}->{big}',retriever_version=corpus_hash,
+                     prompt_template=args.dataset,prompt_fingerprint=prompt_fingerprint(prompt))
+@@ -159,6 +202,9 @@ async def run_pipeline(args: PipelineOptions):
+         retrieval._store = old_store
+         if control_token is not None:
+             active_control.reset(control_token)
++        if ledger_token is not None:
++            active_ledger.reset(ledger_token)
++            write_json(root/'request-budget.json',ledger.report())
+         write_json(root/'request-events.json', {'rps':args.rps,'max_attempts':3,
+             'wall_seconds':time.monotonic()-wall_start,'throttle_seconds':control.throttle_seconds,
+             'events':control.events})
+@@ -177,14 +223,19 @@ async def run_pipeline(args: PipelineOptions):
+     ablations = {'C1':c1_report(args.run_id,diagnostic=not args.live),
+                  'C2':c2_report(args.run_id,diagnostic=not args.live),
+                  'C4':c4_report(args.run_id,diagnostic=not args.live)}
++    operations = operational_report(control.events, time.monotonic()-wall_start,
++        control.throttle_seconds, traces, ledger.report() if ledger is not None else None)
+     report = {'run_id':args.run_id,'analysis_grade':validation['analysis_grade'],
+         'not_evidence':not validation['analysis_grade'],'validation':validation,
+         'support':support,'positivity':positivity_violations(support),
+         'missingness':missingness(traces),'evidence_support':evidence_support,
+         'preflight':estimate,'budget':budget.state.model_dump(),'collection_stopped':stopped,
++        'request_budget':ledger.report() if ledger is not None else None,
++        'operations': operations,
+         'gate2':gate2,'calibration':calibration,'ablations':ablations,
+         'gate1':'NARROW_PROVISIONAL','gate3':'UNRESOLVED','c2_real_data_status':'UNRESOLVED',
+         'live_boundary':not args.live}
+     write_json(root/'calibration.json',calibration)
++    write_json(root/'operations.json', operations)
+     write_json(root/'report.json',report)
+     return report
+diff --git a/config/models.yaml b/config/models.yaml
+index 55c3551..b6051ed 100644
+--- a/config/models.yaml
++++ b/config/models.yaml
+@@ -70,6 +70,7 @@ models:
+     cost_in: 0.075
+     cost_out: 0.30
+     context: 131072
++    escalate_to: groq-gpt-oss-120b
+ 
+   - id: groq-gpt-oss-120b
+     label: "GPT OSS 120B (Groq research)"
+@@ -147,6 +148,8 @@ models:
+     provider: nvidia
+     role: small
+     provider_model: "meta/llama-3.1-8b-instruct"
++    operational_status: retired
++    retired_at: "2026-08-26T09:00:00Z"
+     default_small: true         # <- router auto-pick: fast, free, returns logprobs
+     escalate_to: gpt-4o         # hard/risky tasks go to the paid strong model
+     alt:
+@@ -164,6 +167,8 @@ models:
+     provider: nvidia
+     role: big
+     provider_model: "meta/llama-3.3-70b-instruct"
++    operational_status: retired
++    retired_at: "2026-08-26T09:00:00Z"
+     alt:
+       groq: "llama-3.3-70b-versatile"
+       openrouter: "meta-llama/llama-3.3-70b-instruct:free"
+diff --git a/scripts/run_gate2.py b/scripts/run_gate2.py
+index 1929ff5..0e9a6e6 100644
+--- a/scripts/run_gate2.py
++++ b/scripts/run_gate2.py
+@@ -22,6 +22,7 @@ def main():
+     parser.add_argument('--small')
+     parser.add_argument('--big')
+     parser.add_argument('--rps',type=float,default=.6)
++    parser.add_argument('--max-input-bytes',type=int,help='explicit request-byte budget; refuses oversized inputs without truncation')
+     args = parser.parse_args()
+     if not math.isfinite(args.rps) or args.rps <= 0:
+         parser.error("--rps must be finite and strictly positive")

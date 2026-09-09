@@ -1,0 +1,1105 @@
+{
+  "max_usd": 0.1,
+  "max_input_bytes": null,
+  "reported_listed_usd": 0.0,
+  "reported_plus_reserved_upper_usd": 0.0,
+  "unknown_usage_requests": 1,
+  "accounting": "unknown usage retains full reservation; not an invoice",
+  "requests": [
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 2507,
+      "max_tokens": 1024,
+      "messages": [
+        {
+          "role": "system",
+          "content": "Estimate the marginal answer-quality gain and uncertainty for each action. These are uncalibrated self-estimates, not observed outcomes. Return only a JSON object keyed by each exact action key; each value has numeric expected_gain and uncertainty in [0,1]. Do not answer the question. RESAMPLE, SELF_CHECK and RETRIEVE preserve the draft and acquire information; estimate their potential benefit if consumed by a later action."
+        },
+        {
+          "role": "user",
+          "content": "{\"actions\": [{\"key\": \"stop\", \"kind\": \"stop\"}, {\"key\": \"abstain\", \"kind\": \"abstain\"}, {\"key\": \"answer:nim-nemotron-lightning-30b:t=0.2\", \"kind\": \"answer\"}, {\"key\": \"resample:nim-nemotron-lightning-30b:n=3,t=0.7\", \"kind\": \"resample\"}, {\"key\": \"self_check:nim-nemotron-lightning-30b\", \"kind\": \"self_check\"}, {\"key\": \"verify:nim-nemotron-lightning-30b:max_rounds=1\", \"kind\": \"verify\"}, {\"key\": \"retrieve:min_score=0.2,top_k=4\", \"kind\": \"retrieve\"}, {\"key\": \"stronger_model:nim-nemotron-ultra-550b\", \"kind\": \"stronger_model\"}], \"draft\": \"Ahito ran 24 miles.\", \"evidence\": [], \"history\": [\"answer:nim-nemotron-lightning-30b:t=0.2\"], \"question\": \"Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\\nGive the final numeric answer.\", \"samples\": [], \"signals\": {\"contradiction\": 0.0, \"detail\": {\"uncertainty\": {\"mode\": \"resample_entropy\", \"n\": 0}}, \"evidence_sufficiency\": 1.0, \"instability\": 0.0, \"retrieval_disagreement\": 0.0, \"retrieval_support\": 1.0, \"uncertainty\": 0.3}}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1516,
+      "max_tokens": 80,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a strict self-check probe. Given a QUESTION and a candidate ANSWER, decide whether the answer is internally inconsistent, self-contradictory, or logically incompatible with the question.\n\nQUESTION: Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer.\nANSWER: Ahito ran 24 miles.\n\nRespond on the first line with exactly CONSISTENT or CONTRADICTORY, then one short reason."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1574,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAmber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer.\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\nAhito ran 24 miles.\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 2056,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAmber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer.\n\nPRIOR INTERVENTION OBSERVATIONS (fallible model diagnostics, not ground truth; assess rather than trust):\n{\"resampled_answers\": [\"Ah mass a andellsellsellsellsellsells fromells rigorellsells after whereells on theellsellsellsellsamu subject when theellsellsellsellsells rigorellsellsellsellsellsellsellsells\\n\\u0646\\u0642\\n \\uc0dd\\uac01\\ud560\\n \\u0647\\u0645\\u0647.\\nGil\\n.\", \"Ah from fromellsellsellsells deep ofellsellsells overtells Ahito ran 28 miles.\", \"Ahito ran 11 miles.\"]}\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\nAhito ran 24 miles.\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1784,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAmber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer.\n\nPRIOR INTERVENTION OBSERVATIONS (fallible model diagnostics, not ground truth; assess rather than trust):\n{\"self_check\": {\"hedge\": false, \"probe\": \"CONSISTENT\\nThe calculation is correct: 8 + 28 + 24 = 52.\"}}\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\nAhito ran 24 miles.\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": false,
+      "http_status": 502,
+      "reported_usd": null
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1622,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAmber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer.\n\nEVIDENCE:\n- The square root of 144 is 12, because 12 multiplied by 12 equals 144.\n\nCANDIDATE:\nAhito ran 24 miles.\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1320,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Amber, Micah, and Ahito ran 52 miles in total. Amber ran 8 miles. Micah ran 3.5 times what Amber ran. How many miles did Ahito run?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 2512,
+      "max_tokens": 1024,
+      "messages": [
+        {
+          "role": "system",
+          "content": "Estimate the marginal answer-quality gain and uncertainty for each action. These are uncalibrated self-estimates, not observed outcomes. Return only a JSON object keyed by each exact action key; each value has numeric expected_gain and uncertainty in [0,1]. Do not answer the question. RESAMPLE, SELF_CHECK and RETRIEVE preserve the draft and acquire information; estimate their potential benefit if consumed by a later action."
+        },
+        {
+          "role": "user",
+          "content": "{\"actions\": [{\"key\": \"stop\", \"kind\": \"stop\"}, {\"key\": \"abstain\", \"kind\": \"abstain\"}, {\"key\": \"answer:nim-nemotron-lightning-30b:t=0.2\", \"kind\": \"answer\"}, {\"key\": \"resample:nim-nemotron-lightning-30b:n=3,t=0.7\", \"kind\": \"resample\"}, {\"key\": \"self_check:nim-nemotron-lightning-30b\", \"kind\": \"self_check\"}, {\"key\": \"verify:nim-nemotron-lightning-30b:max_rounds=1\", \"kind\": \"verify\"}, {\"key\": \"retrieve:min_score=0.2,top_k=4\", \"kind\": \"retrieve\"}, {\"key\": \"stronger_model:nim-nemotron-ultra-550b\", \"kind\": \"stronger_model\"}], \"draft\": \"120\", \"evidence\": [], \"history\": [\"answer:nim-nemotron-lightning-30b:t=0.2\"], \"question\": \"Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\\nGive the final numeric answer.\", \"samples\": [], \"signals\": {\"contradiction\": 0.0, \"detail\": {\"uncertainty\": {\"mode\": \"resample_entropy\", \"n\": 0}}, \"evidence_sufficiency\": 1.0, \"instability\": 0.0, \"retrieval_disagreement\": 0.0, \"retrieval_support\": 1.0, \"uncertainty\": 0.3}}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1521,
+      "max_tokens": 80,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a strict self-check probe. Given a QUESTION and a candidate ANSWER, decide whether the answer is internally inconsistent, self-contradictory, or logically incompatible with the question.\n\nQUESTION: Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer.\nANSWER: 120\n\nRespond on the first line with exactly CONSISTENT or CONTRADICTORY, then one short reason."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1579,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nMiguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer.\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\n120\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1731,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nMiguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer.\n\nPRIOR INTERVENTION OBSERVATIONS (fallible model diagnostics, not ground truth; assess rather than trust):\n{\"resampled_answers\": [\"240\", \"600\", \"240\"]}\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\n120\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1903,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nMiguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer.\n\nPRIOR INTERVENTION OBSERVATIONS (fallible model diagnostics, not ground truth; assess rather than trust):\n{\"self_check\": {\"hedge\": false, \"probe\": \"CONSISTENT\\nThe calculation is correct: 2 pads/week \\u00d7 30 sheets/pad = 60 sheets/week. Assuming 4 weeks per month, 60 \\u00d7 4 = 240 sheets/month. However, the answer \"}}\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\n120\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1627,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nMiguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer.\n\nEVIDENCE:\n- The square root of 144 is 12, because 12 multiplied by 12 equals 144.\n\nCANDIDATE:\n120\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1341,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "Miguel uses 2 pads of paper a week for his drawing. If there are 30 sheets of paper on a pad of paper, how many sheets of paper does he use every month?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 2974,
+      "max_tokens": 1024,
+      "messages": [
+        {
+          "role": "system",
+          "content": "Estimate the marginal answer-quality gain and uncertainty for each action. These are uncalibrated self-estimates, not observed outcomes. Return only a JSON object keyed by each exact action key; each value has numeric expected_gain and uncertainty in [0,1]. Do not answer the question. RESAMPLE, SELF_CHECK and RETRIEVE preserve the draft and acquire information; estimate their potential benefit if consumed by a later action."
+        },
+        {
+          "role": "user",
+          "content": "{\"actions\": [{\"key\": \"stop\", \"kind\": \"stop\"}, {\"key\": \"abstain\", \"kind\": \"abstain\"}, {\"key\": \"answer:nim-nemotron-lightning-30b:t=0.2\", \"kind\": \"answer\"}, {\"key\": \"resample:nim-nemotron-lightning-30b:n=3,t=0.7\", \"kind\": \"resample\"}, {\"key\": \"self_check:nim-nemotron-lightning-30b\", \"kind\": \"self_check\"}, {\"key\": \"verify:nim-nemotron-lightning-30b:max_rounds=1\", \"kind\": \"verify\"}, {\"key\": \"retrieve:min_score=0.2,top_k=4\", \"kind\": \"retrieve\"}, {\"key\": \"stronger_model:nim-nemotron-ultra-550b\", \"kind\": \"stronger_model\"}], \"draft\": \"Let the total number of students be \\\\( x \\\\).\\n\\nThree-fourths of the students have a desktop computer, so the number of students without a desktop computer is:\\n\\\\[\\nx - \\\\frac{3}{4}x = \\\\frac{1}{4}x\\n\\\\]\\n\\nWe are told that 20 students do not have desktop computers:\\n\\\\[\\n\\\\frac{1}{4}x = 20\\n\\\\]\\n\\nSolving for \\\\( x \\\\):\\n\\\\[\\nx = 20 \\\\times 4 = 80\\n\\\\]\\n\\nTherefore, there are 80 students at that grade level.\\n\\nFinal answer is: 80\", \"evidence\": [], \"history\": [\"answer:nim-nemotron-lightning-30b:t=0.2\"], \"question\": \"At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\\nGive the final numeric answer.\", \"samples\": [], \"signals\": {\"contradiction\": 0.0, \"detail\": {\"uncertainty\": {\"mode\": \"resample_entropy\", \"n\": 0}}, \"evidence_sufficiency\": 1.0, \"instability\": 0.0, \"retrieval_disagreement\": 0.0, \"retrieval_support\": 1.0, \"uncertainty\": 0.3}}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1950,
+      "max_tokens": 80,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a strict self-check probe. Given a QUESTION and a candidate ANSWER, decide whether the answer is internally inconsistent, self-contradictory, or logically incompatible with the question.\n\nQUESTION: At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer.\nANSWER: Let the total number of students be \\( x \\).\n\nThree-fourths of the students have a desktop computer, so the number of students without a desktop computer is:\n\\[\nx - \\frac{3}{4}x = \\frac{1}{4}x\n\\]\n\nWe are told that 20 students do not have desktop computers:\n\\[\n\\frac{1}{4}x = 20\n\\]\n\nSolving for \\( x \\):\n\\[\nx = 20 \\times 4 = 80\n\\]\n\nTherefore, there are 80 students at that grade level.\n\nFinal answer is: 80\n\nRespond on the first line with exactly CONSISTENT or CONTRADICTORY, then one short reason."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 2008,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAt a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer.\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\nLet the total number of students be \\( x \\).\n\nThree-fourths of the students have a desktop computer, so the number of students without a desktop computer is:\n\\[\nx - \\frac{3}{4}x = \\frac{1}{4}x\n\\]\n\nWe are told that 20 students do not have desktop computers:\n\\[\n\\frac{1}{4}x = 20\n\\]\n\nSolving for \\( x \\):\n\\[\nx = 20 \\times 4 = 80\n\\]\n\nTherefore, there are 80 students at that grade level.\n\nFinal answer is: 80\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 3886,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAt a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer.\n\nPRIOR INTERVENTION OBSERVATIONS (fallible model diagnostics, not ground truth; assess rather than trust):\n{\"resampled_answers\": [\"Let \\\\( T \\\\) be the total number of students at that grade level.\\n\\nWe are told that three-fourths of the students have a desktop computer at home. This means that one-fourth of the students do not have a desktop computer. Therefore:\\n\\n\\\\[\\n\\\\frac{1}{4}T = 20\\n\\\\]\\n\\nTo find \\\\( T \\\\), multiply both sides by 4:\\n\\n\\\\[\\nT = 20 \\\\times 4 = 80\\n\\\\]\\n\\nThus, there are 80 students at that grade level.\\n\\nFinal answer: 80\", \"The problem states that three-fourths of students have a desktop computer at home. This means that one-fourth of students do not have a desktop computer. We are told that 20 students do not have desktop computers.\\n\\nSince 20 students represent one-fourth of the total number of students, we can find the total number of students by multiplying 20 by 4:\\n\\n\\\\[\\n\\\\text{Total students} = 20 \\\\times 4 = 80\\n\\\\]\\n\\nTherefore, there are 80 students at that grade level.\\n\\n80\", \"To find the total number of students at the grade level, let's follow these steps:\\n\\n1. **Understand the given information:**\\n   - Three-fourths (3/4) of students have a desktop computer at home.\\n   - This means 1/4 of students do not have a desktop computer.\\n   - 20 students do not have desktop computers.\\n\\n2. **Set up the equation:**\\n   Let the total number of students be $x$.\\n   Since 1/4 of the students do not have desktops:\\n   $$ \\\\frac{1}{4}x = 20 $$\\n\\n3. **Solve for $x$:**\\n   Multiply both sides by 4:\\n   $$ x = 20 \\\\times 4 $$\\n   $$ x = 80 $$\\n\\n4. **Verify:**\\n   - Total students: 80\\n   - 3/4 have desktops: $80 \\\\times \\\\frac{3}{4} = 60$\\n   - 1/4 do not have desktops: $80 \\\\times \\\\frac{1}{4} = 20$ (matches the given information)\\n\\nTherefore, there are 80 students at that grade level.\\n\\nFinal answer is: 80\"]}\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\nLet the total number of students be \\( x \\).\n\nThree-fourths of the students have a desktop computer, so the number of students without a desktop computer is:\n\\[\nx - \\frac{3}{4}x = \\frac{1}{4}x\n\\]\n\nWe are told that 20 students do not have desktop computers:\n\\[\n\\frac{1}{4}x = 20\n\\]\n\nSolving for \\( x \\):\n\\[\nx = 20 \\times 4 = 80\n\\]\n\nTherefore, there are 80 students at that grade level.\n\nFinal answer is: 80\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 2253,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAt a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer.\n\nPRIOR INTERVENTION OBSERVATIONS (fallible model diagnostics, not ground truth; assess rather than trust):\n{\"self_check\": {\"hedge\": false, \"probe\": \"CONSISTENT\\nThe answer correctly solves the equation derived from the question's conditions.\"}}\n\nEVIDENCE:\n(no evidence retrieved)\n\nCANDIDATE:\nLet the total number of students be \\( x \\).\n\nThree-fourths of the students have a desktop computer, so the number of students without a desktop computer is:\n\\[\nx - \\frac{3}{4}x = \\frac{1}{4}x\n\\]\n\nWe are told that 20 students do not have desktop computers:\n\\[\n\\frac{1}{4}x = 20\n\\]\n\nSolving for \\( x \\):\n\\[\nx = 20 \\times 4 = 80\n\\]\n\nTherefore, there are 80 students at that grade level.\n\nFinal answer is: 80\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-lightning-30b",
+      "provider": "nvidia",
+      "input_allowance": 2056,
+      "max_tokens": 400,
+      "messages": [
+        {
+          "role": "user",
+          "content": "You are a verification model. Check whether the CANDIDATE answer to the QUESTION is (1) grounded in the EVIDENCE and (2) internally consistent.\n\nQUESTION:\nAt a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer.\n\nEVIDENCE:\n- The square root of 144 is 12, because 12 multiplied by 12 equals 144.\n\nCANDIDATE:\nLet the total number of students be \\( x \\).\n\nThree-fourths of the students have a desktop computer, so the number of students without a desktop computer is:\n\\[\nx - \\frac{3}{4}x = \\frac{1}{4}x\n\\]\n\nWe are told that 20 students do not have desktop computers:\n\\[\n\\frac{1}{4}x = 20\n\\]\n\nSolving for \\( x \\):\n\\[\nx = 20 \\times 4 = 80\n\\]\n\nTherefore, there are 80 students at that grade level.\n\nFinal answer is: 80\n\nReply with ONLY a JSON object, no prose:\n{\"verdict\": \"pass\" | \"fail\", \"grounded\": true|false, \"revised\": \"<corrected or confirmed answer>\", \"reason\": \"<short>\"}"
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    },
+    {
+      "model_id": "nim-nemotron-ultra-550b",
+      "provider": "nvidia",
+      "input_allowance": 1368,
+      "max_tokens": 2048,
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are a helpful, accurate assistant. Think step by step when the question requires reasoning, then state the final answer."
+        },
+        {
+          "role": "user",
+          "content": "At a certain grade level, three-fourths of students have a desktop computer at home. If 20 students do not have desktop computers, how many students are there at that grade level?\nGive the final numeric answer."
+        }
+      ],
+      "reserved_usd": 0.0,
+      "settled": true,
+      "usage_known": true,
+      "http_status": 200,
+      "reported_usd": 0.0
+    }
+  ]
+}
