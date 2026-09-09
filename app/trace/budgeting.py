@@ -92,6 +92,10 @@ def estimate_action_cost(action, ctx, prices: dict) -> ActionCost:
     if any(not math.isfinite(v) or v < 0 for v in rates):
         raise ValueError("snapshotted prices must be finite and nonnegative")
     mock = get_settings().force_mock
+    if not mock and 'price_provider' in price and (
+            price['price_provider'], price['price_model']) != (
+            price['live_provider'], price['live_model']):
+        raise BudgetExceeded('resolved alternate provider lacks an independent declared price')
     dollars = 0.0 if mock else (tin * rates[0] + tout * rates[1]) / 1_000_000
     return ActionCost(tokens_in=tin, tokens_out=tout, llm_calls=n,
                       est_cost_usd=dollars, compute_units=tin + 10 * tout,

@@ -92,7 +92,8 @@ from app.trace import store  # noqa: E402
 from app.trace.adapter import TraceRecorder  # noqa: E402
 from app.trace.branching import BudgetExceeded, RunBudget, collect_fanout  # noqa: E402
 from app.trace.contract import Budget  # noqa: E402
-from app.trace.pacing import RequestControl, active_control
+from app.trace.pacing import EventJournal, RequestControl, active_control
+from app.trace.request_budget import RequestLedger, active_ledger
 from app.trace.policies import build_policy  # noqa: E402
 from app.trace.splits import GroupKey, SplitManifest, prompt_fingerprint  # noqa: E402
 from app.trace.support import (  # noqa: E402
@@ -203,10 +204,15 @@ async def collect(args: argparse.Namespace) -> str:
     n_written = 0
 
     control = RequestControl(getattr(args, "rps", .6))
+    control.events = EventJournal(store.run_dir(run_id)/'request-events.jsonl')
     token = active_control.set(control) if args.live else None
+    ledger = RequestLedger(manifest.model_snapshot, args.max_usd,
+        journal_path=store.run_dir(run_id)/'request-budget-events.jsonl') if args.live else None
+    ledger_token = active_ledger.set(ledger) if ledger is not None else None
     try:
         for i, item in enumerate(items):
             item_id = f"{args.dataset}-{i:04d}"
+            control.item_id = item_id
             prompt = build_prompt(args.dataset, item)
             key = GroupKey(
                 item_id=item_id, dataset=args.dataset,
@@ -258,6 +264,10 @@ async def collect(args: argparse.Namespace) -> str:
     finally:
         if token is not None:
             active_control.reset(token)
+        if ledger_token is not None:
+            active_ledger.reset(ledger_token)
+            with (store.run_dir(run_id)/'request-budget.json').open('x', encoding='utf-8') as handle:
+                json.dump(ledger.report(), handle, indent=2, allow_nan=False)
         with (store.run_dir(run_id)/"request-events.json").open("x",encoding="utf-8") as handle:
             json.dump({"rps":control.rps,"max_attempts":control.attempts,
                        "events":control.events},handle,indent=2)

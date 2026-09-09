@@ -338,6 +338,9 @@ def gate2_report(run_id: str, seed: int = 0,
             "not_evidence": not validation["analysis_grade"], "validation": validation,
             "support_thresholds": asdict(thresholds or SupportThresholds()),
             "calibration": {"status": "REFUSED", "reason": "evidence gates not cleared", "per_action": {}}}
+    if validation.get("collection_complete") is False:
+        return {**meta, "verdict": "REFUSED",
+                "reason": "prespecified collection is incomplete"}
     try:
         trajectories = read_run(run_id)
         assert_estimable(trajectories, thresholds)

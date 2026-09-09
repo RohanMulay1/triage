@@ -60,6 +60,43 @@ def test_adapter_preserves_503_and_retry_after(monkeypatch):
     assert result.tokens_in == result.tokens_out == 0
 
 
+def test_empty_message_network_exception_is_never_a_success(monkeypatch):
+    async def post(self, url, **kwargs):
+        raise httpx.ReadTimeout("")
+
+    monkeypatch.setattr(httpx.AsyncClient, "post", post)
+    adapter = OpenAICompatAdapter("nvidia", "test", "https://example.invalid")
+    result = asyncio.run(adapter.generate("model", [{"role": "user", "content": "Hi"}]))
+    assert result.text == "" and result.usage_known is False
+    assert result.error == "ReadTimeout: ReadTimeout"
+    assert result.raw == {"failure_kind": "network_exception",
+                          "exception_type": "ReadTimeout"}
+
+
+def test_network_exception_retries_in_research_control():
+    adapter = SequenceAdapter([
+        GenResult(text="", provider="nvidia", model="provider-model",
+                  error="ConnectError: DNS", usage_known=False,
+                  raw={"failure_kind": "network_exception"}),
+        GenResult(text="real", provider="nvidia", model="provider-model",
+                  tokens_in=5, tokens_out=1),
+    ])
+    client = client_for(adapter)
+    async def no_wait(delay):
+        pass
+    control = RequestControl(rps=100000, attempts=2, sleep=no_wait)
+    async def run():
+        token = active_control.set(control)
+        try:
+            return await client.generate([{"role": "user", "content": "Hi"}])
+        finally:
+            active_control.reset(token)
+    result = asyncio.run(run())
+    assert result.text == "real" and adapter.calls == 2
+    assert [event["status"] for event in control.events] == [
+        "provider_failure", "returned"]
+
+
 def test_transient_503_retries_with_shared_control_without_mock_fallback():
     now = [0.0]
     sleeps = []

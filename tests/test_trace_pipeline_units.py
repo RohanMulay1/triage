@@ -17,6 +17,12 @@ def test_pipeline_refuses_live_diagnostic_provider():
         validate_options(PipelineOptions('unit',live=True,max_usd=1,diagnostic_scores=True))
 
 
+@pytest.mark.parametrize('timeout',[0,-1,float('inf'),float('nan')])
+def test_pipeline_rejects_invalid_request_timeout(timeout):
+    with pytest.raises(ValueError):
+        validate_options(PipelineOptions('unit',request_timeout=timeout))
+
+
 def test_whole_run_estimate_counts_all_calls():
     cfg=load_router_config()
     prices={m:{'cost_in':1,'cost_out':1,'live_provider':'unit'} for m in ('s','b')}

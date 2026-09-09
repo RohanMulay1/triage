@@ -20,6 +20,11 @@ pair. Pass them explicitly as `--small` and `--big`; historical router defaults
 are preserved. Credentials belong in ignored `.env` (`NVIDIA_API_KEY`,
 `GROQ_API_KEY`). Successful catalog access does not guarantee generation availability.
 
+The historical automatic default points to a retired hosted Llama model. For
+an explicit current application default, set `TRIAGE_DEFAULT_MODEL=groq-gpt-oss-20b`
+in `.env`; its escalation target is `groq-gpt-oss-120b`. An unknown override
+refuses configuration. Leaving the override unset preserves historical routing.
+
 ## Run the application
 
 ```powershell
@@ -56,13 +61,27 @@ The command prints a planning cost estimate before generation, collects under on
 run-wide accumulator, freezes the retrieval corpus, validates traces, checks
 support, runs Gate 2, calibrates eligible action estimators, and attempts C1/C2/C4.
 Live collection defaults to `--rps 0.6` across the run, with bounded rate-limit
-retries and recorded request events. Exhausted retries remain unlabelled failures.
+and transient 502/503/504 retries. Research provider failures never silently become
+mock answers. Exhausted retries remain unlabelled failures. Every live attempt,
+including a retry, reserves cost against the same pinned model-price ledger.
+Unknown usage retains its reservation and is disclosed separately from reported
+tokens. A finite cap is admission control against listed prices, not an invoice.
+`--max-input-bytes` optionally sets an enforced request-size budget; oversized
+requests refuse before execution and are never truncated. It does not override
+completion limits or guarantee that a whole dataset fits the approved cap.
 Artifacts under `data/traces/<run-id>/` include:
 
 - `manifest.json`, `splits.json`, `trajectories.jsonl`, and `collect.log`;
 - `preflight.json` and the frozen `corpus.json`;
 - `calibration.json` with fitted model coefficients and isotonic maps when estimable;
 - `report.json`, the consolidated verdicts, intervals, refusals, and cost accounting.
+
+Live runs also preserve request-budget journals and per-attempt raw-response
+journals before starting the next request. The final operational report includes
+latency intervals clustered by item, actual reported tokens, failure counts,
+and unknown-usage reservations. Production-router overhead is not inferred from
+the separate fan-out executor. Provider outages and daily quotas can still stop
+a run; completed trajectories remain evidence with their actual statuses.
 
 `--diagnostic-scores` explicitly enables seeded synthetic score JSON through the
 comparator's real client path. It is forbidden with `--live`. Ordinary mock scoring
@@ -89,11 +108,12 @@ An interval with null endpoints and n=0 means unavailable, not a zero effect.
   values. Ranking disagreement is not policy superiority.
 - **Gate 3 and a learned controller:** still gated on real evidence.
 
-No live cap has been supplied for Checkpoint 8. After an operator supplies one,
-replace `<CAP>` with that approved finite dollar value:
+The approved program cap is $2.00, with earlier listed-price spend accounted
+against it. New live commands require an explicit remaining cap and fresh run id;
+the pipeline never infers authorization from a configured credential:
 
 ```powershell
-python scripts/run_gate2.py --n 120 --dataset gsm8k --depth 2 --policy balanced --live --max-usd <CAP> --run-id gate2-live-20260907
+python scripts/run_gate2.py --n 120 --dataset gsm8k --depth 2 --policy balanced --small nim-nemotron-lightning-30b --big nim-nemotron-ultra-550b --live --max-usd <APPROVED_REMAINING_CAP> --run-id <FRESH_RUN_ID>
 ```
 
 The command refuses before generation if its whole-run estimate exceeds the cap.

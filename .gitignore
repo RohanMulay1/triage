@@ -69,3 +69,12 @@ CLAUDE_MEMORY.md
 
 !data/traces/gate2-groq-smoke-json-20260908/
 !data/traces/gate2-groq-smoke-json-20260908/collect.log
+
+!data/traces/gate2-final-mock-20260908/
+!data/traces/gate2-final-mock-20260908/collect.log
+!data/traces/gate2-nvidia-retry-smoke-20260908/
+!data/traces/gate2-nvidia-retry-smoke-20260908/collect.log
+!data/traces/gate2-nvidia-full-20260909/
+!data/traces/gate2-nvidia-full-20260909/collect.log
+!data/traces/gate2-nvidia-full-awake-20260909/
+!data/traces/gate2-nvidia-full-awake-20260909/collect.log

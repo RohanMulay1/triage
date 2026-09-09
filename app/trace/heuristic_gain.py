@@ -74,6 +74,7 @@ class HeuristicGainPolicy:
         payload, error, latency = None, None, 0.0
         raw_text = None
         runtime_refused = False
+        budget_refused = False
         status = OutcomeStatus.CHOSEN
         try:
             response = await client.generate(
@@ -97,8 +98,13 @@ class HeuristicGainPolicy:
                     raise ValueError("nonfinite, out-of-range or nonnumeric self-estimate")
                 scores[a.key] = [min(1.0, max(0.0, v)) for v in values]
             self._prepared = (prompt, scores)
-        except BudgetExceeded:
-            raise
+        except BudgetExceeded as exc:
+            error = str(exc)
+            status = OutcomeStatus.FAILED
+            budget_refused = True
+            response = getattr(exc, 'result', None)
+            if response is not None:
+                raw_text, latency = response.text, response.latency_ms
         except ProviderFailureError as exc:
             error = str(exc)
             status = OutcomeStatus.FAILED
@@ -116,6 +122,7 @@ class HeuristicGainPolicy:
             detail={"purpose": "policy_overhead", "scores": payload if error is None else None,
                     "raw_response": raw_text,
                     "runtime_refused": runtime_refused,
+                    "budget_refused": budget_refused,
                     "unknown_usage": getattr(client, 'unknown_usage', False) or (error is not None and client.cost.llm_calls == 0 and status != OutcomeStatus.FAILED),
                     "weights": self.weights, "max_steps": self.max_steps,
                     "adaptation": "heterogeneous_actions_exact_key_redundancy",

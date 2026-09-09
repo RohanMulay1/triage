@@ -136,10 +136,13 @@ class OpenAICompatAdapter(ProviderAdapter):
             data['_rate_limit_headers'] = {k: v for k, v in resp.headers.items()
                                            if k.startswith('x-ratelimit-')}
         except Exception as exc:  # network / timeout / parse
+            message = str(exc).strip() or type(exc).__name__
             return GenResult(
                 text="", provider=self.name, model=model,
-                latency_ms=(time.perf_counter() - t0) * 1000, error=str(exc),
-                usage_known=False,
+                latency_ms=(time.perf_counter() - t0) * 1000,
+                error=f"{type(exc).__name__}: {message}", usage_known=False,
+                raw={"failure_kind": "network_exception",
+                     "exception_type": type(exc).__name__},
             )
 
         # Some gateways (e.g. OpenRouter) return HTTP 200 with an error body and

@@ -22,6 +22,7 @@ from .heuristic_gain import HeuristicGainPolicy
 from .information_value import c2_report
 from .pacing import EventJournal, RequestControl, active_control
 from .request_budget import RequestLedger, active_ledger, CHAT_ALLOWANCE
+from .runtime import HostAwakeGuard
 from .policies import build_policy
 from .operations import operational_report
 from .splits import GroupKey, SplitManifest, prompt_fingerprint
@@ -42,6 +43,7 @@ class PipelineOptions:
     small: str | None = None
     big: str | None = None
     rps: float = .6
+    request_timeout: float = 180.0
     max_input_bytes: int | None = None
 
 
@@ -50,6 +52,8 @@ def validate_options(args):
         raise ValueError("max_input_bytes must exceed the chat-framing allowance")
     if not math.isfinite(args.rps) or args.rps <= 0:
         raise ValueError("rps must be finite and strictly positive")
+    if not math.isfinite(args.request_timeout) or args.request_timeout <= 0:
+        raise ValueError("request_timeout must be finite and strictly positive")
     if not isinstance(args.n, int) or args.n <= 0:
         raise ValueError("n must be positive integer")
     if args.depth != 2 or args.policy != 'balanced':
@@ -68,6 +72,12 @@ def preflight(prompts, cfg, prices, small, big, live, max_input_bytes=None):
     Input allowance assumes 64 UTF-8 bytes per generated token plus frozen
     retrieval and JSON overhead. This is an estimate, not an invoice guarantee.
     """
+    if live:
+        for model in (small, big):
+            if model and 'price_provider' in prices[model]:
+                price = prices[model]
+                if (price['price_provider'], price['price_model']) != (price['live_provider'], price['live_model']):
+                    raise ValueError('resolved alternate provider lacks an independent declared price')
     if max_input_bytes is not None:
         if max_input_bytes <= CHAT_ALLOWANCE:
             raise ValueError("input-byte ceiling too small")
@@ -149,11 +159,19 @@ async def run_pipeline(args: PipelineOptions):
     manifest = store.build_manifest(args.run_id,dataset=args.dataset,split='mixed',seeds=[args.seed],
         command='scripts/run_gate2.py '+json.dumps(vars(args),sort_keys=True),
         notes='consolidated depth2; frozen seed corpus '+corpus_hash+
-              '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+'; max_attempts=3; max_retry_wait_seconds=60')
+              '; diagnostic_scores='+str(args.diagnostic_scores)+'; rps='+str(args.rps)+
+              '; max_attempts=3; max_retry_wait_seconds=60; request_timeout_seconds='+
+              str(args.request_timeout)+'; windows_host_awake='+str(args.live))
     store.create_run(manifest)
     root = store.run_dir(args.run_id)
     write_json(root/'preflight.json',estimate)
     write_json(root/'items.json',{'dataset':args.dataset,'items':items,'prompts':prompts})
+    planned_item_ids = [f'{args.dataset}-{i:04d}' for i in range(len(items))]
+    write_json(root/store.COLLECTION_PLAN_NAME, {
+        'item_ids': planned_item_ids, 'item_count': len(planned_item_ids),
+        'dataset': args.dataset, 'seed': args.seed, 'depth': args.depth,
+        'policy': args.policy,
+    })
     write_json(root/'corpus.json',{'sha256':corpus_hash,'documents':SEED_CORPUS})
     splits = SplitManifest(args.run_id)
     budget = RunBudget(Budget(max_usd=args.max_usd),prices)
@@ -164,13 +182,16 @@ async def run_pipeline(args: PipelineOptions):
     frozen.add(SEED_CORPUS,source='frozen:'+corpus_hash)
     retrieval._store = frozen
     stopped = None
-    control = RequestControl(args.rps)
+    control = RequestControl(args.rps, request_timeout=args.request_timeout)
     control.events = EventJournal(root/'request-events.jsonl')
+    awake = HostAwakeGuard(args.live)
+    awake_status = awake.acquire()
     control_token = active_control.set(control) if args.live else None
     ledger = RequestLedger(prices,args.max_usd,args.max_input_bytes,
                            root/'request-budget-events.jsonl') if args.live else None
     ledger_token = active_ledger.set(ledger) if ledger is not None else None
     wall_start = time.monotonic()
+    completed_item_ids = []
     try:
         with (root/'collect.log').open('x',encoding='utf-8') as log:
             log.write(json.dumps({'options':vars(args),'preflight':estimate})+'\n')
@@ -198,6 +219,7 @@ async def run_pipeline(args: PipelineOptions):
                       f"calls={budget.state.spent_llm_calls}; usd={budget.state.spent_usd:.6f}", flush=True)
                 if stopped:
                     break
+                completed_item_ids.append(item_id)
     finally:
         retrieval._store = old_store
         if control_token is not None:
@@ -205,11 +227,18 @@ async def run_pipeline(args: PipelineOptions):
         if ledger_token is not None:
             active_ledger.reset(ledger_token)
             write_json(root/'request-budget.json',ledger.report())
+        awake.release()
         write_json(root/'request-events.json', {'rps':args.rps,'max_attempts':3,
+            'request_timeout_seconds':args.request_timeout,'host_awake':awake_status,
             'wall_seconds':time.monotonic()-wall_start,'throttle_seconds':control.throttle_seconds,
             'events':control.events})
     splits.write(root)
     traces = store.read_run(args.run_id)
+    if stopped is None and completed_item_ids == planned_item_ids:
+        write_json(root/store.COLLECTION_COMPLETE_NAME, {
+            'item_ids': completed_item_ids, 'item_count': len(completed_item_ids),
+            'trajectory_count': len(traces),
+        })
     validation = store.validate_run(args.run_id)
     support = action_support(traces)
     try:

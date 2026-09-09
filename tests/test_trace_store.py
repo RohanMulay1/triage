@@ -188,6 +188,21 @@ def test_validate_run_reports_a_missing_manifest():
     assert store.validate_run(run_id)["manifest_present"] is False
 
 
+def test_validate_run_refuses_analysis_grade_for_an_interrupted_plan():
+    run_id = store.new_run_id("interrupted")
+    store.create_run(store.build_manifest(run_id, dataset="unit"))
+    store.append(_trajectory(run_id, "unit-0000"))
+    root = store.run_dir(run_id)
+    (root/store.COLLECTION_PLAN_NAME).write_text(json.dumps({
+        "item_ids": ["unit-0000", "unit-0001"], "item_count": 2,
+    }), encoding="utf-8")
+    report = store.validate_run(run_id)
+    assert report["chain_ok"] and report["cost_conservation_ok"]
+    assert report["collection_complete"] is False
+    assert report["expected_items"] == 2 and report["observed_items"] == 1
+    assert report["analysis_grade"] is False
+
+
 # --------------------------------------------------------------------------- #
 # Support diagnostics
 # --------------------------------------------------------------------------- #

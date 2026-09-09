@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from app.llm import LLMClient, RateLimitError
+from app.llm import LLMClient, RateLimitError, RetryableProviderError
 from app.providers.base import GenResult
 from app.trace.actions import InterventionExecutor
 from app.trace.contract import ActionKind, OutcomeStatus
@@ -78,6 +78,30 @@ def test_retry_is_bounded_and_throttle_is_shared():
 @pytest.mark.parametrize('rps',[0,-1,float('inf'),float('nan')])
 def test_invalid_throttle_refuses(rps):
     with pytest.raises(ValueError): RequestControl(rps)
+
+
+@pytest.mark.parametrize('timeout',[0,-1,float('inf'),float('nan')])
+def test_invalid_request_timeout_refuses(timeout):
+    with pytest.raises(ValueError): RequestControl(request_timeout=timeout)
+
+
+def test_wall_runtime_timeout_is_bounded_retried_and_recorded():
+    sleeps=[]
+    async def backoff(delay): sleeps.append(delay)
+    async def stalled(): await asyncio.sleep(.05)
+    client=SimpleNamespace(model_id='unit',provider_label='nvidia',unknown_usage=False)
+    control=RequestControl(rps=100000,attempts=2,sleep=backoff,
+                           request_timeout=.001)
+    async def run():
+        with pytest.raises(RetryableProviderError):
+            await control.call(client,stalled)
+    asyncio.run(run())
+    assert [e['status'] for e in control.events]==[
+        'provider_timeout','provider_timeout']
+    assert all(e['usage_known'] is False for e in control.events)
+    assert client.unknown_usage is True
+    assert sleeps[0]==1.0
+    assert all(delay < .01 for delay in sleeps[1:])
 
 
 def test_partial_resample_cost_is_preserved_on_exhaustion(monkeypatch):

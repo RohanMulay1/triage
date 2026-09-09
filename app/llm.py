@@ -90,11 +90,12 @@ class LLMClient:
             from .trace.budgeting import BudgetExceeded
             try:
                 ledger.settle(ticket, res)
-            except BudgetExceeded:
+            except BudgetExceeded as exc:
                 self.cost.tokens_in += res.tokens_in
                 self.cost.tokens_out += res.tokens_out
                 self.cost.est_cost_usd += estimate_cost(self.model_id, res.tokens_in, res.tokens_out)
                 self.cost.llm_calls += 1
+                exc.result = res
                 raise
         # Rate limits are user-facing: tell them when to come back, don't mock.
         if res.error and res.error.startswith("RATE_LIMIT") and label != "mock":
@@ -108,7 +109,8 @@ class LLMClient:
         # surface every other failure immediately. Legacy routing keeps its
         # historical mock fallback when no research control is active.
         if res.error and label != "mock" and active_control.get() is not None:
-            if res.http_status in (502, 503, 504):
+            if (res.http_status in (502, 503, 504)
+                    or res.raw.get("failure_kind") == "network_exception"):
                 raise RetryableProviderError(label, res)
             raise ProviderFailureError(label, res)
         # Fall back to mock on a live-provider error so a request never hard-fails.

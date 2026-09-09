@@ -48,6 +48,9 @@ class RequestLedger:
 
     def admit(self, model_id, provider, provider_model, messages, max_tokens):
         price = self.prices[model_id]
+        if ('price_provider' in price and (price['price_provider'], price['price_model'])
+                != (provider, provider_model)):
+            raise BudgetExceeded('resolved alternate provider lacks an independent declared price')
         if (price["live_provider"], price["live_model"]) != (provider, provider_model):
             raise BudgetExceeded("provider/model differs from frozen price snapshot")
         tokens = input_allowance(messages)

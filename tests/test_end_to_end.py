@@ -30,6 +30,7 @@ def test_whole_pipeline_from_cold_start(tmp_path, monkeypatch):
     report=json.loads((root/'report.json').read_text())
     assert report['validation']['chain_ok'] and report['validation']['cost_conservation_ok']
     assert report['validation']['errors']==[]
+    assert report['validation']['collection_complete'] is True
     assert report['not_evidence'] and not report['analysis_grade']
     monkeypatch.setattr(store,'trace_root',lambda:trace_root)
     traces=store.read_run('e2e-cold')
@@ -54,7 +55,8 @@ def test_whole_pipeline_from_cold_start(tmp_path, monkeypatch):
         ci=report['ablations']['C2']['per_action'][action]['paired_depth2_minus_depth1_ci95']
         assert ci['n']==8 and ci['lo']<=ci['point']<=ci['hi']
     assert sum(t.total_cost.llm_calls for t in traces)==report['budget']['spent_llm_calls']
-    for filename in ('manifest.json','splits.json','trajectories.jsonl','collect.log','corpus.json'):
+    for filename in ('manifest.json','splits.json','trajectories.jsonl','collect.log','corpus.json',
+                     'collection-plan.json','collection-complete.json'):
         assert (root/filename).is_file()
     for question in (CONFIDENT_Q,UNCERTAIN_Q,MATH_Q):
         traced,_=_traced(question)

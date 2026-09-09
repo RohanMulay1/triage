@@ -33,6 +33,8 @@ from .contract import (
 
 MANIFEST_NAME = "manifest.json"
 TRAJECTORIES_NAME = "trajectories.jsonl"
+COLLECTION_PLAN_NAME = "collection-plan.json"
+COLLECTION_COMPLETE_NAME = "collection-complete.json"
 
 # Cost conservation tolerance: float addition over many steps, not a real gap.
 _COST_TOL = 1e-9
@@ -85,6 +87,8 @@ def model_snapshot() -> dict[str, Any]:
         snap[m["id"]] = {
             "live_provider": label,
             "live_model": provider_model,
+            "price_provider": m['provider'],
+            "price_model": m['provider_model'],
             "cost_in": m.get("cost_in", 0.0),
             "cost_out": m.get("cost_out", 0.0),
         }
@@ -258,6 +262,40 @@ def validate_run(run_id: str) -> dict[str, Any]:
                          or "does not store" in e or "schema" in e.lower()]
     errors.extend(cost_mismatches)
     force_mock = bool(manifest.force_mock) if manifest else False
+    directory = run_dir(run_id)
+    plan_path = directory / COLLECTION_PLAN_NAME
+    legacy_items_path = directory / "items.json"
+    completion_path = directory / COLLECTION_COMPLETE_NAME
+    expected_ids: list[str] | None = None
+    plan_requires_receipt = plan_path.exists()
+    try:
+        if plan_requires_receipt:
+            expected_ids = list(json.loads(plan_path.read_text(encoding="utf-8"))["item_ids"])
+        elif legacy_items_path.exists():
+            legacy = json.loads(legacy_items_path.read_text(encoding="utf-8"))
+            expected_ids = [f"{legacy['dataset']}-{i:04d}" for i in range(len(legacy["items"]))]
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        errors.append(f"invalid collection plan: {exc}")
+        expected_ids = []
+    seen_ids = sorted({t.item_id for t in trajectories})
+    collection_complete: bool | None = None
+    if expected_ids is not None:
+        expected = sorted(expected_ids)
+        collection_complete = seen_ids == expected
+        if plan_requires_receipt:
+            if not completion_path.exists():
+                collection_complete = False
+            else:
+                try:
+                    receipt = json.loads(completion_path.read_text(encoding="utf-8"))
+                    collection_complete = collection_complete and (
+                        sorted(receipt["item_ids"]) == expected
+                        and receipt["item_count"] == len(expected)
+                        and receipt["trajectory_count"] == len(trajectories)
+                    )
+                except (KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+                    errors.append(f"invalid collection completion receipt: {exc}")
+                    collection_complete = False
     return {
         "run_id": run_id,
         "schema_version": SCHEMA_VERSION,
@@ -267,8 +305,12 @@ def validate_run(run_id: str) -> dict[str, Any]:
         "synthetic_trajectories": synthetic,
         "cost_conservation_ok": not cost_mismatches,
         "chain_ok": not structural_errors,
+        "collection_complete": collection_complete,
+        "expected_items": len(expected_ids) if expected_ids is not None else None,
+        "observed_items": len(seen_ids),
         # A run is evidence about model behaviour only if it validates, contains
         # no mock-provider outcome, and was not collected under forced mock.
-        "analysis_grade": bool(trajectories) and not errors and synthetic == 0 and not force_mock,
+        "analysis_grade": bool(trajectories) and not errors and synthetic == 0 and not force_mock
+                          and collection_complete is not False,
         "errors": errors[:20],
     }

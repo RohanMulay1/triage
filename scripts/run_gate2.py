@@ -22,10 +22,14 @@ def main():
     parser.add_argument('--small')
     parser.add_argument('--big')
     parser.add_argument('--rps',type=float,default=.6)
+    parser.add_argument('--request-timeout',type=float,default=180.0,
+                        help='per-attempt wall-runtime bound in seconds')
     parser.add_argument('--max-input-bytes',type=int,help='explicit request-byte budget; refuses oversized inputs without truncation')
     args = parser.parse_args()
     if not math.isfinite(args.rps) or args.rps <= 0:
         parser.error("--rps must be finite and strictly positive")
+    if not math.isfinite(args.request_timeout) or args.request_timeout <= 0:
+        parser.error("--request-timeout must be finite and strictly positive")
     if args.n <= 0:
         parser.error('n must be strictly positive')
     if (args.live and args.max_usd is None) or (args.max_usd is not None and
